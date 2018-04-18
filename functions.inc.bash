@@ -1,21 +1,21 @@
 #!/bin/bash
-###############################################################################
-# Pegasus' Linux Administration Tools	#					Functions Library #
-# (C)2017-2018 Mattijs Snepvangers		#				pegasus.ict@gmail.com #
-# License: GPL v3						#  Please keep my name in the credits #
-###############################################################################
+############################################################################
+# Pegasus' Linux Administration Tools #					 Functions Library #
+# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
+# License: GPL v3					  #	Please keep my name in the credits #
+############################################################################
 
-#########################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools"	#
-# SCRIPT_TITLE="Functions Library"						#
-# MAINTAINER="Mattijs Snepvangers"						#
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
-# VERSION_MAJOR=0										#
-# VERSION_MINOR=5										#
-# VERSION_PATCH=47										#
-# VERSION_STATE="ALPHA"									#
-# VERSION_BUILD=20180416								#
-#########################################################
+#######################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
+# SCRIPT_TITLE="Functions Library"					  #
+# MAINTAINER="Mattijs Snepvangers"					  #
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
+# VERSION_MAJOR=0									  #
+# VERSION_MINOR=5									  #
+# VERSION_PATCH=51									  #
+# VERSION_STATE="ALPHA"								  #
+# VERSION_BUILD=20180418							  #
+#######################################################
 
 ### Basic program ##############################################################
 create_var() {	### sets $VAR to $VALUE
@@ -25,7 +25,7 @@ create_var() {	### sets $VAR to $VALUE
 	declare -gu $_VAR=$_VALUE
 }
 create_indexed_array() { ### sets $ARRAY to $VALUE1 --- $VALUEn
-	# usage create_indexed_array $ARRAY $VALUE1 [$VALUE2 ...]
+						 # usage create_indexed_array $ARRAY $VALUE1 [$VALUE2 ...]
 	_ARRAY=$1
 	_ARGS=$@
 	for (( i=1 ; i<=_ARGS ; i++ ))
@@ -34,7 +34,7 @@ create_indexed_array() { ### sets $ARRAY to $VALUE1 --- $VALUEn
 	done
 }
 create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
-	# usage create_associative_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
+							 # usage create_associative_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
 	_ARRAY=$1
 	_ARGS=$@
 	for (( i=1 ; i<=_ARGS ; i+2 ))
@@ -90,8 +90,8 @@ header_line() {	### generates a header-line
 	printf "%s\n" "$_NEW_HEADER_LINE"
 }
 make_line() { ### generates a line
-	# usage: make_line [$CHAR [$LEN [$LINE]]]
-	# $CHAR defaults to "#" and $LEN defaults to 80
+			  # usage: make_line [$CHAR [$LEN [$LINE]]]
+			  # $CHAR defaults to "#" and $LEN defaults to 80
 	_CHAR=${1:-#}
 	_LEN=${2:-80}
 	_LINE=${3:-#}
@@ -104,14 +104,14 @@ make_line() { ### generates a line
 ### LOGGING ####################################################################
 set_verbosity() { ### Set verbosity level
 	case $1 in
-		0   )   VERBOSITY=0;;   ### Be vewy, vewy quiet... /
+		0	)	VERBOSITY=0;;	### Be vewy, vewy quiet... /
 								#+ Will only show Critical errors which result in an untimely exiting of the script
-		1   )   VERBOSITY=1;;   # Will show errors that don't endanger the basic functioning of the program
-		2   )   VERBOSITY=3;;   # Will show warnings
-		3   )   VERBOSITY=3;;   # Just give us the highlights, please - will tell what phase is taking place
-		4   )   VERBOSITY=4;;   # Let me know what youre doing, every step of the way
-		5   )   VERBOSITY=5;;   # I want it all, your thoughts and dreams too!!!
-		*   )   VERBOSITY=3;;   ## DEFAULT
+		1	)	VERBOSITY=1;;	# Will show errors that don't endanger the basic functioning of the program
+		2	)	VERBOSITY=3;;	# Will show warnings
+		3	)	VERBOSITY=3;;	# Just give us the highlights, please - will tell what phase is taking place
+		4	)	VERBOSITY=4;;	# Let me know what youre doing, every step of the way
+		5	)	VERBOSITY=5;;	# I want it all, your thoughts and dreams too!!!
+		*	)	VERBOSITY=3;;	## DEFAULT
 	esac
 }
 ###
@@ -127,11 +127,11 @@ warn_line() { ### WARNING MESSAGES
 	local _MESSAGE="$1"
 	log_line 3 "$_MESSAGE"
 }
-verb_line() { ### VERBOSE MESSAGES with timestamp
+verb_line() { ### VERBOSE MESSAGES
 	local _MESSAGE="$1"
 	log_line 4 "$_MESSAGE"
 }
-dbg_line() { ### DEBUG MESSAGES with timestamp
+dbg_line() { ### DEBUG MESSAGES
 	if [[ $VERBOSITY -ge 5 ]]
 	then
 		local _MESSAGE="$1"
@@ -145,13 +145,14 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 				# if verbosity = 5, all messages are printed on screen and sent to log incl debug
 				# usage: log_line <importance> <message>
 	_log_line_length() {
-		_LOG_LINE="$_LINE$_MESSAGE $_LOG_LINE_FILLER"
-		echo ${#_LOG_LINE}
+		local _LINE=""
+		_LINE="$_LOG_LINE$_MESSAGE $_LOG_LINE_FILLER"
+		echo ${#_LINE}
 	}
 	local _IMPORTANCE=$1
 	local _MESSAGE=$2
 	local _LABEL=""
-	local _LINE=""
+	local _LOG_LINE=""
 	local _LOG_LINE_FILLER=""
 	source "$LIB_DIRterminaloutput$LIB_EXT"
 	case $IMPORTANCE in
@@ -161,7 +162,7 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 		4	)	_LABEL="INFO"		;;
 		5	)	_LABEL="DEBUG"		;;
 	esac
-	_LINE="$(get_timestamp) # $_LABEL: "
+	_LOG_LINE="$(get_timestamp) # $_LABEL: "
 		get_screen_size
 	for (( i=$(_log_line_length) ; i<SCREEN_WIDTH ; i++ ))
 		do _LOG_LINE_FILLER+="#"
@@ -176,9 +177,9 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 	esac
 	if [ $IMPORTANCE -le $VERBOSITY ]
 	then
-		echo -e "$_LOGLINE" | tee -a $LOGFILE
+		echo -e "$_LOG_LINE" | tee -a $LOGFILE
 	else
-		echo -e "$_LOGLINE" >> $LOGFILE
+		echo -e "$_LOG_LINE" >> $LOGFILE
 	fi
 }
 
@@ -247,17 +248,17 @@ create_file() { ### Creates file if it doesn't exist
 
 ######################################################################################################################
 create_file_from_template() { ### render a template file
-	# expand variables + preserve formatting
-	#usage: create_file_from_template $TARGET_FILE $TEMPLATE
+							  # expand variables + preserve formatting
+							  #usage: create_file_from_template $TARGET_FILE $TEMPLATE
 	_TARGET_FILE=$1
 	_TEMPLATE=$2
 	eval "echo \"$(cat $_TEMPLATE)\"" > $_TARGET_FILE
 }
 ######################################################################################################################
 file_exists() { ### Checks if file exists
-	# usage: file_exists $FILE
+				# usage: file_exists $FILE
 	$_FILE=$1
-	if [ -f "$1" ]
+	if [ -f "$_FILE" ]
 	then
 		echo true
 	else
@@ -265,7 +266,7 @@ file_exists() { ### Checks if file exists
 	fi
 }
 goto_base_dir() { # If we're not in the base directory of the script,
-	#+ let's go there to prevent stuff from going haywire
+				  #+ let's go there to prevent stuff from going haywire
 	dbg_line "Let's find out where we're at..."
 	EXEC_PATH="${BASH_SOURCE[0]}"
 	while [ -h "$EXEC_PATH" ]
@@ -300,7 +301,7 @@ goto_base_dir() { # If we're not in the base directory of the script,
 	dbg_line "Now we're in the base directory\"$BASE_DIR\""
 }
 purge_dir() {
-	_DIR="$1"
+	local _DIR="$1"
 	rm -rf "$_DIR"
 	create_dir "$_DIR"
 }
@@ -331,21 +332,25 @@ create_tmp() { ### usage: create_tmp $PREFIX
 
 ### apt & friends ##############################################################
 add_ppa(){
-	METHOD=$1; URL=$2; KEY=$3
-	case $METHOD in
-		"wget"	  )   wget -q -a "$LOGFILE" $URL -O- | apt-key add - ;;
-		"apt-key"   )   apt-key adv --keyserver $URL --recv-keys $KEY 2>&1 | opr3 ;;
-		"aar"	   )   add-apt-repository $URL | opr3 ;;
+	local _METHOD=$1
+	local _URL=$2
+	local _KEY=$3
+	case $_METHOD in
+		"wget"		)	wget -q -a "$LOGFILE" $_URL -O- | apt-key add - ;;
+		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY 2>&1 | verb_line ;;
+		"aar"		)	add-apt-repository $_URL 2>&1 | verb_line ;;
 	esac
 }
 apt_inst() { ### Installs packages (space seperated arguments)
-	apt-get -qqy --allow-unauthenticated install "$@" 2>&1 | opr4
+	apt-get -qqy --allow-unauthenticated install "$@" 2>&1 | verb_line
 }
 install() {
-	dpkg -i $1 2>&1 | opr4
+	local _PACKAGE=$1
+	dpkg -i $_PACKAGE 2>&1 | verb_line
 }
 
 ### (Inter)net(work) Operations ################################################
 download() { ### downloads quietly, output to $LOGFILE
-	wget -q -a "$LOGFILE" -nv $1
+	local _URL=$1
+	wget -q -a "$LOGFILE" -nv $_URL
 }

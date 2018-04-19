@@ -250,8 +250,8 @@ create_file() { ### Creates file if it doesn't exist
 create_file_from_template() { ### render a template file
 							  # expand variables + preserve formatting
 							  #usage: create_file_from_template $TARGET_FILE $TEMPLATE
-	_TARGET_FILE=$1
-	_TEMPLATE=$2
+	local _TARGET_FILE=$1
+	local _TEMPLATE=$2
 	eval "echo \"$(cat $_TEMPLATE)\"" > $_TARGET_FILE
 }
 ######################################################################################################################

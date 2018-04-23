@@ -41,7 +41,11 @@ create_constants() {
 	declare -gr FALSE=1
 }
 
+import_libs() {
+	source "$LIB"
+	source "$INI_PRSR"
+}
+
 ### MAIN ###
 create_constants
-source "$LIB"
-source "$INI_PRSR"
+import_libs

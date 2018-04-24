@@ -1,187 +1,23 @@
 #!/bin/bash
 ############################################################################
-# Pegasus' Linux Administration Tools #					 Functions Library #
+# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
 # License: GPL v3					  #	Please keep my name in the credits #
 ############################################################################
 
 #######################################################
 # PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="Functions Library"					  #
+# SCRIPT_TITLE="Main Functions Library Script"		  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=5									  #
-# VERSION_PATCH=51									  #
+# VERSION_PATCH=53									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180418							  #
+# VERSION_BUILD=20180424							  #
 #######################################################
 
-### Basic program ##############################################################
-create_var() {	### sets $VAR to $VALUE
-				# varname is automatically changed to uppercase
-	_VAR=$1
-	_VALUE=$2
-	declare -gu $_VAR=$_VALUE
-}
-create_indexed_array() { ### sets $ARRAY to $VALUE1 --- $VALUEn
-						 # usage create_indexed_array $ARRAY $VALUE1 [$VALUE2 ...]
-	_ARRAY=$1
-	_ARGS=$@
-	for (( i=1 ; i<=_ARGS ; i++ ))
-	do
-		declare -ga $_ARRAY$[$i]=( ${_ARGS[$i]} ) ###CHECK###
-	done
-}
-create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
-							 # usage create_associative_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
-	_ARRAY=$1
-	_ARGS=$@
-	for (( i=1 ; i<=_ARGS ; i+2 ))
-	do
-		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
-	done
-}
-get_screen_size() { ### gets terminal size and sets global vars
-					#+  SCREEN_HEIGHT and SCREEN_WIDTH
-	shopt -s checkwinsize
-	(:)
-	dbg_line "Found $LINES lines and $COLUMNS columns."
-	declare -g SCREEN_HEIGHT=${ $LINES:-25 }
-	declare -g SCREEN_WIDTH=${ $COLUMNS:-80 }
-}
-get_timestamp() { ### returns something like 2018-03-23_13.37.59.123
-	echo $(date +"%Y-%m-%d_%H.%M.%S.%3N")
-}
 
-### Program Info ###############################################################
-version() {
-	echo -e "\n$PROGRAM $VERSION - $COPYRIGHT $MAINTAINER"
-}
-
-### User Interaction ###########################################################
-header() {	### generates a header
-			# usage: header $CHAR $LEN
-			# $CHAR defaults to # and $LEN defaults to 80
-	local _CHAR=${1:-#}
-	local _LEN=${2:-80}
-	local _HEADER=$(make_line "$_CHAR" "$_LEN")
-	_HEADER+=$(header_line "$PROGRAM_SUITE" "$SCRIPT_TITLE" "$_CHAR" "$_LEN")
-	_HEADER+=$(header_line "$COPYRIGHT" "$MAINTAINER_EMAIL" "$_CHAR" "$_LEN")
-	_HEADER+=$(header_line "$SHORT_VERSION" "Build $VERSION_BUILD" "$_CHAR" "$_LEN")
-	_HEADER+=$(header_line "License: $LICENSE" "Please keep my name in the credits" "$_CHAR" "$_LEN")
-	_HEADER+="\n$(make_line $_CHAR $_LEN)"
-	printf "%s\n" $_HEADER
-}
-header_line() {	### generates a header-line
-				# usage: header_line $PART1 $PART2 $CHAR $LEN $SPACER
-				# $CHAR defaults to "#", $LEN to 80 and spacer to " "
-	local _PART1="$1"
-	local _PART2="$2"
-	local _CHAR=${3:-#}
-	local _LEN=${4:-}
-	local _SPACER=${5:-" "}
-	local _SPACERS=$_SPACER
-	local _HEADER_LINE="# $_PART1$_SPACERS$_PART2 #"
-	for (( i=${#_HEADER_LINE}; i<MAX_WIDTH; i++ ))
-		do _SPACERS+=$_SPACER
-	done
-	local _NEW_HEADER_LINE="# $_PART1$_SPACERS$_PART2 #"
-	printf "%s\n" "$_NEW_HEADER_LINE"
-}
-make_line() { ### generates a line
-			  # usage: make_line [$CHAR [$LEN [$LINE]]]
-			  # $CHAR defaults to "#" and $LEN defaults to 80
-	_CHAR=${1:-#}
-	_LEN=${2:-80}
-	_LINE=${3:-#}
-	for (( i=${#_LINE}; i<_LEN; i++ ))
-		do _LINE+=$CHAR
-	done
-	printf "%s\n" "$_LINE"
-}
-
-### LOGGING ####################################################################
-set_verbosity() { ### Set verbosity level
-	case $1 in
-		0	)	VERBOSITY=0;;	### Be vewy, vewy quiet... /
-								#+ Will only show Critical errors which result in an untimely exiting of the script
-		1	)	VERBOSITY=1;;	# Will show errors that don't endanger the basic functioning of the program
-		2	)	VERBOSITY=3;;	# Will show warnings
-		3	)	VERBOSITY=3;;	# Just give us the highlights, please - will tell what phase is taking place
-		4	)	VERBOSITY=4;;	# Let me know what youre doing, every step of the way
-		5	)	VERBOSITY=5;;	# I want it all, your thoughts and dreams too!!!
-		*	)	VERBOSITY=3;;	## DEFAULT
-	esac
-}
-###
-crit_line() { ### CRITICAL MESSAGES
-	local _MESSAGE="$1"
-	logline 1 "$_MESSAGE"
-}
-err_line() { ### ERROR MESSAGES
-	local _MESSAGE="$1"
-	log_line 2 "$_MESSAGE"
-}
-warn_line() { ### WARNING MESSAGES
-	local _MESSAGE="$1"
-	log_line 3 "$_MESSAGE"
-}
-verb_line() { ### VERBOSE MESSAGES
-	local _MESSAGE="$1"
-	log_line 4 "$_MESSAGE"
-}
-dbg_line() { ### DEBUG MESSAGES
-	if [[ $VERBOSITY -ge 5 ]]
-	then
-		local _MESSAGE="$1"
-		log_line 5 "$_MESSAGE"
-	fi
-}
-###
-log_line() {	# creates a nice logline and decides what to print on screen and
-				#+ what to send to logfile based on VERBOSITY and IMPORTANCE levels
-				# messages up to level 4 are sent to log
-				# if verbosity = 5, all messages are printed on screen and sent to log incl debug
-				# usage: log_line <importance> <message>
-	_log_line_length() {
-		local _LINE=""
-		_LINE="$_LOG_LINE$_MESSAGE $_LOG_LINE_FILLER"
-		echo ${#_LINE}
-	}
-	local _IMPORTANCE=$1
-	local _MESSAGE=$2
-	local _LABEL=""
-	local _LOG_LINE=""
-	local _LOG_LINE_FILLER=""
-	source "$LIB_DIRterminaloutput$LIB_EXT"
-	case $IMPORTANCE in
-		1	)	_LABEL="CRITICAL"	;;
-		2	)	_LABEL="ERROR"		;;
-		3	)	_LABEL="WARNING"	;;
-		4	)	_LABEL="INFO"		;;
-		5	)	_LABEL="DEBUG"		;;
-	esac
-	_LOG_LINE="$(get_timestamp) # $_LABEL: "
-		get_screen_size
-	for (( i=$(_log_line_length) ; i<SCREEN_WIDTH ; i++ ))
-		do _LOG_LINE_FILLER+="#"
-	done
-	_MESSAGE+=" $_LOG_LINE_FILLER"
-	case $IMPORTANCE in
-	1	)	_LOGLINE=$(crit_colors "$_LINE" "$_MESSAGE")	;;
-	2	)	_LOGLINE=$(err_colors "$_LINE" "$_MESSAGE")		;;
-	3	)	_LOGLINE=$(warn_colors "$_LINE" "$_MESSAGE")	;;
-	4	)	_LOGLINE=$(info_colors "$_LINE" "$_MESSAGE")	;;
-	5	)	_LOGLINE=$(dbg_colors "$_LINE" "$_MESSAGE")		;;
-	esac
-	if [ $IMPORTANCE -le $VERBOSITY ]
-	then
-		echo -e "$_LOG_LINE" | tee -a $LOGFILE
-	else
-		echo -e "$_LOG_LINE" >> $LOGFILE
-	fi
-}
 
 ### File(System) operations ####################################################
 add_line_to_file() { ### Inserts line into file if it's not there yet

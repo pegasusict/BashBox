@@ -1,23 +1,32 @@
 #!/bin/bash
-##############################################################################
-# Pegasus' Linux Administration Tools	#			 Terminal Output Library #
-# (C)2017-2018 Mattijs Snepvangers		#			   pegasus.ict@gmail.com #
-# License: GPL v3						# Please keep my name in the credits #
-##############################################################################
+############################################################################
+# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
+# License: GPL v3					  # Please keep my name in the credits #
+############################################################################
 
 #########################################################
 # PROGRAM_SUITE="Pegasus' Linux Administration Tools"	#
-# SCRIPT_TITLE="Terminal Output Library"				#
+# SCRIPT_TITLE="Terminal Library"						#
 # MAINTAINER="Mattijs Snepvangers"						#
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=12										#
+# VERSION_PATCH=15										#
 # VERSION_STATE="ALPHA"									#
-# VERSION_BUILD=20180416								#
+# VERSION_BUILD=20180424								#
 #########################################################
 
 ### FUNCTIONS ###
+get_screen_size() { ### gets terminal size and sets global vars
+					#+  SCREEN_HEIGHT and SCREEN_WIDTH
+	shopt -s checkwinsize
+	(:)
+	dbg_line "Found $LINES lines and $COLUMNS columns."
+	declare -g SCREEN_HEIGHT=${ $LINES:-25 }
+	declare -g SCREEN_WIDTH=${ $COLUMNS:-80 }
+}
+
 define_colors() {
 	# Reset
 	Color_Off='\033[0m'			# Text Reset

@@ -1,6 +1,6 @@
 #!/bin/bash
 ############################################################################
-# Pegasus' Linux Administration Tools #						 Library Index #
+# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
 # License: GPL v3					  # Please keep my name in the credits #
 ############################################################################
@@ -12,10 +12,12 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=25										#
+# VERSION_PATCH=28										#
 # VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180419								#
+# VERSION_BUILD=20180424								#
 #########################################################
+
+unset CDPATH # to prevent mishaps when using cd with relative paths
 
 ### FUNCTIONS ###
 create_constants() {
@@ -24,7 +26,8 @@ create_constants() {
 	declare -gr LIB_EXT=".inc.bash"
 	declare -gr LOG_EXT=".log"
 	# declare directories !!! always end with a "/" !!!
-	declare -gr LIB_DIR="lib/"
+	declare -gr LIB_DIR="BASH_FUNC_LIB/"
+	declare -gr PEG_LIB="pbfl-"
 	declare -gr SYS_LIB_DIR="/var/lib/plat/"
 	declare -gr SYS_BIN_DIR="/usr/bin/plat/"
 	declare -gr LOG_DIR="/var/log/plat/"
@@ -42,8 +45,12 @@ create_constants() {
 }
 
 import_libs() {
-	source "$LIB"
-	source "$INI_PRSR"
+	declare -a _LIB_PARTS=("vars","datetime","term")
+	for _PART in $_LIB_PARTS
+	do
+		import "$LIB_DIR$PEG_LIB$_PART$LIB_EXT"
+	done
+	import "$INI_PRSR"
 }
 
 ### MAIN ###

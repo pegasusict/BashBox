@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=28										#
+# VERSION_PATCH=30										#
 # VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180424								#
+# VERSION_BUILD=20180425								#
 #########################################################
 
 unset CDPATH # to prevent mishaps when using cd with relative paths
@@ -43,12 +43,24 @@ create_constants() {
 	declare -gr TRUE=0
 	declare -gr FALSE=1
 }
-
+import() {
+	local _FILE="$1"
+	if [[ -f "$_FILE" ]]
+	then
+		source "$_FILE"
+	else
+		crit_line "File $_FILE not found!"
+		exit 1
+	fi
+}
 import_libs() {
-	declare -a _LIB_PARTS=("vars","datetime","term")
+	echo "importing libs...."
+	declare -a _LIB_PARTS=("apt" "datetime" "file" "net" "term" "tmp" "tmpl" "user" "vars")
 	for _PART in $_LIB_PARTS
 	do
-		import "$LIB_DIR$PEG_LIB$_PART$LIB_EXT"
+		local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
+		echo "importing $_TO_BE_IMPORTED"
+		import "$_TO_BE_IMPORTED"
 	done
 	import "$INI_PRSR"
 }

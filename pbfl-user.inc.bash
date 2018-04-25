@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=1									  #
+# VERSION_PATCH=8									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180424							  #
+# VERSION_BUILD=20180425							  #
 #######################################################
 
 ### Basic program ##############################################################
@@ -52,16 +52,23 @@ ask() {	### Asks the user a question and returns the answer
 	fi
 	echo -e _FINAL_ANSWER
 }
-prompt() { ### prompt a user for information
+
+prompt() {	### prompt a user for information
 			# usage: prompt $QUESTION $PASS [$OPTIONS]
 			# If OPTIONS is provided, will only accept any of these as answer
+			# if $PASS is true, OPTIONS will be ignored
 	local _QUERY="$1"
 	local _PASS=${2:-false}
 	local _OPTIONS=${3:-false} # eg: ("j", "ja", "y", "yes", "n", "nee", "no")
 	local _ANSWER
 	local _FINAL_ANSWER=""
 	###
-	read -p $_ANSWER
+	if [ "$_PASS" == false ]
+	then
+		read -p $_ANSWER
+	else
+		read -sp $_ANSWER
+	fi
 	if [ $_OPTIONS != false ]
 	then
 		for _OPTION in $_OPTIONS
@@ -81,15 +88,17 @@ prompt() { ### prompt a user for information
 	fi
 	echo -e _FINAL_ANSWER
 }
-choose() {
-	echo "Do you wish to install this program?"
-	select yn in "Yes" "No"; do
-		case $yn in
-			Yes	)	make install ; break;;
-			No	)	exit;;
-		esac
-	done
+
+#choose() {
+#	echo "Do you wish to install this program?"
+#	select yn in "Yes" "No"; do
+#		case $yn in
+#			Yes	)	make install ; break;;
+#			No	)	exit;;
+#		esac
+#	done
 }
+
 ### Headers & Lines ############################################################
 header() {	### generates a header
 			# usage: header $CHAR $LEN

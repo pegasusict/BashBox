@@ -2,3 +2,7 @@
 
 # PBFL - PEGASUS' BASH FUNCTION LIBRARY
 This is my attempt at building a better function library for BASH
+
+
+acknowledgements:
+ini parser: Ruediger Meier (https://github.com/rudimeier/)

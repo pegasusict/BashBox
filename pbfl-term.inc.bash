@@ -20,11 +20,10 @@
 ### FUNCTIONS ###
 get_screen_size() { ### gets terminal size and sets global vars
 					#+  SCREEN_HEIGHT and SCREEN_WIDTH
-	shopt -s checkwinsize
-	(:)
-	dbg_line "Found $LINES lines and $COLUMNS columns."
-	declare -g SCREEN_HEIGHT=${ $LINES:-25 }
-	declare -g SCREEN_WIDTH=${ $COLUMNS:-80 }
+	dbg_line "getting screen size"
+	declare -g SCREEN_HEIGHT=$(tput lines)
+	declare -g SCREEN_WIDTH=$(tput cols)
+	dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
 }
 
 define_colors() {
@@ -100,38 +99,49 @@ define_colors() {
 	On_IPurple='\033[0;105m'	# Purple
 	On_ICyan='\033[0;106m'		# Cyan
 	On_IWhite='\033[0;107m'		# White
+
+	# Other effects
+	Bold='\033[1m'
+	Dim='\033[2m'
+	Italic='\033[3m'
+	Underline='\033[4m'
+	Blink='\033[5m'
+	
+	Invert='\033[7m'
+	Hidden='\033[8m'
+	Strikethrough='\033[9m'
 }
-###
 crit_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$BIYellow$On_IRed$_LABEL:$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
-	echo -e $_OUPUT
+	local _OUTPUT="$BIYellow$On_IRed$_LABEL$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
+	echo -e "$_OUTPUT"
 }
 err_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$BRed$On_Black$_LABEL:$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
-	echo -e $_OUPUT
+	local _OUTPUT="$BRed$On_Black$_LABEL$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
+	echo -e "$_OUTPUT"
 }
 warn_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Red$On_White$_LABEL:$Color_Off $Red$On_White$_MESSAGE$Color_Off"
-	echo -e $_OUPUT
+	local _OUTPUT="$Red$On_White$_LABEL$Color_Off $Red$On_White$_MESSAGE$Color_Off"
+	echo -e "$_OUTPUT"
 }
 info_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Black$On_White$_LABEL:$Color_Off $Black$On_White$_MESSAGE$Color_Off"
-	echo -e $_OUPUT
+	local _OUTPUT="$Black$On_White$_LABEL$Color_Off $Black$On_White$_MESSAGE$Color_Off"
+	echo -e "$_OUTPUT"
 }
 dbg_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Green$On_White$_LABEL:$Color_Off $Green$On_White$_MESSAGE$Color_Off"
-	echo -e $_OUPUT
+	local _OUTPUT="$Black$On_White$_LABEL$Color_Off $Black$On_Green$_MESSAGE$Color_Off"
+	echo -e "$_OUTPUT"
 }
+
 
 ### MAIN ###
 define_colors

@@ -13,8 +13,8 @@
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
 # VERSION_PATCH=1									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180424							  #
+# VERSION_STATE="STABLE"							  #
+# VERSION_BUILD=20180430							  #
 #######################################################
 
 get_timestamp() { ### returns something like 2018-03-23_13.37.59.123

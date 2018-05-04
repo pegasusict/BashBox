@@ -23,7 +23,7 @@ add_ppa(){
 	local _URL=$2
 	local _KEY=$3
 	case $_METHOD in
-		"wget"		)	wget -q -a "$LOGFILE" $_URL -O- | apt-key add - ;;
+		"wget"		)	wget -q -a "$LOG_FILE" $_URL -O- | apt-key add - ;;
 		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY 2>&1 | verb_line ;;
 		"aar"		)	add-apt-repository $_URL 2>&1 | verb_line ;;
 	esac

@@ -7,14 +7,14 @@
 
 #######################################################
 # PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="Filesystem Operations Script"		  #
+# SCRIPT_TITLE="File(system) Operations Script"		  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=0									  #
+# VERSION_PATCH=3									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180425							  #
+# VERSION_BUILD=20180502							  #
 #######################################################
 
 ### File(System) operations ####################################################
@@ -40,6 +40,7 @@ add_line_to_file() { ### Inserts line into file if it's not there yet
 		fi
 	fi
 }
+
 add_to_script() { #adds line or blob to script
 	local _TARGET_SCRIPT=$1
 	local _LINE_OR_BLOB=$2
@@ -55,6 +56,7 @@ add_to_script() { #adds line or blob to script
 		exit 1
 	fi
 }
+
 create_dir() { ### Creates directory if it doesn't exist
 	_TARGET_DIR=$1
 	if [ ! -d "$_TARGET_DIR" ]
@@ -62,6 +64,7 @@ create_dir() { ### Creates directory if it doesn't exist
 		mkdir "$_TARGET_DIR"
 	fi
 }
+
 create_file() { ### Creates file if it doesn't exist
 	local _TARGET_FILE=$1
 	local _UMASK=$2
@@ -75,10 +78,11 @@ create_file() { ### Creates file if it doesn't exist
 	then
 		chmod $_UMASK $_TARGET_FILE
 	fi
-	if [ var_is_set $_GROUP ]
-	then
-		chown 
+#	if [ var_is_set $_GROUP ]
+#	then
+#		chown 
 }
+
 file_exists() { ### Checks if file exists
 				# usage: file_exists $FILE
 	$_FILE=$1
@@ -89,6 +93,7 @@ file_exists() { ### Checks if file exists
 		echo false
 	fi
 }
+
 goto_base_dir() { # If we're not in the base directory of the script,
 				  #+ let's go there to prevent stuff from going haywire
 	dbg_line "Let's find out where we're at..."
@@ -124,8 +129,9 @@ goto_base_dir() { # If we're not in the base directory of the script,
 	fi
 	dbg_line "Now we're in the base directory\"$BASE_DIR\""
 }
+
 purge_dir() {
 	local _DIR="$1"
-	rm -rf "$_DIR"
+	rm -rf "$_DIR" && mkdir "$_DIR"
 	create_dir "$_DIR"
 }

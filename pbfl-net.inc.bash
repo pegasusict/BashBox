@@ -12,13 +12,54 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=1									  #
+# VERSION_PATCH=14									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180425							  #
+# VERSION_BUILD=20180502							  #
 #######################################################
 
 ### (Inter)net(work) Operations ################################################
-download() { ### downloads quietly, output to $LOGFILE
+download() { ### downloads quietly, output to $LOG_FILE
 	local _URL=$1
-	wget -q -a "$LOGFILE" -nv $_URL
+	wget -q -a "$LOG_FILE" -nv $_URL
+}
+
+cycle_network() {
+	dbg_line "cycle_network: resetting network"
+	ifdown --exclude=lo -a && ifup --exclude=lo -a 
+}
+
+test_DNS() {
+	dbg_line "test_DNS: testing DNS"
+	local _SERVER="$1"
+	# Checking for the resolved IP address from the end of the command output. Refer
+	# the normal command output of nslookup to understand why.
+	local _RESOLVED_IP=$(nslookup "$_SERVER" | awk -F':' '/^Address: / { matched = 1 } matched { print $2}' | xargs)
+	# Deciding the lookup status by checking the variable has a valid IP string
+	dbg_line "test_DNS: nslookup $_SERVER yielded $_RESOLVED_IP"
+	if [[ -z "$_RESOLVED_IP" ]]
+	then
+		declare -g DNS_STATE="false"
+		dbg_line "test_DNS: DNS DOWN"
+	else
+		declare -g DNS_STATE="true"
+		dbg_line "test_DNS: DNS OK"
+	fi
+}
+
+watch_dog() {
+	local _TEST_SERVER="$1"
+	dbg_line "watch_dog: commencing DNS testing"
+	while true
+	do
+		test_DNS "$_TEST_SERVER"
+		if [ "$DNS_STATE" == "false" ]
+		then
+			err_line "watch_dog: DNS Down, resetting network"
+			cycle_network
+		else
+			dbg_line "watch_dog: DNS works fine"
+		fi
+		dbg_line "watch_dog: sleeping for 1 minute"
+		sleep 60
+	done
 }

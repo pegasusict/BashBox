@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=8									  #
+# VERSION_PATCH=17									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180425							  #
+# VERSION_BUILD=20180502							  #
 #######################################################
 
 ### Basic program ##############################################################
@@ -89,14 +89,16 @@ prompt() {	### prompt a user for information
 	echo -e _FINAL_ANSWER
 }
 
-#choose() {
-#	echo "Do you wish to install this program?"
-#	select yn in "Yes" "No"; do
-#		case $yn in
-#			Yes	)	make install ; break;;
-#			No	)	exit;;
-#		esac
-#	done
+choose() {
+	local _QUESTION="$1"
+	echo "$_QUESTION"
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes	)	local _CHOICE="true"	;	break;;
+			No	)	local _CHOICE="false"	;	break;;
+		esac
+	done
+	echo "$_CHOICE"
 }
 
 ### Headers & Lines ############################################################
@@ -113,6 +115,7 @@ header() {	### generates a header
 	_HEADER+="\n$(make_line $_CHAR $_LEN)"
 	printf "%s\n" $_HEADER
 }
+
 header_line() {	### generates a header-line
 				# usage: header_line $PART1 $PART2 $CHAR $LEN $SPACER
 				# $CHAR defaults to "#", $LEN to 80 and spacer to " "
@@ -129,6 +132,7 @@ header_line() {	### generates a header-line
 	local _NEW_HEADER_LINE="# $_PART1$_SPACERS$_PART2 #"
 	printf "%s\n" "$_NEW_HEADER_LINE"
 }
+
 make_line() { ### generates a line
 			  # usage: make_line [$CHAR [$LEN [$LINE]]]
 			  # $CHAR defaults to "#" and $LEN defaults to 80
@@ -143,17 +147,17 @@ make_line() { ### generates a line
 
 ### LOGGING ####################################################################
 set_verbosity() { ### Set verbosity level
+	dbg_line "setting verbosity to $1"
 	case $1 in
-		0	)	VERBOSITY=0;;	### Be vewy, vewy quiet... /
-								#+ Will only show Critical errors which result in an untimely exiting of the script
-		1	)	VERBOSITY=1;;	# Will show errors that don't endanger the basic functioning of the program
-		2	)	VERBOSITY=3;;	# Will show warnings
-		3	)	VERBOSITY=3;;	# Just give us the highlights, please - will tell what phase is taking place
-		4	)	VERBOSITY=4;;	# Let me know what youre doing, every step of the way
-		5	)	VERBOSITY=5;;	# I want it all, your thoughts and dreams too!!!
-		*	)	VERBOSITY=3;;	## DEFAULT
+		1	)	declare -gr VERBOSITY=1; info_line "Verbosity is set to CRITICAL"	;	shift	;;	### Be vewy, vewy quiet... Will only show Critical errors which result in an untimely exiting of the script
+		2	)	declare -gr VERBOSITY=2; info_line "Verbosity is set to ERROR"		;	shift	;;	# Will show errors that don't endanger the basic functioning of the program
+		3	)	declare -gr VERBOSITY=3; info_line "Verbosity is set to WARNING"	;	shift	;;	# Will show warnings
+		4	)	declare -gr VERBOSITY=4; info_line "Verbosity is set to INFO"		;	shift	;;	# Let me know what youre doing, every step of the way
+		5	)	declare -gr VERBOSITY=5; info_line "Verbosity is set to DEBUG"		;	shift	;;	# I want it all, your thoughts and dreams too!!!
+		*	)	declare -gr VERBOSITY=4; info_line "Verbosity is default: INFO"		;	shift	;	break	;;	## DEFAULT
 	esac
 }
+
 ###
 crit_line() { ### CRITICAL MESSAGES
 	local _MESSAGE="$1"
@@ -167,7 +171,7 @@ warn_line() { ### WARNING MESSAGES
 	local _MESSAGE="$1"
 	log_line 3 "$_MESSAGE"
 }
-verb_line() { ### VERBOSE MESSAGES
+info_line() { ### VERBOSE MESSAGES
 	local _MESSAGE="$1"
 	log_line 4 "$_MESSAGE"
 }
@@ -186,39 +190,68 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 				# usage: log_line <importance> <message>
 	_log_line_length() {
 		local _LINE=""
-		_LINE="$_LOG_LINE$_MESSAGE $_LOG_LINE_FILLER"
+		_LINE="$_LOG_HEADER$_MESSAGE"
 		echo ${#_LINE}
 	}
 	local _IMPORTANCE=$1
-	local _MESSAGE=$2
 	local _LABEL=""
-	local _LOG_LINE=""
+	local _LOG_HEADER=""
+	local _MESSAGE="$2"
 	local _LOG_LINE_FILLER=""
-	source "$LIB_DIRterminaloutput$LIB_EXT"
-	case $IMPORTANCE in
-		1	)	_LABEL="CRITICAL"	;;
-		2	)	_LABEL="ERROR"		;;
-		3	)	_LABEL="WARNING"	;;
-		4	)	_LABEL="INFO"		;;
-		5	)	_LABEL="DEBUG"		;;
+	local _SCREEN_LINE_FILLER=""
+	local _SCREEN_LINE=""
+	local _SCREEN_OUTPUT=""
+	local _LOG_OUTPUT=""
+	case $_IMPORTANCE in
+		1	)	_LABEL="CRITICAL:"	;;
+		2	)	_LABEL="ERROR:   "	;;
+		3	)	_LABEL="WARNING: "	;;
+		4	)	_LABEL="INFO:    "	;;
+		5	)	_LABEL="DEBUG:   "	;;
 	esac
-	_LOG_LINE="$(get_timestamp) # $_LABEL: "
-		get_screen_size
-	for (( i=$(_log_line_length) ; i<SCREEN_WIDTH ; i++ ))
-		do _LOG_LINE_FILLER+="#"
-	done
-	_MESSAGE+=" $_LOG_LINE_FILLER"
-	case $IMPORTANCE in
-	1	)	_LOGLINE=$(crit_colors "$_LINE" "$_MESSAGE")	;;
-	2	)	_LOGLINE=$(err_colors "$_LINE" "$_MESSAGE")		;;
-	3	)	_LOGLINE=$(warn_colors "$_LINE" "$_MESSAGE")	;;
-	4	)	_LOGLINE=$(info_colors "$_LINE" "$_MESSAGE")	;;
-	5	)	_LOGLINE=$(dbg_colors "$_LINE" "$_MESSAGE")		;;
-	esac
-	if [ $IMPORTANCE -le $VERBOSITY ]
+	_LOG_HEADER="$(get_timestamp) # $_LABEL"
+	### generating screen output
+	if (( "$_IMPORTANCE" <= "$VERBOSITY" ))
 	then
-		echo -e "$_LOG_LINE" | tee -a $LOGFILE
+		local IMAX=$SCREEN_WIDTH-$(_log_line_length)
+		for (( i=2 ; i<IMAX ; i++ ))
+		do
+			_SCREEN_LINE_FILLER+="#"
+		done
+		_SCREEN_LINE="$_MESSAGE $_SCREEN_LINE_FILLER"
+		case $_IMPORTANCE in
+			1	)	_SCREEN_OUTPUT=$(crit_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			2	)	_SCREEN_OUTPUT=$(err_colors "$_LOG_HEADER" "$_SCREEN_LINE")		;;
+			3	)	_SCREEN_OUTPUT=$(warn_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			4	)	_SCREEN_OUTPUT=$(info_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			5	)	_SCREEN_OUTPUT=$(dbg_colors "$_LOG_HEADER" "$_SCREEN_LINE")		;;
+		esac
+		echo -e "$_SCREEN_OUTPUT"
+	fi
+	### generating log output
+	local IMAX=$LOG_WIDTH-$(_log_line_length)
+	for (( i=1 ; i<IMAX ; i++ ))
+	do
+		_LOG_LINE_FILLER+="#"
+	done
+	_LOG_OUTPUT="$_LOG_HEADER $_MESSAGE $_LOG_LINE_FILLER"
+	tolog "$_LOG_OUTPUT"
+}
+
+tolog() {
+	local _LOG_ENTRY="$1"
+	if [ $LOG_FILE_CREATED != true ]
+	then
+		if [ -z ${LOG_BUFFER+x} ] ; then declare -g LOG_BUFFER="" ; fi
+		LOG_BUFFER+="\n$_LOG_ENTRY"
 	else
-		echo -e "$_LOG_LINE" >> $LOGFILE
+		if [ -n "$LOG_BUFFER" ]
+		then
+			echo -e "$_LOG_BUFFER" >> "$LOG_FILE"
+			unset $_LOG_BUFFER
+			echo "$_LOG_ENTRY" >> "$LOG_FILE"
+		else
+			echo "$_LOG_ENTRY" >> "$LOG_FILE"
+		fi
 	fi
 }

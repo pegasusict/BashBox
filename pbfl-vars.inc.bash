@@ -11,10 +11,10 @@
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=2									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180424							  #
+# VERSION_MINOR=1									  #
+# VERSION_PATCH=0									  #
+# VERSION_STATE="ALPHA"								  #
+# VERSION_BUILD=20180504							  #
 #######################################################
 
 create_var() {	### sets $VAR to $VALUE
@@ -40,4 +40,10 @@ create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
 	do
 		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
 	done
+}
+str_to_lower() {
+	echo "${1,,}"
+}
+str_to_upper() {
+	echo "${1^^}"
 }

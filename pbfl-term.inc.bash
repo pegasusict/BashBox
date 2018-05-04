@@ -26,122 +26,124 @@ get_screen_size() { ### gets terminal size and sets global vars
 	dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
 }
 
-define_colors() {
-	# Reset
-	Color_Off='\033[0m'			# Text Reset
-
-	# Regular Colors
-	Black='\033[0;30m'			# Black
-	Red='\033[0;31m'			# Red
-	Green='\033[0;32m'			# Green
-	Yellow='\033[0;33m'			# Yellow
-	Blue='\033[0;34m'			# Blue
-	Purple='\033[0;35m'			# Purple
-	Cyan='\033[0;36m'			# Cyan
-	White='\033[0;37m'			# White
-
-	# Bold
-	BBlack='\033[1;30m'			# Black
-	BRed='\033[1;31m'			# Red
-	BGreen='\033[1;32m'			# Green
-	BYellow='\033[1;33m'		# Yellow
-	BBlue='\033[1;34m'			# Blue
-	BPurple='\033[1;35m'		# Purple
-	BCyan='\033[1;36m'			# Cyan
-	BWhite='\033[1;37m'			# White
-
-	# Underline
-	UBlack='\033[4;30m'			# Black
-	URed='\033[4;31m'			# Red
-	UGreen='\033[4;32m'			# Green
-	UYellow='\033[4;33m'		# Yellow
-	UBlue='\033[4;34m'			# Blue
-	UPurple='\033[4;35m'		# Purple
-	UCyan='\033[4;36m'			# Cyan
-	UWhite='\033[4;37m'			# White
-
-	# Background
-	On_Black='\033[40m'			# Black
-	On_Red='\033[41m'			# Red
-	On_Green='\033[42m'			# Green
-	On_Yellow='\033[43m'		# Yellow
-	On_Blue='\033[44m'			# Blue
-	On_Purple='\033[45m'		# Purple
-	On_Cyan='\033[46m'			# Cyan
-	On_White='\033[47m'			# White
-
-	# High Intensity
-	IBlack='\033[0;90m'			# Black
-	IRed='\033[0;91m'			# Red
-	IGreen='\033[0;92m'			# Green
-	IYellow='\033[0;93m'		# Yellow
-	IBlue='\033[0;94m'			# Blue
-	IPurple='\033[0;95m'		# Purple
-	ICyan='\033[0;96m'			# Cyan
-	IWhite='\033[0;97m'			# White
-
-	# Bold High Intensity
-	BIBlack='\033[1;90m'		# Black
-	BIRed='\033[1;91m'			# Red
-	BIGreen='\033[1;92m'		# Green
-	BIYellow='\033[1;93m'		# Yellow
-	BIBlue='\033[1;94m'			# Blue
-	BIPurple='\033[1;95m'		# Purple
-	BICyan='\033[1;96m'			# Cyan
-	BIWhite='\033[1;97m'		# White
-
-	# High Intensity backgrounds
-	On_IBlack='\033[0;100m'		# Black
-	On_IRed='\033[0;101m'		# Red
-	On_IGreen='\033[0;102m'		# Green
-	On_IYellow='\033[0;103m'	# Yellow
-	On_IBlue='\033[0;104m'		# Blue
-	On_IPurple='\033[0;105m'	# Purple
-	On_ICyan='\033[0;106m'		# Cyan
-	On_IWhite='\033[0;107m'		# White
-
-	# Other effects
-	Bold='\033[1m'
-	Dim='\033[2m'
-	Italic='\033[3m'
-	Underline='\033[4m'
-	Blink='\033[5m'
-	
-	Invert='\033[7m'
-	Hidden='\033[8m'
-	Strikethrough='\033[9m'
+str_to_lower() {
+	echo "${1,,}"
 }
+str_to_upper() {
+	echo "${1^^}"
+}
+gen_colours() { ### These colours are based on the results in Tilda using the Tango colour scheme
+	local _COLOUR="$(str_to_lower "$1")"
+	local _EFFECTS="$(str_to_lower "$2")"
+	local _BG_COLOUR="$(str_to_lower "$3")"
+	local _CODEBLOCK_START='\033['
+	local _CODEBLOCK_END='m'
+	local _TXT_COLOUR=""
+	local _TXT_EFFECT=""
+	local _TXT_BG=""
+	local _RETURN=""
+
+	case $_COLOUR in
+		off		)	_TXT_COLOUR=0	;;
+		black	)	_TXT_COLOUR=30	;;
+		red		)	_TXT_COLOUR=31	;;
+		green	)	_TXT_COLOUR=32	;;
+		orange	)	_TXT_COLOUR=33	;;
+		blue	)	_TXT_COLOUR=34	;;
+		fucsia	)	_TXT_COLOUR=35	;;
+		cyan	)	_TXT_COLOUR=36	;;
+		silver	)	_TXT_COLOUR=37	;;
+		grey	)	_TXT_COLOUR=90	;;
+		lred	)	_TXT_COLOUR=91	;;
+		lgreen	)	_TXT_COLOUR=92	;;
+		yellow	)	_TXT_COLOUR=93	;;
+		purple	)	_TXT_COLOUR=94	;;
+		pink	)	_TXT_COLOUR=95	;;
+		lcyan	)	_TXT_COLOUR=96	;;
+		white	)	_TXT_COLOUR=97	;; # or 39????
+		*		)	_TXT_COLOUR=0	;;
+	esac
+
+	case $_EFFECT in
+		n|none		)	_TXT_EFFECT=0	;;
+		b|bold		)	_TXT_EFFECT=1	;;
+		d|dim		)	_TXT_EFFECT=2	;;
+		u|under		)	_TXT_EFFECT=4	;;
+		h|hidden	)	_TXT_EFFECT=8	;;
+		s|strike	)	_TXT_EFFECT=9	;;
+		*			)	_TXT_EFFECT=0	;;
+	esac
+
+	case $_BG_COLOUR in
+		black		)	_TXT_BG=40	;;
+		red			)	_TXT_BG=41	;;
+		green		)	_TXT_BG=42	;;
+		orange		)	_TXT_BG=43	;;
+		blue		)	_TXT_BG=44	;;
+		fucsia		)	_TXT_BG=45	;;
+		cyan		)	_TXT_BG=46	;;
+		silver		)	_TXT_BG=47	;;
+		gray		)	_TXT_BG=100	;;
+		lred		)	_TXT_BG=101	;;
+		lgreen		)	_TXT_BG=102	;;
+		yellow		)	_TXT_BG=103	;;
+		purple		)	_TXT_BG=104	;;
+		pink		)	_TXT_BG=105	;;
+		lcyan		)	_TXT_BG=106	;;
+		white		)	_TXT_BG=107	;;
+		unknown		)	_TXT_BG=49	;; # behaves strangely in my terminal emulator, probably a "tilda" issue
+		off			)	_TXT_BG=40	;;
+		*			)	_TXT_BG=0	;;
+	esac
+
+	if [[ "$_TXT_COLOUR" == 0]]
+	then
+		_RETURN="$_CODEBLOCK_START0$_CODEBLOCK_END"
+		echo -e "$_RETURN"
+		break
+	else
+		if [[ "$_TXT_BG" == 0]]
+		then
+			_RETURN="$_CODEBLOCK_START"
+		else
+			_RETURN="$_CODEBLOCK_START$_TXT_BG"
+		fi
+		if [[ "$_TXT_EFFECT" != 0]]
+		then
+			_RETURN+="$_TXT_EFFECT"
+		fi
+		_RETURN+="$_TXT_COLOUR$_CODEBLOCK_END"
+	fi
+	echo -e "$_RETURN"
+}
+
 crit_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$BIYellow$On_IRed$_LABEL$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
+	local _OUTPUT="$(gen_colours lyellow b red)$_LABEL$(gen_colours off) $(gen_colours red b lyellow)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 err_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$BRed$On_Black$_LABEL$Color_Off $Red$On_Black$_MESSAGE$Color_Off"
+	local _OUTPUT="$(gen_colours yellow b black)$_LABEL$(gen_colours off) $(gen_colours black b yellow)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 warn_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Red$On_White$_LABEL$Color_Off $Red$On_White$_MESSAGE$Color_Off"
+	local _OUTPUT="$(gen_colours lred n black)$_LABEL$(gen_colours off) $(gen_colours black n lred)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 info_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Black$On_White$_LABEL$Color_Off $Black$On_White$_MESSAGE$Color_Off"
+	local _OUTPUT="$(gen_colours black n white)$_LABEL$(gen_colours off) $(gen_colours black n silver)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 dbg_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$Black$On_White$_LABEL$Color_Off $Black$On_Green$_MESSAGE$Color_Off"
+	local _OUTPUT="$(gen_colours black n lgreen)$_LABEL$(gen_colours off) $(gen_colours black n green)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
-
-
-### MAIN ###
-define_colors

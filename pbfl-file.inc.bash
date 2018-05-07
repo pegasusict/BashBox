@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=3									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180502							  #
+# VERSION_PATCH=5									  #
+# VERSION_STATE="ALPHA"								  #
+# VERSION_BUILD=20180507							  #
 #######################################################
 
 ### File(System) operations ####################################################
@@ -59,10 +59,20 @@ add_to_script() { #adds line or blob to script
 
 create_dir() { ### Creates directory if it doesn't exist
 	_TARGET_DIR=$1
+	local _UMASK=$2
+	local _OWNER=$3
+	local _GROUP=$4
 	if [ ! -d "$_TARGET_DIR" ]
 	then
 		mkdir "$_TARGET_DIR"
 	fi
+	if [ var_is_set $_UMASK ]
+	then
+		chmod $_UMASK "$_TARGET_DIR"
+	fi
+	if [ var_is_set $_GROUP ]
+	then
+		chown $_OWNER:$_GROUP "$_TARGET_DIR"
 }
 
 create_file() { ### Creates file if it doesn't exist
@@ -76,12 +86,27 @@ create_file() { ### Creates file if it doesn't exist
 	fi
 	if [ var_is_set $_UMASK ]
 	then
-		chmod $_UMASK $_TARGET_FILE
+		chmod $_UMASK "$_TARGET_FILE"
 	fi
-#	if [ var_is_set $_GROUP ]
-#	then
-#		chown 
+	if [ var_is_set $_GROUP ]
+	then
+		chown $_OWNER:$_GROUP "$_TARGET_FILE"
+	fi
 }
+
+create_logfile() {
+    create_file $LOG_FILE
+    declare -gr LOG_FILE_CREATED=true
+}
+
+create_file() { ### Creates file if it doesn't exist
+	local _TARGET_FILE="$1"
+	if [ ! -f "$_TARGET_FILE" ]
+	then
+		touch "$_TARGET_FILE"
+	fi
+}
+
 
 file_exists() { ### Checks if file exists
 				# usage: file_exists $FILE

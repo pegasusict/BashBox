@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=14									  #
+# VERSION_PATCH=15									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180502							  #
+# VERSION_BUILD=20180507							  #
 #######################################################
 
 ### (Inter)net(work) Operations ################################################
@@ -57,9 +57,9 @@ watch_dog() {
 			err_line "watch_dog: DNS Down, resetting network"
 			cycle_network
 		else
-			dbg_line "watch_dog: DNS works fine"
+			info_line "watch_dog: DNS works fine"
 		fi
-		dbg_line "watch_dog: sleeping for 1 minute"
+		dbg_line "watch_dog: Back in 1 minute"
 		sleep 60
 	done
 }

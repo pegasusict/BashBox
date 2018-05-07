@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=31										#
-# VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180502								#
+# VERSION_PATCH=35										#
+# VERSION_STATE="ALPHA"									#
+# VERSION_BUILD=20180507								#
 #########################################################
 
 unset CDPATH # to prevent mishaps when using cd with relative paths
@@ -22,6 +22,8 @@ unset CDPATH # to prevent mishaps when using cd with relative paths
 ### FUNCTIONS ###
 create_constants() { ### defines constants
 	dbg_line "creating constants"
+	# today's date
+	declare -gr TODAY=$(date +"%d-%m-%Y")
 	# declare extensions
 	declare -gr INI_EXT=".ini"
 	declare -gr LIB_EXT=".inc.bash"
@@ -37,9 +39,8 @@ create_constants() { ### defines constants
 	declare -gr INI_PRSR="$LIB_DIRini_parser$LIB_EXT"
 	declare -gr LIB_FILE="functions$LIB_EXT"
 	declare -gr LIB="$LIB_DIR$LIB_FILE"
-	declare -gr LOG_FILE="$LOG_DIR$SCRIPT_$START_TIME$LOG_EXT"
-	# today's date
-	declare -gr TODAY=$(date +"%d-%m-%Y")
+	declare -gr LOG_FILE="$LOG_DIR$SCRIPT_$$TODAY$LOG_EXT"
+
 	# define booleans
 	declare -gr TRUE=0
 	declare -gr FALSE=1
@@ -60,7 +61,7 @@ import() {
 
 import_libs() {
 	echo "importing libs...."
-	declare -a _LIB_PARTS=("apt" "datetime" "file" "net" "term" "tmp" "tmpl" "user" "vars")
+	declare -a _LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
 	for _PART in $_LIB_PARTS
 	do
 		local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"

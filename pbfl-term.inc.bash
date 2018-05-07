@@ -21,17 +21,11 @@
 get_screen_size() { ### gets terminal size and sets global vars
 					#+  SCREEN_HEIGHT and SCREEN_WIDTH
 	dbg_line "getting screen size"
-	declare -g SCREEN_HEIGHT=$(tput lines)
-	declare -g SCREEN_WIDTH=$(tput cols)
+	declare -g SCREEN_HEIGHT=$(tput lines) #${ $LINES:-25 }
+	declare -g SCREEN_WIDTH=$(tput cols) #${ $COLUMNS:-80 }
 	dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
 }
 
-str_to_lower() {
-	echo "${1,,}"
-}
-str_to_upper() {
-	echo "${1^^}"
-}
 gen_colours() { ### These colours are based on the results in Tilda using the Tango colour scheme
 	local _COLOUR="$(str_to_lower "$1")"
 	local _EFFECTS="$(str_to_lower "$2")"

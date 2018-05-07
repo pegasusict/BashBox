@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=35										#
+# VERSION_PATCH=37										#
 # VERSION_STATE="ALPHA"									#
 # VERSION_BUILD=20180507								#
 #########################################################
@@ -23,7 +23,7 @@ unset CDPATH # to prevent mishaps when using cd with relative paths
 create_constants() { ### defines constants
 	dbg_line "creating constants"
 	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
-	declare -agr _LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
+	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
 	# today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	# declare extensions
@@ -63,7 +63,9 @@ import() {
 
 import_libs() {
 	echo "importing libs...."
-	for _PART in $_LIB_PARTS
+	local _PART=""
+	local _TO_BE_IMPORTED=""
+	for _PART in $LIB_PARTS
 	do
 		local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
 		echo "importing $_TO_BE_IMPORTED"

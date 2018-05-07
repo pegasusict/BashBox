@@ -36,9 +36,7 @@ insert_into_initd() {
 	info_line "Installation of $SCRIPT_TITLE complete"
 }
 
-
 install_mod() {
-	mods=(PLAT_Manager PLAT_WordPressTools PBFL PLAT_internet_watchdog PLAT_aptcacher)
 	local _MODULE=$1
 	create_tmp
 	local _OLD_PWD=$(pwd)

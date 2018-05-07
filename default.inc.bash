@@ -22,6 +22,8 @@ unset CDPATH # to prevent mishaps when using cd with relative paths
 ### FUNCTIONS ###
 create_constants() { ### defines constants
 	dbg_line "creating constants"
+	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
+	declare -agr _LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
 	# today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	# declare extensions
@@ -61,7 +63,6 @@ import() {
 
 import_libs() {
 	echo "importing libs...."
-	declare -a _LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
 	for _PART in $_LIB_PARTS
 	do
 		local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"

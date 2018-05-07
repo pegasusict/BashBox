@@ -2,7 +2,7 @@
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: GPL v3					  # Please keep my name in the credits #
+# License: MIT						  # Please keep my name in the credits #
 ############################################################################
 
 #########################################################
@@ -15,6 +15,7 @@
 # VERSION_PATCH=15										#
 # VERSION_STATE="ALPHA"									#
 # VERSION_BUILD=20180424								#
+# LICENSE="MIT"											#
 #########################################################
 
 ### FUNCTIONS ###
@@ -114,19 +115,19 @@ gen_colours() { ### These colours are based on the results in Tilda using the Ta
 crit_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$(gen_colours lyellow b red)$_LABEL$(gen_colours off) $(gen_colours red b lyellow)$_MESSAGE$(gen_colours off)"
+	local _OUTPUT="$(gen_colours yellow b red)$_LABEL$(gen_colours off) $(gen_colours red b yellow)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 err_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$(gen_colours yellow b black)$_LABEL$(gen_colours off) $(gen_colours black b yellow)$_MESSAGE$(gen_colours off)"
+	local _OUTPUT="$(gen_colours orange b black)$_LABEL$(gen_colours off) $(gen_colours black b orange)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 warn_colors() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
-	local _OUTPUT="$(gen_colours lred n black)$_LABEL$(gen_colours off) $(gen_colours black n lred)$_MESSAGE$(gen_colours off)"
+	local _OUTPUT="$(gen_colours red n black)$_LABEL$(gen_colours off) $(gen_colours black n red)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
 info_colors() {

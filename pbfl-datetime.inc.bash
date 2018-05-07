@@ -2,7 +2,7 @@
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: GPL v3					  #	Please keep my name in the credits #
+# License: MIT						  #	Please keep my name in the credits #
 ############################################################################
 
 #######################################################
@@ -15,6 +15,7 @@
 # VERSION_PATCH=1									  #
 # VERSION_STATE="STABLE"							  #
 # VERSION_BUILD=20180430							  #
+# LICENSE="MIT"										  #
 #######################################################
 
 get_timestamp() { ### returns something like 2018-03-23_13.37.59.123

@@ -2,7 +2,7 @@
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: GPL v3					  #	Please keep my name in the credits #
+# License: MIT						  #	Please keep my name in the credits #
 ############################################################################
 
 #######################################################
@@ -15,6 +15,7 @@
 # VERSION_PATCH=15									  #
 # VERSION_STATE="ALPHA"								  #
 # VERSION_BUILD=20180507							  #
+# LICENSE="MIT"										  #
 #######################################################
 
 ### (Inter)net(work) Operations ################################################

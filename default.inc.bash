@@ -2,7 +2,7 @@
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: GPL v3					  # Please keep my name in the credits #
+# License: MIT						  # Please keep my name in the credits #
 ############################################################################
 
 #########################################################
@@ -15,6 +15,7 @@
 # VERSION_PATCH=37										#
 # VERSION_STATE="ALPHA"									#
 # VERSION_BUILD=20180507								#
+# LICENSE="MIT"											#
 #########################################################
 
 unset CDPATH # to prevent mishaps when using cd with relative paths
@@ -31,17 +32,17 @@ create_constants() { ### defines constants
 	declare -gr LIB_EXT=".inc.bash"
 	declare -gr LOG_EXT=".log"
 	# declare directories !!! always end with a "/" !!!
-	declare -gr LIB_DIR="BASH_FUNC_LIB/"
+	declare -gr LIB_DIR="PBFL/"
 	declare -gr PEG_LIB="pbfl-"
-	declare -gr SYS_LIB_DIR="/var/lib/plat/"
+	#declare -gr SYS_LIB_DIR="/var/lib/plat/"
 	declare -gr SYS_BIN_DIR="/usr/bin/plat/"
 	declare -gr LOG_DIR="/var/log/plat/"
 	# declare ini & dedicated function lib
 	declare -gr INI_FILE="$SCRIPT$INI_EXT"
 	declare -gr INI_PRSR="$LIB_DIRini_parser$LIB_EXT"
-	declare -gr LIB_FILE="functions$LIB_EXT"
-	declare -gr LIB="$LIB_DIR$LIB_FILE"
-	declare -gr LOG_FILE="$LOG_DIR$SCRIPT_$$TODAY$LOG_EXT"
+	#declare -gr LIB_FILE="functions$LIB_EXT"
+	#declare -gr LIB="$LIB_DIR$LIB_FILE"
+	declare -gr LOG_FILE="$LOG_DIR$SCRIPT_$TODAY$LOG_EXT"
 
 	# define booleans
 	declare -gr TRUE=0
@@ -62,18 +63,29 @@ import() {
 }
 
 import_libs() {
-	echo "importing libs...."
+	dbg_line "importing libs...."
 	local _PART=""
 	local _TO_BE_IMPORTED=""
 	for _PART in $LIB_PARTS
 	do
+################
+	if [[ -f "$_LOCAL_LIB$_LIB_INDEX" ]]
+	then
+		source "$_LOCAL_LIB$_LIB_INDEX"
+	elif [[ -f "$_SYSTEM_LIB$_LIB_INDEX" ]]
+	then
+		source "$_SYSTEM_LIB$_LIB_INDEX"
+	else
+		crit_line "File $_LIB_INDEX not found!"
+		exit 1
+########################
+	fi
 		local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
 		echo "importing $_TO_BE_IMPORTED"
 		import "$_TO_BE_IMPORTED"
 	done
 	import "$INI_PRSR"
 }
-
 ### MAIN ###
 create_constants
 import_libs

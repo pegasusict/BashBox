@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=15										#
+# VERSION_PATCH=17										#
 # VERSION_STATE="ALPHA"									#
-# VERSION_BUILD=20180424								#
+# VERSION_BUILD=20180508								#
 # LICENSE="MIT"											#
 #########################################################
 
@@ -22,8 +22,8 @@
 get_screen_size() { ### gets terminal size and sets global vars
 					#+  SCREEN_HEIGHT and SCREEN_WIDTH
 	dbg_line "getting screen size"
-	declare -g SCREEN_HEIGHT=$(tput lines) #${ $LINES:-25 }
-	declare -g SCREEN_WIDTH=$(tput cols) #${ $COLUMNS:-80 }
+	declare -g SCREEN_HEIGHT=$(tput lines)
+	declare -g SCREEN_WIDTH=$(tput cols)
 	dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
 }
 

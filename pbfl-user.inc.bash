@@ -1,4 +1,4 @@
-#!/bin/bash -p
+#!/bin/bash
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #

@@ -221,11 +221,11 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 		done
 		_SCREEN_LINE="$_MESSAGE $_SCREEN_LINE_FILLER"
 		case $_IMPORTANCE in
-			1	)	_SCREEN_OUTPUT=$(crit_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			2	)	_SCREEN_OUTPUT=$(err_colors "$_LOG_HEADER" "$_SCREEN_LINE")		;;
-			3	)	_SCREEN_OUTPUT=$(warn_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			4	)	_SCREEN_OUTPUT=$(info_colors "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			5	)	_SCREEN_OUTPUT=$(dbg_colors "$_LOG_HEADER" "$_SCREEN_LINE")		;;
+			1	)	_SCREEN_OUTPUT=$(crit_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			2	)	_SCREEN_OUTPUT=$(err_colours "$_LOG_HEADER" "$_SCREEN_LINE")		;;
+			3	)	_SCREEN_OUTPUT=$(warn_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			4	)	_SCREEN_OUTPUT=$(info_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			5	)	_SCREEN_OUTPUT=$(dbg_colours "$_LOG_HEADER" "$_SCREEN_LINE")		;;
 		esac
 		echo -e "$_SCREEN_OUTPUT"
 	fi

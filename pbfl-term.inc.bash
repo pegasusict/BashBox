@@ -112,31 +112,31 @@ gen_colours() { ### These colours are based on the results in Tilda using the Ta
 	echo -e "$_RETURN"
 }
 
-crit_colors() {
+crit_colours() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
 	local _OUTPUT="$(gen_colours yellow b red)$_LABEL$(gen_colours off) $(gen_colours red b yellow)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
-err_colors() {
+err_colours() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
 	local _OUTPUT="$(gen_colours orange b black)$_LABEL$(gen_colours off) $(gen_colours black b orange)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
-warn_colors() {
+warn_colours() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
 	local _OUTPUT="$(gen_colours red n black)$_LABEL$(gen_colours off) $(gen_colours black n red)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
-info_colors() {
+info_colours() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
 	local _OUTPUT="$(gen_colours black n white)$_LABEL$(gen_colours off) $(gen_colours black n silver)$_MESSAGE$(gen_colours off)"
 	echo -e "$_OUTPUT"
 }
-dbg_colors() {
+dbg_colours() {
 	local _LABEL="$1"
 	local _MESSAGE="$2"
 	local _OUTPUT="$(gen_colours black n lgreen)$_LABEL$(gen_colours off) $(gen_colours black n green)$_MESSAGE$(gen_colours off)"

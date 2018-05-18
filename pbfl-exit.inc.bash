@@ -12,15 +12,16 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=0										#
+# VERSION_PATCH=5										#
 # VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180425								#
+# VERSION_BUILD=20180518								#
 # LICENSE="MIT"											#
 #########################################################
 
 
 ### EXITCODES HOWTO
-howto=<<-EOF
+exit_codes_howto() {
+	<<-EOF
 		This file attempts to categorize possible error exit statuses for system program.
 
 		Error numbers begin at EX__BASE to reduce the possibility of clashing with other exit statuses that random programs may already return.
@@ -41,50 +42,97 @@ howto=<<-EOF
 		EX_PROTOCOL		->	the remote system returned something that was "not possible" during a protocol exchange.
 		EX_NOPERM		->	You did not have sufficient permission to perform the operation. This is not intended for file system problems, which should use NOINPUT or CANTCREAT, but rather for higher level permissions.
 EOF
+}
 
-declare -gr EX_OK=0				#	successful termination
-### reserved exit codes (source: advanced bash scripting guide)
-declare -gr EX_GEN_ERR=1		#	generic error code
-declare -gr EX_MISUSE=2			#	Misuse of shell builtins; Missing keyword or command, or permission problem (and diff return code on a failed binary file comparison).
-####
+### DECLARING EXIT CODES
+declare_exit_codes() {
+	declare -ag EXIT_CODES
+	EXIT_CODES[0]="EX_OK"			#	successful termination
+	
+	### reserved exit codes (source: advanced bash scripting guide)
+	EXIT_CODES[1]="EX_GEN_ERR"		#	generic error code
+	EXIT_CODES[2]="EX_MISUSE"		#	Misuse of shell builtins; Missing keyword or command, or permission problem (and diff return code on a failed binary file comparison).
+	####
 
-### defined by apple for C code ###
-declare -gr EX_USAGE=64			#	command line usage error 
-declare -gr EX_DATAERR=65		#	data format error 
-declare -gr EX_NOINPUT=66		#	cannot open input 
-declare -gr EX_NOUSER=67		#	addressee unknown 
-declare -gr EX_NOHOST=68		#	host name unknown 
-declare -gr EX_UNAVAILABLE=69	#	service unavailable 
-declare -gr EX_SOFTWARE=70		#	internal software error 
-declare -gr EX_OSERR=71			#	system error (e.g., can't fork) 
-declare -gr EX_OSFILE=72		#	critical OS file missing 
-declare -gr EX_CANTCREAT=73		#	can't create (user) output file 
-declare -gr EX_IOERR=74			#	input/output error 
-declare -gr EX_TEMPFAIL=75		#	temp failure; user is invited to retry 
-declare -gr EX_PROTOCOL=76		#	remote error in protocol 
-declare -gr EX_NOPERM=77		#	permission denied 
-declare -gr EX_CONFIG=78		#	configuration error 
-### end defined by apple ###
+	### defined by apple for C code ###
+	EXIT_CODES[64]="EX_USAGE"			#	command line usage error 
+	EXIT_CODES[65]="EX_DATAERR"			#	data format error 
+	EXIT_CODES[66]="EX_NOINPUT"			#	cannot open input 
+	EXIT_CODES[67]="EX_NOUSER"			#	addressee unknown 
+	EXIT_CODES[68]="EX_NOHOST"			#	host name unknown 
+	EXIT_CODES[69]="EX_UNAVAILABLE"		#	service unavailable 
+	EXIT_CODES[70]="EX_SOFTWARE"		#	internal software error 
+	EXIT_CODES[71]="EX_OSERR"			#	system error (e.g., can't fork) 
+	EXIT_CODES[72]="EX_OSFILE"			#	critical OS file missing 
+	EXIT_CODES[73]="EX_CANTCREAT"		#	can't create (user) output file 
+	EXIT_CODES[74]="EX_IOERR"			#	input/output error 
+	EXIT_CODES[75]="EX_TEMPFAIL"		#	temp failure; user is invited to retry 
+	EXIT_CODES[76]="EX_PROTOCOL"		#	remote error in protocol 
+	EXIT_CODES[77]="EX_NOPERM"			#	permission denied 
+	EXIT_CODES[78]="EX_CONFIG"			#	configuration error 
+	### end defined by apple ###
 
-### thought up myself ###
-declare -gr EX_USER=80			#	Something went wrong during user interaction, most likely unexpected input from user.
-declare -gr EX_FORK=81			#	Cannot Fork
-declare -gr EX_PIPE=82			#	Cannot create pipe
-declare -gr EX_DNS=83			#	DNS error, either Host or Domain does not exist or DNS server unreachable.
-declare -gr EX_FILE_WRITE=84	#	File writing error so either the permissons are off or the fs is readonly
-declare -gr EX_FILE_READ=85		#	File reading error so the permissons must be wrong
-declare -gr EX_FILE_NOTEXIST=86	#	File doen not exist
-declare -gr EX_DIR_WRITE=87		#	Cannot write into DIR; directory permissions are wrong or fs is mounted readonly
-declare -gr EX_DIR_READ=88		#	Dir reading error so the permissons must be wrong
-declare -gr EX_DIR_NOTEXIST=89	#	Dir does not exist
-declare -gr EX_HOST_TIMEOUT=90	#	Timeout on connection
-### end thought up myself
+	### thought up myself ###
+	EXIT_CODES[80]="EX_USER"			#	unexpected user input.
+	EXIT_CODES[81]="EX_FORK"			#	Cannot Fork
+	EXIT_CODES[82]="EX_PIPE"			#	Cannot create pipe
+	EXIT_CODES[83]="EX_DNS"				#	DNS error, either Host or Domain does not exist or DNS server unreachable.
+	EXIT_CODES[84]="EX_FILE_WRITE"		#	File writing error so either the permissons are off or the fs is readonly
+	EXIT_CODES[85]="EX_FILE_READ"		#	File reading error so the permissons must be wrong
+	EXIT_CODES[86]="EX_FILE_NOTEXIST"	#	File doen not exist
+	EXIT_CODES[87]="EX_DIR_WRITE"		#	Cannot write into DIR; directory permissions are wrong or fs is mounted readonly
+	EXIT_CODES[88]="EX_DIR_READ"		#	Dir reading error so the permissons must be wrong
+	EXIT_CODES[89]="EX_DIR_NOTEXIST"	#	Dir does not exist
+	EXIT_CODES[90]="EX_HOST_TIMEOUT"	#	Timeout on connection
+	### end thought up myself
 
-### reserved exit codes (source: advanced bash scripting guide)
-declare -gr EX_EXEC=126			#	Command invoked cannot execute; permission problem or command is not an executable
-declare -gr EX_NOTFOUND=127		#	command not found; possible problem with $PATH or a typo
-declare -gr EX_EXIT=128			#	Invalid argument to exit; exit takes only integer args in the range 0 - 255
-declare -gr EX_ERR_SIG9=137		#	Fatal error signal 9; kill -9 $PPID $? returns 137 (128 + 9)
-declare -gr EX_ERR_SIG15=143	#	Fatal error signal 15; kill -15 $PPID $? returns 143 (128 + 15)
-declare -gr EX_CTRL_C=130		#	Script terminated by Control-C; Control-C is fatal error signal 2, (130 = 128 + 2, see above)
-if [[EXIT_CODE>255]] ; then 	#	Exit status out of range									exit -1	exit takes only integer args in the range 0 - 255
+	### reserved exit codes (source: advanced bash scripting guide)
+	EXIT_CODES[126]="EX_EXEC"			#	Command invoked cannot execute; permission problem or command is not an executable
+	EXIT_CODES[127]="EX_NOTFOUND"		#	command not found; possible problem with $PATH or a typo
+	EXIT_CODES[128]="EX_EXIT"			#	Invalid argument to exit; exit takes only integer args in the range 0 - 255
+	EXIT_CODES[130]="EX_CTRL_C"			#	Script terminated by Control-C; Control-C is fatal error signal 2, (130 = 128 + 2)
+	EXIT_CODES[137]="EX_ERR_SIG9"		#	Fatal error signal 9; kill -9 $PPID $? returns 137 (128 + 9)
+	EXIT_CODES[143]="EX_ERR_SIG15"		#	Fatal error signal 15; kill -15 $PPID $? returns 143 (128 + 15)
+	if [[EXIT_CODE>255]]		 		#	Exit status out of range; exit takes only integer args in the range 0 - 255
+	then
+		EXIT_CODE="$EX_EXIT"
+	fi
+}
+
+do_exit() {
+	local _EXIT_CODE="$1"
+	local _MESSAGE="$2"
+	local _OUTPUT=""
+	for $EXIT_CODE in "${EXIT_CODES[@]}"
+	do
+		if (("$_EXIT_CODE" == "$EXIT_CODE" ))
+		then
+			_OUTPUT="$EXIT_CODES[$_EXIT_CODE]: $_MESSAGE"
+			if (( "$_EXIT_CODE" > 0 ))
+			then
+				exit "$_EXIT_CODE" "$_OUTPUT" >&2
+		fi
+	done
+}
+
+catch_exit() {
+	local _CAUGHT_CODE="$1"
+	local _OUTPUT=""
+	for $EXIT_CODE in "${EXIT_CODES[@]}"
+	do
+		if (("$_CAUGHT_CODE" == "$EXIT_CODE" ))
+		then
+			_OUTPUT="$_CAUGHT_CODE: $EXIT_CODES[$_CAUGHT_CODE]"
+			echo "$_OUTPUT"
+		fi
+	done
+}
+
+#######
+
+main() {
+	declare_exit_codes
+}
+
+### BOILERPLATE ###
+main

@@ -12,18 +12,21 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=0									  #
+# VERSION_PATCH=3									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180504							  #
+# VERSION_BUILD=20180522							  #
 # LICENSE="MIT"										  #
 #######################################################
 
+### VARS
 create_var() {	### sets $VAR to $VALUE
 				# varname is automatically changed to uppercase
 	_VAR=$1
 	_VALUE=$2
 	declare -gu $_VAR=$_VALUE
 }
+
+### ARRAYS
 create_indexed_array() { ### sets $ARRAY to $VALUE1 --- $VALUEn
 						 # usage create_indexed_array $ARRAY $VALUE1 [$VALUE2 ...]
 	_ARRAY=$1
@@ -42,6 +45,8 @@ create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
 		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
 	done
 }
+
+###STRING MANIPULATION
 str_to_lower() {
 	echo "${1,,}"
 }

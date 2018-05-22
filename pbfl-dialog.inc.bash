@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=0									  #
+# VERSION_PATCH=1									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180508							  #
+# VERSION_BUILD=20180517							  #
 # LICENSE="MIT"										  #
 #######################################################
 # reference: http://xmodulo.com/create-dialog-boxes-interactive-shell-script.html

@@ -12,12 +12,11 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=5										#
+# VERSION_PATCH=6										#
 # VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180518								#
+# VERSION_BUILD=20180522								#
 # LICENSE="MIT"											#
 #########################################################
-
 
 ### EXITCODES HOWTO
 exit_codes_howto() {

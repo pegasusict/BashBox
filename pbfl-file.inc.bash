@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=5									  #
+# VERSION_PATCH=6									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180507							  #
+# VERSION_BUILD=20180517							  #
 # LICENSE="MIT"										  #
 #######################################################
 

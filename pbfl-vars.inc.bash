@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=3									  #
+# VERSION_PATCH=5									  #
 # VERSION_STATE="ALPHA"								  #
 # VERSION_BUILD=20180522							  #
 # LICENSE="MIT"										  #
@@ -44,6 +44,26 @@ create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
 	do
 		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
 	done
+}
+key_exists() {
+	local _KEY="$1"
+	local _ARRAY="$2"
+	if [] # key exists in array
+	then
+		echo true
+	else
+		echo false
+	fi
+}
+value_exists() {
+	local _VALUE="$1"
+	local _ARRAY="$2"
+	if [] # value exists in array
+	then
+		echo true
+	else
+		echo false
+	fi
 }
 
 ###STRING MANIPULATION

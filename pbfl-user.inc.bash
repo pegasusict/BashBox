@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=18									  #
+# VERSION_PATCH=19									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180517							  #
+# VERSION_BUILD=20180525							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -60,7 +60,7 @@ prompt() {	### prompt a user for information
 			# if $PASS is true, OPTIONS will be ignored
 	local _QUERY="$1"
 	local _PASS=${2:-false}
-	local _OPTIONS=${3:-false} # eg: ("j", "ja", "y", "yes", "n", "nee", "no")
+	local _OPTIONS=$3 # eg: ("j", "ja", "y", "yes", "n", "nee", "no")
 	local _ANSWER
 	local _FINAL_ANSWER=""
 	###

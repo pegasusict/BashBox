@@ -12,18 +12,20 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=43										#
-# VERSION_STATE="ALPHA"									#
-# VERSION_BUILD=20180517								#
+# VERSION_PATCH=44										#
+# VERSION_STATE="PRE-ALPHA"								#
+# VERSION_BUILD=20180528								#
 #########################################################
 
-unset CDPATH # to prevent mishaps when using cd with relative paths
+# to prevent mishaps when using cd with relative paths
+unset CDPATH
+
 # A better class of script...
-set -o errexit		# Exit on most errors (see the manual)
-set -o errtrace		# Make sure any error trap is inherited
-set -o nounset		# Disallow expansion of unset variables
-set -o pipefail		# Use last non-zero exit code in a pipeline
-set -o xtrace		# Trace the execution of the script (debug)
+set -o errexit	# Exit on most errors (see the manual)
+set -o errtrace	# Make sure any error trap is inherited
+set -o nounset	# Disallow expansion of unset variables
+set -o pipefail	# Use last non-zero exit code in a pipeline
+set -o xtrace	# Trace the execution of the script (debug)
 
 ### FUNCTIONS ###
 create_constants() { ### defines constants
@@ -83,7 +85,7 @@ import_libs() {
 		crit_line "File $_PART not found!"
 		exit 1
 	fi
-	local _TO_BE_IMPORTED="$PEG_LIB$_PART	local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
+	local _TO_BE_IMPORTED="$PEG_LIB$_PART	local _TO_BE_IMPORTED=$PEG_LIB$_PART$LIB_EXT"
 	echo "importing $_TO_BE_IMPORTED"
 	echo "importing $_TO_BE_IMPORTED"
 	import "$_TO_BE_IMPORTED"

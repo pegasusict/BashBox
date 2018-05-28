@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=1									  #
+# VERSION_PATCH=2									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180517							  #
+# VERSION_BUILD=20180528							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -29,9 +29,11 @@ add_ppa(){
 		"aar"		)	add-apt-repository $_URL 2>&1 | verb_line ;;
 	esac
 }
+
 apt_inst() { ### Installs packages (space seperated arguments)
 	apt-get -qqy --allow-unauthenticated install "$@" 2>&1 | verb_line
 }
+
 install() {
 	local _PACKAGE=$1
 	dpkg -i $_PACKAGE 2>&1 | verb_line

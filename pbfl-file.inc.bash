@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=6									  #
+# VERSION_PATCH=7									  #
 # VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180517							  #
+# VERSION_BUILD=20180528							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -40,6 +40,25 @@ add_line_to_file() { ### Inserts line into file if it's not there yet
 			exit 1
 		fi
 	fi
+}
+
+edit_line_in_file() {
+	local _SEARCH_FOR="$1"
+	local _REPLACE_WITH="$2"
+	local _FILE="$3"
+	#dbg_line "Replacing $_SEARCH_FOR with $_REPLACE_WITH in $_FILE"
+	local _QUERY="sed -i 's/"
+	_QUERY+="$_SEARCH_FOR"
+	_QUERY+=".*/"
+	_QUERY+="$_REPLACE_WITH"
+	_QUERY+="/' "
+	_QUERY+="'$_FILE'"
+	echo $_QUERY
+	local _RESULT=("$_QUERY")
+	#if [ $_RESULT!=0 ]
+	#then
+	#	err_line "edit_line_in_file(): Something went wrong"
+	#fi
 }
 
 add_to_script() { #adds line or blob to script
@@ -74,6 +93,7 @@ create_dir() { ### Creates directory if it doesn't exist
 	if [ var_is_set $_GROUP ]
 	then
 		chown $_OWNER:$_GROUP "$_TARGET_DIR"
+	fi
 }
 
 create_file() { ### Creates file if it doesn't exist

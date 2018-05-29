@@ -29,9 +29,9 @@ set -o xtrace	# Trace the execution of the script (debug)
 
 ### FUNCTIONS ###
 create_constants() { ### defines constants
-	dbg_line "creating constants"
+	if [ $VERBOSITY=5 ] ; then echo "creating constants" ; fi
 	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
-	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "net" "term" "tmp" "tmpl" "user" "vars")
+	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "mutex" "net" "term" "tmp" "tmpl" "user" "vars")
 	# today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	# declare extensions
@@ -55,7 +55,7 @@ create_constants() { ### defines constants
 	declare -gr TRUE=0
 	declare -gr FALSE=1
 	declare -gr LOG_WIDTH=100
-	dbg_line "constants created"
+	if [ $VERBOSITY=5 ] ; then echo "constants created" ; fi
 }
 
 import() {
@@ -64,7 +64,7 @@ import() {
 	then
 		source "$_FILE"
 	else
-		crit_line "File $_FILE not found!"
+		>&2 echo "File $_FILE not found!"
 		exit 1
 	fi
 }
@@ -82,7 +82,7 @@ import_libs() {
 	then
 		source "$SYS_LIB_DIR$_PART"
 	else
-		crit_line "File $_PART not found!"
+		>&2 echo "File $_PART not found!"
 		exit 1
 	fi
 	local _TO_BE_IMPORTED="$PEG_LIB$_PART	local _TO_BE_IMPORTED=$PEG_LIB$_PART$LIB_EXT"

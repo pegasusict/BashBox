@@ -51,3 +51,12 @@ delete_from_file() {
 	local _COMMAND="'$_ADDRESS" ; _COMMAND+="d'"
 	in_place "$_COMMAND" "$_SOURCE" "$_TARGET"
 }
+
+append_in_file() {
+	local _ADDRESS="$1" # can be line no, regex or range of line numbers
+	local _TEXT="$2"
+	local _SOURCE="$3"
+	local _TARGET="$4"
+	local _COMMAND="'$_ADDRESS" ; _COMMAND+="a $_TEXT'"
+	in_place "$_COMMAND" "$_SOURCE" "$_TARGET"
+}

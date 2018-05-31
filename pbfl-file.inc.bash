@@ -128,7 +128,6 @@ create_file() { ### Creates file if it doesn't exist
 	fi
 }
 
-
 file_exists() { ### Checks if file exists
 				# usage: file_exists $FILE
 	$_FILE=$1

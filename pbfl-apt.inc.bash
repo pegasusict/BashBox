@@ -12,14 +12,13 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=2									  #
+# VERSION_PATCH=3									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180528							  #
+# VERSION_BUILD=20180602							  #
 # LICENSE="MIT"										  #
 #######################################################
 
-### apt & friends ##############################################################
-add_ppa(){
+add_ppa_key() {
 	local _METHOD=$1
 	local _URL=$2
 	local _KEY=$3

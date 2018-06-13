@@ -45,10 +45,10 @@ create_constants() { ### defines constants
 	declare -gr SYS_LOG_DIR="/var/log/plat/"
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="$SCRIPT$INI_EXT"
-	declare -gr INI_PRSR="$LIB_DIRini_parser$LIB_EXT"
+	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
 	declare -gr LIB_FILE="functions$LIB_EXT"
 	declare -gr LIB="$LIB_DIR$LIB_FILE"
-	declare -gr LOG_FILE="$LOG_DIR$SCRIPT_$$TODAY$LOG_EXT"
+	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
 
 	# define booleans
 	declare -gr TRUE=0

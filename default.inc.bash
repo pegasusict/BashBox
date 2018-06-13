@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=48										#
+# VERSION_PATCH=51										#
 # VERSION_STATE="PRE-ALPHA"								#
 # VERSION_BUILD=20180613								#
 # LICENSE="MIT"											#
@@ -36,7 +36,7 @@ create_constants() { ### defines constants
 	declare -gr LIB_EXT=".inc.bash"
 	declare -gr LOG_EXT=".log"
 	### declare directories !!! always end with a "/" !!!
-	declare -gr LOG_DIR="LOGS"
+	declare -gr LOG_DIR="LOGS/"
 	declare -gr LIB_DIR="PBFL/"
 	declare -gr LIB_PREFIX="pbfl-"
 	declare -gr SYS_LIB_DIR="/var/lib/plat/"
@@ -46,7 +46,7 @@ create_constants() { ### defines constants
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="$SCRIPT$INI_EXT"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
-	declare -gr LIB_FILE="functions$LIB_EXT"
+	declare -gr LIB_FILE="${SCRIPT}functions$LIB_EXT"
 	declare -gr LIB="$LIB_DIR$LIB_FILE"
 	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
 
@@ -84,8 +84,8 @@ import_libs() {
 		>&2 echo "File $_PART not found!"
 		exit 1
 	fi
-	local _TO_BE_IMPORTED="$PEG_LIB$_PART	local _TO_BE_IMPORTED=$PEG_LIB$_PART$LIB_EXT"
-	echo "importing $_TO_BE_IMPORTED"
+	local _TO_BE_IMPORTED="$PEG_LIB$_PART"
+	local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
 	echo "importing $_TO_BE_IMPORTED"
 	import "$_TO_BE_IMPORTED"
 	done

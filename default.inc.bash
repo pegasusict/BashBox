@@ -2,7 +2,7 @@
 ############################################################################
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: GPL v3					  #	Please keep my name in the credits #
+# License: MIT						  #	Please keep my name in the credits #
 ############################################################################
 
 #########################################################
@@ -12,22 +12,11 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
 # VERSION_MAJOR=0										#
 # VERSION_MINOR=0										#
-# VERSION_PATCH=46										#
+# VERSION_PATCH=48										#
 # VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180602								#
+# VERSION_BUILD=20180613								#
+# LICENSE="MIT"											#
 #########################################################
-
-# DEBUG SWITCH
-set -o xtrace	# Trace the execution of the script
-
-# to prevent mishaps when using cd with relative paths
-unset CDPATH
-
-# A better class of script...
-set -o errexit	# Exit on most errors (see the manual)
-set -o errtrace	# Make sure any error trap is inherited
-set -o nounset	# Disallow expansion of unset variables
-set -o pipefail	# Use last non-zero exit code in a pipeline
 
 ### FUNCTIONS ###
 MAINTENANCE_SCRIPT="maintenance.sh"

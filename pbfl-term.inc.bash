@@ -91,19 +91,19 @@ gen_colours() { ### These colours are based on the results in Tilda using the Ta
 		*			)	_TXT_BG=0	;;
 	esac
 
-	if [[ "$_TXT_COLOUR" == 0]]
+	if (( "$_TXT_COLOUR" == 0 ))
 	then
 		_RETURN="$_CODEBLOCK_START0$_CODEBLOCK_END"
 		echo -e "$_RETURN"
 		break
 	else
-		if [[ "$_TXT_BG" == 0]]
+		if (( "$_TXT_BG" == 0 ))
 		then
 			_RETURN="$_CODEBLOCK_START"
 		else
 			_RETURN="$_CODEBLOCK_START$_TXT_BG"
 		fi
-		if [[ "$_TXT_EFFECT" != 0]]
+		if (( "$_TXT_EFFECT" != 0 ))
 		then
 			_RETURN+="$_TXT_EFFECT"
 		fi

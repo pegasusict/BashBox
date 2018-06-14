@@ -5,18 +5,18 @@
 # License: MIT						  #	Please keep my name in the credits #
 ############################################################################
 
-#########################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools"	#
-# SCRIPT_TITLE="Library Index"							#
-# MAINTAINER="Mattijs Snepvangers"						#
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
-# VERSION_MAJOR=0										#
-# VERSION_MINOR=0										#
-# VERSION_PATCH=51										#
-# VERSION_STATE="PRE-ALPHA"								#
-# VERSION_BUILD=20180613								#
-# LICENSE="MIT"											#
-#########################################################
+#######################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
+# SCRIPT_TITLE="Library Index"						  #
+# MAINTAINER="Mattijs Snepvangers"					  #
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
+# VERSION_MAJOR=0									  #
+# VERSION_MINOR=0									  #
+# VERSION_PATCH=55									  #
+# VERSION_STATE="PRE-ALPHA"							  #
+# VERSION_BUILD=20180614							  #
+# LICENSE="MIT"										  #
+#######################################################
 
 ### FUNCTIONS ###
 MAINTENANCE_SCRIPT="maintenance.sh"
@@ -44,12 +44,11 @@ create_constants() { ### defines constants
 	declare -gr SYS_CFG_DIR="/etc/plat/"
 	declare -gr SYS_LOG_DIR="/var/log/plat/"
 	### declare ini & dedicated function lib
-	declare -gr INI_FILE="$SCRIPT$INI_EXT"
+	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
-	declare -gr LIB_FILE="${SCRIPT}functions$LIB_EXT"
-	declare -gr LIB="$LIB_DIR$LIB_FILE"
+	declare -gr LIB_FILE="${SCRIPT}functions${LIB_EXT}"
+	declare -gr LIB="${LIB_DIR}${LIB_FILE}"
 	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
-
 	# define booleans
 	declare -gr TRUE=0
 	declare -gr FALSE=1
@@ -57,41 +56,28 @@ create_constants() { ### defines constants
 	if [ $VERBOSITY=5 ] ; then echo "constants created" ; fi
 }
 
-import() {
-	local _FILE="$1"
-	if [[ -f "$_FILE" ]]
-	then
-		source "$_FILE"
-	else
-		>&2 echo "File $_FILE not found!"
-		exit 1
-	fi
-}
-
 import_libs() {
 	echo "importing libs...."
 	local _PART=""
 	local _TO_BE_IMPORTED=""
-	for _PART in $LIB_PARTS
+	for _PART in "${LIB_PARTS[@]}"
 	do
-	if [[ -f "$LOCAL_LIB$_PART" ]]
-	then
-		source "$LOCAL_LIB$_PART"
-	elif [[ -f "$SYS_LIB_DIR$_PART" ]]
-	then
-		source "$SYS_LIB_DIR$_PART"
-	else
-		>&2 echo "File $_PART not found!"
-		exit 1
-	fi
-	local _TO_BE_IMPORTED="$PEG_LIB$_PART"
-	local _TO_BE_IMPORTED="$PEG_LIB$_PART$LIB_EXT"
-	echo "importing $_TO_BE_IMPORTED"
-	import "$_TO_BE_IMPORTED"
+		local _LIB_FILE="${LIB_PREFIX}${_PART}${LIB_EXT}"
+		if [[ -f "${LIB_DIR}${_LIB_FILE}" ]]
+		then
+			echo "importing $_LIB_FILE"
+			source "${LIB_DIR}${_LIB_FILE}"
+		elif [[ -f "${SYS_LIB_DIR}${_LIB_FILE}" ]]
+		then
+			source "${SYS_LIB_DIR}${_LIB_FILE}"
+		else
+			>&2 echo "File $_LIB_FILE not found!"
+			exit 1
+		fi
 	done
-	import "$INI_PRSR"
 }
 
 ### MAIN ###
 create_constants
 import_libs
+import "$INI_PRSR"

@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=1									  #
-# VERSION_PATCH=5									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180522							  #
+# VERSION_PATCH=7									  #
+# VERSION_STATE="PRE-ALPHA"							  #
+# VERSION_BUILD=20180614							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -30,12 +30,9 @@ create_var() {	### sets $VAR to $VALUE
 create_indexed_array() { ### sets $ARRAY to $VALUE1 --- $VALUEn
 						 # usage create_indexed_array $ARRAY $VALUE1 [$VALUE2 ...]
 	_ARRAY=$1
-	_ARGS=$@
-	for (( i=1 ; i<=_ARGS ; i++ ))
-	do
-		declare -ga $_ARRAY$[$i]=( ${_ARGS[$i]} ) ###CHECK###
-	done
+	${_ARRAY}=("$[@]:1")
 }
+
 create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
 							 # usage create_associative_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
 	_ARRAY=$1
@@ -45,31 +42,34 @@ create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
 		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
 	done
 }
-key_exists() {
-	local _KEY="$1"
-	local _ARRAY="$2"
-	if [] # key exists in array
-	then
-		echo true
-	else
-		echo false
-	fi
-}
-value_exists() {
-	local _VALUE="$1"
-	local _ARRAY="$2"
-	if [] # value exists in array
-	then
-		echo true
-	else
-		echo false
-	fi
-}
+
+#key_exists() {
+#	local _KEY="$1"
+#	local _ARRAY="$2"
+#	if [] # key exists in array
+#	then
+#		echo true
+#	else
+#		echo false
+#	fi
+#}
+
+#value_exists() {
+#	local _VALUE="$1"
+#	local _ARRAY="$2"
+#	if [] # value exists in array
+#	then
+#		echo true
+#	else
+#		echo false
+#	fi
+#}
 
 ###STRING MANIPULATION
 str_to_lower() {
 	echo "${1,,}"
 }
+
 str_to_upper() {
 	echo "${1^^}"
 }

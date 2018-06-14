@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=3									  #
+# VERSION_PATCH=5									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180517							  #
+# VERSION_BUILD=20180614							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -27,13 +27,13 @@ create_tmp() { ### usage: create_tmp $PREFIX
 	do
 		TMP_DIR="/tmp/$_PREFIX.${RANDOM}${RANDOM}${RANDOM}"
 	done
-	if { !$(mkdir -p -m 0700 $TMP_DIR) }
+	if [[ !$(mkdir -p -m 0700 $TMP_DIR) ]]
 	then
 		echo "FATAL: Failed to create temp dir '$TMP_DIR': $?"
 		exit 100
 	fi
 	TMP_FILE="$TMP_DIR/$_PREFIX.${RANDOM}${RANDOM}${RANDOM}"
-	if { !$(touch $TMP_FILE && chmod 0600 $TMP_FILE) }
+	if [[ !$(touch $TMP_FILE && chmod 0600 $TMP_FILE) ]]
 	then
 		echo "FATAL: Failed to create temp file '$TMP_FILE': $?"
 		exit 101

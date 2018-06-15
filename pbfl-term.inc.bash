@@ -21,10 +21,10 @@
 ### FUNCTIONS ###
 get_screen_size() { ### gets terminal size and sets global vars
 					#+  SCREEN_HEIGHT and SCREEN_WIDTH
-	dbg_line "getting screen size"
+	#dbg_line "getting screen size"
 	declare -g SCREEN_HEIGHT=$(tput lines)
 	declare -g SCREEN_WIDTH=$(tput cols)
-	dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
+	#dbg_line "Found $SCREEN_HEIGHT lines and $SCREEN_WIDTH columns."
 }
 
 gen_colours() { ### These colours are based on the results in Tilda using the Tango colour scheme
@@ -93,9 +93,8 @@ gen_colours() { ### These colours are based on the results in Tilda using the Ta
 
 	if (( "$_TXT_COLOUR" == 0 ))
 	then
-		_RETURN="$_CODEBLOCK_START0$_CODEBLOCK_END"
+		_RETURN="${_CODEBLOCK_START}0${_CODEBLOCK_END}"
 		echo -e "$_RETURN"
-		break
 	else
 		if (( "$_TXT_BG" == 0 ))
 		then

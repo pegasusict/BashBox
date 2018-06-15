@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=7									  #
+# VERSION_PATCH=10									  #
 # VERSION_STATE="ALPHA"								  #
 # VERSION_BUILD=20180528							  #
 # LICENSE="MIT"										  #
@@ -78,40 +78,48 @@ add_to_script() { #adds line or blob to script
 }
 
 create_dir() { ### Creates directory if it doesn't exist
-	_TARGET_DIR=$1
-	local _UMASK=$2
-	local _OWNER=$3
-	local _GROUP=$4
-	if [ ! -d "$_TARGET_DIR" ]
+	_DIR="$1"
+	# UMASK=$2, OWNER=$3, GROUP=$4
+	if [ ! -d "$_DIR" ]
 	then
-		mkdir "$_TARGET_DIR"
+		mkdir "$_DIR"
 	fi
-	if [ var_is_set $_UMASK ]
+	if [ "x$2" != "x" ]
 	then
-		chmod $_UMASK "$_TARGET_DIR"
+		chmod $2 "$_DIR"
 	fi
-	if [ var_is_set $_GROUP ]
+	if [ "x$3" != "x" ]
 	then
-		chown $_OWNER:$_GROUP "$_TARGET_DIR"
+		if [ "x$4" != "x" ]
+		then
+			chown $3:$4 "$_DIR"
+		else
+			chown $3 "$_DIR"
+		fi
 	fi
 }
 
 create_file() { ### Creates file if it doesn't exist
-	local _TARGET_FILE=$1
-	local _UMASK=$2
-	local _OWNER=$3
-	local _GROUP=$4
-	if [ ! -f "$_TARGET_FILE" ]
+	local _FILE=$1
+	#UMASK=$2
+	#OWNER=$3
+	#GROUP=$4
+	if [ ! -f "$_FILE" ]
 	then
-		touch "$_TARGET_FILE"
+		touch "$_FILE"
 	fi
-	if [ var_is_set $_UMASK ]
+	if [ "x$2" != "x" ]
 	then
-		chmod $_UMASK "$_TARGET_FILE"
+		chmod $2 "$_FILE"
 	fi
-	if [ var_is_set $_GROUP ]
+	if [ "x$3" != "x" ]
 	then
-		chown $_OWNER:$_GROUP "$_TARGET_FILE"
+		if [ "x$4" != "x" ]
+		then
+			chown $3:$4 "$_FILE"
+		else
+			chown $3 "$_FILE"
+		fi
 	fi
 }
 

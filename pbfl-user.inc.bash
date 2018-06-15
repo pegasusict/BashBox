@@ -125,12 +125,12 @@ header_line() {	### generates a header-line
 	local _CHAR=${3:-#}
 	local _LEN=${4:-}
 	local _SPACER=${5:-" "}
-	local _SPACERS=$_SPACER
-	local _HEADER_LINE="# $_PART1$_SPACERS$_PART2 #"
+	local _SPACERS=""
+	local _HEADER_LINE="# ${_PART1}${_SPACERS}${_PART2} #"
 	for (( i=${#_HEADER_LINE}; i<MAX_WIDTH; i++ ))
 		do _SPACERS+=$_SPACER
 	done
-	local _NEW_HEADER_LINE="# $_PART1$_SPACERS$_PART2 #"
+	local _NEW_HEADER_LINE="# ${_PART1}${_SPACERS}${_PART2} #"
 	printf "%s\n" "$_NEW_HEADER_LINE"
 }
 
@@ -141,7 +141,7 @@ make_line() { ### generates a line
 	_LEN=${2:-80}
 	_LINE=${3:-#}
 	for (( i=${#_LINE}; i<_LEN; i++ ))
-		do _LINE+=$CHAR
+		do _LINE+=$_CHAR
 	done
 	printf "%s\n" "$_LINE"
 }
@@ -190,19 +190,22 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 				# if verbosity = 5, all messages are printed on screen and sent to log incl debug
 				# usage: log_line <importance> <message>
 	_log_line_length() {
-		local _LINE=""
-		_LINE="$_LOG_HEADER$_MESSAGE"
+		local _LINE="${_LOG_HEADER}${_MESSAGE}"
 		echo ${#_LINE}
 	}
 	local _IMPORTANCE=$1
 	local _LABEL=""
 	local _LOG_HEADER=""
 	local _MESSAGE="$2"
+	local _CHAR="%"
 	local _LOG_LINE_FILLER=""
 	local _SCREEN_LINE_FILLER=""
 	local _SCREEN_LINE=""
 	local _SCREEN_OUTPUT=""
 	local _LOG_OUTPUT=""
+	local _LOG_LINE_FILLER_LENGTH=0
+	local _SCREEN_LINE_FILLER_LENGTH=0
+	if [ -z $SCREEN_WIDTH ] ; then get_screen_size ; fi
 	case $_IMPORTANCE in
 		1	)	_LABEL="CRITICAL:"	;;
 		2	)	_LABEL="ERROR:   "	;;
@@ -210,15 +213,12 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 		4	)	_LABEL="INFO:    "	;;
 		5	)	_LABEL="DEBUG:   "	;;
 	esac
-	_LOG_HEADER="$(get_timestamp) # $_LABEL"
+	_LOG_HEADER="$(get_timestamp) % $_LABEL"
 	### generating screen output
 	if (( "$_IMPORTANCE" <= "$VERBOSITY" ))
 	then
-		local IMAX=$SCREEN_WIDTH-$(_log_line_length)
-		for (( i=2 ; i<IMAX ; i++ ))
-		do
-			_SCREEN_LINE_FILLER+="#"
-		done
+		_SCREEN_LINE_FILLER_LENGTH=$((SCREEN_WIDTH - $(_log_line_length)))
+		_SCREEN_LINE_FILLER=$(dup_var '$_CHAR' $_SCREEN_LINE_FILLER_LENGTH)
 		_SCREEN_LINE="$_MESSAGE $_SCREEN_LINE_FILLER"
 		case $_IMPORTANCE in
 			1	)	_SCREEN_OUTPUT=$(crit_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
@@ -230,20 +230,21 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 		echo -e "$_SCREEN_OUTPUT"
 	fi
 	### generating log output
-	local IMAX=$LOG_WIDTH-$(_log_line_length)
-	for (( i=1 ; i<IMAX ; i++ ))
-	do
-		_LOG_LINE_FILLER+="#"
-	done
+#	local IMAX=$LOG_WIDTH-$(_log_line_length)
+	_LOG_LINE_FILLER_LENGTH=$((LOG_WIDTH - $(_log_line_length)))
+	_LOG_LINE_FILLER=$(dup_var '$_CHAR' $_LOG_LINE_FILLER_LENGTH)
 	_LOG_OUTPUT="$_LOG_HEADER $_MESSAGE $_LOG_LINE_FILLER"
 	tolog "$_LOG_OUTPUT"
 }
 
 tolog() {
 	local _LOG_ENTRY="$1"
-	if [ $LOG_FILE_CREATED != true ]
+	if [ "$LOG_FILE_CREATED" != true ]
 	then
-		if [ -z ${LOG_BUFFER+x} ] ; then declare -g LOG_BUFFER="" ; fi
+		if [ -z ${LOG_BUFFER+x} ]
+		then
+			declare -g LOG_BUFFER=""
+		fi
 		LOG_BUFFER+="\n$_LOG_ENTRY"
 	else
 		if [ -n "$LOG_BUFFER" ]

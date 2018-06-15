@@ -26,7 +26,7 @@ CONTAINER_SCRIPT_TITLE="Container Maintenance Script"
 ################################################################################
 
 create_constants() { ### defines constants
-	if [ $VERBOSITY=5 ] ; then echo "creating constants" ; fi
+	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
 	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
 	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
 	### today's date
@@ -46,18 +46,19 @@ create_constants() { ### defines constants
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
-	declare -gr LIB_FILE="${SCRIPT}functions${LIB_EXT}"
-	declare -gr LIB="${LIB_DIR}${LIB_FILE}"
+	declare -gr LIB_FILE="${SCRIPT}-functions${LIB_EXT}"
+	declare -gr LIB="lib/${LIB_FILE}"
 	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
 	# define booleans
 	declare -gr TRUE=0
 	declare -gr FALSE=1
+	### misc
 	declare -gr LOG_WIDTH=100
-	if [ $VERBOSITY=5 ] ; then echo "constants created" ; fi
+	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 
 import_libs() {
-	echo "importing libs...."
+	if [ $VERBOSITY=5 ] ; then echo "importing libs..." ; fi
 	local _PART=""
 	local _TO_BE_IMPORTED=""
 	for _PART in "${LIB_PARTS[@]}"
@@ -75,6 +76,7 @@ import_libs() {
 			exit 1
 		fi
 	done
+	if [ $VERBOSITY=5 ] ; then echo "libs imported." ; fi
 }
 
 ### MAIN ###

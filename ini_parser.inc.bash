@@ -13,22 +13,43 @@
 function read_ini() {
 	# usage: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]
 	# Be strict with the prefix, since it's going to be run through eval
+
+	# Set defaults
+	local _BOOLEANS=1
+	local _CLEAN_ENV=0
+	local _IFS=""
+	local _IFS_OLD=""
+	local _INI_ALL_SECTION=""
+	local _INI_ALL_VARNAME=""
+	local _INI_FILE=""
+	local _INI_NUMSECTIONS_VARNAME=""
+	local _INI_SECTION=""
+	local _LINE=""
+	local _LINE_NUM=""
+	local _SECTION=""
+	local _SECTIONS_NUM=""
+	local _SWITCH_SHOPT=""
+	local _VAL=""
+	local _VAR=""
+	local _VARNAME=""
+	local _VARNAME_PREFIX=INI
+
 	function check_prefix() {
-		if ! [[ "${VARNAME_PREFIX}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]
+		if ! [[ "${_VARNAME_PREFIX}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]
 		then
-			opr1 "CRITICAL read_ini: invalid prefix '${VARNAME_PREFIX}'" >&2
+			crit_line "CRITICAL read_ini: invalid prefix '${_VARNAME_PREFIX}'" >&2
 			return 1
 		fi
 	}
 	function check_ini_file() {
-		if [ ! -f "$INI_FILE" ]
+		if [ ! -f "$_INI_FILE" ]
 		then
-			echo "ERROR read_ini: '${INI_FILE}' doesn't exist" >&2
+			err_line "ERROR read_ini: '${_INI_FILE}' doesn't exist" >&2
 			return 1
 		else
-			if [ ! -r "$INI_FILE" ]
+			if [ ! -r "$_INI_FILE" ]
 			then
-				opr2 "ERROR read_ini: '${INI_FILE}' not readable" >&2
+				err_line "ERROR read_ini: '${_INI_FILE}' not readable" >&2
 			fi
 		fi
 	}
@@ -36,29 +57,22 @@ function read_ini() {
 	function pollute_bash() {
 		if ! shopt -q extglob
 		then
-			SWITCH_SHOPT="${SWITCH_SHOPT} extglob"
+			_SWITCH_SHOPT="${_SWITCH_SHOPT} extglob"
 		fi
 		if ! shopt -q nocasematch
 		then
-			SWITCH_SHOPT="${SWITCH_SHOPT} nocasematch"
+			_SWITCH_SHOPT="${_SWITCH_SHOPT} nocasematch"
 		fi
-		shopt -q -s ${SWITCH_SHOPT}
+		shopt -q -s ${_SWITCH_SHOPT}
 	}
 	# unset all local functions and restore shopt settings before returning
 	# from read_ini()
 	function cleanup_bash() {
-		shopt -q -u ${SWITCH_SHOPT}
+		shopt -q -u ${_SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}
-	local INI_FILE=""
-	local INI_SECTION=""
 
 	# {{{ START Deal with command line args
-
-	# Set defaults
-	local BOOLEANS=1
-	local VARNAME_PREFIX=INI
-	local CLEAN_ENV=0
 
 		# {{{ START Options
 
@@ -76,22 +90,22 @@ function read_ini() {
 		while [ $# -gt 0 ]
 		do
 			case $1 in
-				--clean | -c	)	CLEAN_ENV=1 ;;
-				--booleans | -b	)	shift ; BOOLEANS=$1 ;;
-				--prefix | -p	)	shift ; VARNAME_PREFIX=$1 ;;
-				* )					if [ -z "$INI_FILE" ]
+				--clean | -c	)	_CLEAN_ENV=1 ;;
+				--booleans | -b	)	shift ; _BOOLEANS=$1 ;;
+				--prefix | -p	)	shift ; _VARNAME_PREFIX=$1 ;;
+				* )					if [ -z "$_INI_FILE" ]
 									then
-										INI_FILE=$1
+										_INI_FILE=$1
 									else
-										if [ -z "$INI_SECTION" ]
+										if [ -z "_$INI_SECTION" ]
 										then
-											INI_SECTION=$1
+											_INI_SECTION=$1
 										fi
 									fi ;;
 			esac
 			shift
 		done
-		if [ -z "$INI_FILE" ] && [ "${CLEAN_ENV}" = 0 ]
+		if [ -z "$_INI_FILE" ] && [ "${_CLEAN_ENV}" = 0 ]
 		then
 			echo -e "Usage: read_ini [-c] [-b 0| -b 1]] [-p PREFIX] FILE [SECTION]\n  or   read_ini -c [-p PREFIX]" >&2
 			cleanup_bash
@@ -102,17 +116,17 @@ function read_ini() {
 			cleanup_bash
 			return 1
 		fi
-		local INI_ALL_VARNAME="${VARNAME_PREFIX}__ALL_VARS"
-		local INI_ALL_SECTION="${VARNAME_PREFIX}__ALL_SECTIONS"
-		local INI_NUMSECTIONS_VARNAME="${VARNAME_PREFIX}__NUMSECTIONS"
-		if [ "${CLEAN_ENV}" = 1 ]
+		_INI_ALL_VARNAME="${VARNAME_PREFIX}__ALL_VARS"
+		_INI_ALL_SECTION="${VARNAME_PREFIX}__ALL_SECTIONS"
+		_INI_NUMSECTIONS_VARNAME="${VARNAME_PREFIX}__NUMSECTIONS"
+		if [ "${_CLEAN_ENV}" = 1 ]
 		then
-			eval unset "\$${INI_ALL_VARNAME}"
+			eval unset "\$${_INI_ALL_VARNAME}"
 		fi
-		unset ${INI_ALL_VARNAME}
-		unset ${INI_ALL_SECTION}
-		unset ${INI_NUMSECTIONS_VARNAME}
-		if [ -z "$INI_FILE" ]
+		unset ${_INI_ALL_VARNAME}
+		unset ${_INI_ALL_SECTION}
+		unset ${_INI_NUMSECTIONS_VARNAME}
+		if [ -z "$_INI_FILE" ]
 		then
 			cleanup_bash
 			return 0
@@ -123,90 +137,90 @@ function read_ini() {
 			return 1
 		fi
 		# Sanitise BOOLEANS - interpret "0" as 0, anything else as 1
-		if [ "$BOOLEANS" != "0" ]
+		if [ "$_BOOLEANS" != "0" ]
 		then
-			BOOLEANS=1
+			_BOOLEANS=1
 		fi
 		# }}} END Options
 
 	# }}} END Deal with command line args
 
-	local LINE_NUM=0
-	local SECTIONS_NUM=0
-	local SECTION=""
+	_LINE_NUM=0
+	_SECTIONS_NUM=0
+	_SECTION=""
 	# IFS is used in "read" and we want to switch it within the loop
-	local IFS=$' \t\n'
-	local IFS_OLD="${IFS}"
+	_IFS=$' \t\n'
+	_IFS_OLD="${_IFS}"
 	# we need some optional shell behavior (shopt) but want to restore
 	# current settings before returning
-	local SWITCH_SHOPT=""
+	_SWITCH_SHOPT=""
 	pollute_bash
-	while read -r line || [ -n "$line" ]
+	while read -r _LINE || [ -n "$_LINE" ]
 	do
-		dbg_line "line = $line"
-		((LINE_NUM++))
+		dbg_line "line = $_LINE"
+		((_LINE_NUM++))
 		# Skip blank lines and comments
-		if [ -z "$line" -o "${line:0:1}" = ";" -o "${line:0:1}" = "#" ]
+		if [ -z "$_LINE" -o "${_LINE:0:1}" = ";" -o "${_LINE:0:1}" = "#" ]
 		then
 			continue
 		fi
 		# Section marker?
-		if [[ "${line}" =~ ^\[[a-zA-Z0-9_]{1,}\]$ ]]
+		if [[ "${_LINE}" =~ ^\[[a-zA-Z0-9_]{1,}\]$ ]]
 		then
 			# Set SECTION var to name of section (strip [ and ] from section marker)
-			SECTION="${line#[}"
-			SECTION="${SECTION%]}"
-			eval "${INI_ALL_SECTION}=\"\${${INI_ALL_SECTION}# } $SECTION\""
-			((SECTIONS_NUM++))
+			_SECTION="${_LINE#[}"
+			_SECTION="${_SECTION%]}"
+			eval "${_INI_ALL_SECTION}=\"\${${_INI_ALL_SECTION}# } $_SECTION\""
+			((_SECTIONS_NUM++))
 			continue
 		fi
 		# Are we getting only a specific section? And are we currently in it?
-		if [ ! -z "$INI_SECTION" ]
+		if [ ! -z "$_INI_SECTION" ]
 		then
-			if [ "$SECTION" != "$INI_SECTION" ]
+			if [ "$_SECTION" != "$_INI_SECTION" ]
 			then
 				continue
 			fi
 		fi
 		# Valid var/value line? (check for variable name and then '=')
-		if ! [[ "${line}" =~ ^[a-zA-Z0-9._]{1,}[[:space:]]*= ]]
+		if ! [[ "${_LINE}" =~ ^[a-zA-Z0-9._]{1,}[[:space:]]*= ]]
 		then
-			err_line "Invalid line:  ${LINE_NUM}: $line"
+			err_line "Invalid line:  ${_LINE_NUM}: $_LINE"
 			cleanup_bash
 			return 1
 		fi
 		# split line at "=" sign
-		IFS="="
-		read -r VAR VAL <<< "${line}"
-		IFS="${IFS_OLD}"
+		_IFS="="
+		read -r _VAR _VAL <<< "${_LINE}"
+		_IFS="${_IFS_OLD}"
 		# delete spaces around the equal sign (using extglob)
-		VAR="${VAR%%+([[:space:]])}"
-		VAL="${VAL##+([[:space:]])}"
-		VAR=$(echo $VAR)
+		_VAR="${_VAR%%+([[:space:]])}"
+		_VAL="${_VAL##+([[:space:]])}"
+		_VAR=$(echo $_VAR)
 
 		# Construct variable name:
-		# ${VARNAME_PREFIX}__$SECTION__$VAR
+		# ${_VARNAME_PREFIX}__$_SECTION__$_VAR
 		# Or if not in a section:
-		# ${VARNAME_PREFIX}__$VAR
+		# ${_VARNAME_PREFIX}__$_VAR
 		# In both cases, full stops ('.') are replaced with underscores ('_')
-		if [ -z "$SECTION" ]
+		if [ -z "$_SECTION" ]
 		then
-			VARNAME=${VARNAME_PREFIX}__${VAR//./_}
+			_VARNAME=${_VARNAME_PREFIX}__${_VAR//./_}
 		else
-			VARNAME=${VARNAME_PREFIX}__${SECTION}__${VAR//./_}
+			_VARNAME=${_VARNAME_PREFIX}__${_SECTION}__${_VAR//./_}
 		fi
-		eval "${INI_ALL_VARNAME}=\"\${${INI_ALL_VARNAME}# } ${VARNAME}\""
-		if [[ "${VAL}" =~ ^\".*\"$  ]]
+		eval "${_INI_ALL_VARNAME}=\"\${${_INI_ALL_VARNAME}# } ${_VARNAME}\""
+		if [[ "${_VAL}" =~ ^\".*\"$  ]]
 		then
 			# remove existing double quotes
-			VAL="${VAL##\"}"
-			VAL="${VAL%%\"}"
-		elif [[ "${VAL}" =~ ^\'.*\'$  ]]
+			_VAL="${_VAL##\"}"
+			_VAL="${_VAL%%\"}"
+		elif [[ "${_VAL}" =~ ^\'.*\'$  ]]
 		then
 			# remove existing single quotes
-			VAL="${VAL##\'}"
-			VAL="${VAL%%\'}"
-		elif [ "$BOOLEANS" = 1 ]
+			_VAL="${_VAL##\'}"
+			_VAL="${_VAL%%\'}"
+		elif [ "$_BOOLEANS" = 1 ]
 		then
 			# Value is not enclosed in quotes
 			# Booleans processing is switched on, check for special boolean
@@ -214,20 +228,20 @@ function read_ini() {
 
 			# here we compare case insensitive because
 			# "shopt nocasematch"
-			case "$VAL" in
-				yes | true | on )   VAL=1 ;;
-				no | false | off )  VAL=0 ;;
+			case "$_VAL" in
+				yes | true | on )   _VAL=1 ;;
+				no | false | off )  _VAL=0 ;;
 			esac
 		fi
 		# enclose the value in single quotes and escape any
 		# single quotes and backslashes that may be in the value
-		VAL="${VAL//\\/\\\\}"
-		VAL="\$'${VAL//\'/\'}'"
+		_VAL="${_VAL//\\/\\\\}"
+		_VAL="\$'${_VAL//\'/\'}'"
 
-		eval "$VARNAME=$VAL"
-	done  <"${INI_FILE}"
+		eval "$_VARNAME=$_VAL"
+	done  <"${_INI_FILE}"
 
 	# return also the number of parsed sections
-	eval "$INI_NUMSECTIONS_VARNAME=$SECTIONS_NUM"
+	eval "$_INI_NUMSECTIONS_VARNAME=$_SECTIONS_NUM"
 	cleanup_bash
 }

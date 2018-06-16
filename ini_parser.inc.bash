@@ -1,14 +1,23 @@
 #!/bin/bash
-# Copyright (c) 2009 Kevin Porter / Advanced Web Construction Ltd
-#			(http://coding.tinternet.info, http://webutils.co.uk)
-# Copyright (c) 2010-2014	 Ruediger Meier <sweet_f_a@gmx.de>
-#								(https://github.com/rudimeier/)
-#
-# License: BSD-3-Clause, see LICENSE file
-#
-# Simple INI file parser.
-#
-# See README for usage.
+############################################################################
+# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
+# License: MIT						  #	Please keep my name in the credits #
+# based on
+############################################################################
+
+#######################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
+# SCRIPT_TITLE="INI Parser"							  #
+# MAINTAINER="Mattijs Snepvangers"					  #
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
+# VERSION_MAJOR=0									  #
+# VERSION_MINOR=0									  #
+# VERSION_PATCH=5									  #
+# VERSION_STATE="PRE-ALPHA"							  #
+# VERSION_BUILD=20180616							  #
+# LICENSE="MIT"										  #
+#######################################################
 
 function read_ini() {
 	# usage: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]

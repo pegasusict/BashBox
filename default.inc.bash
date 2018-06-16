@@ -19,12 +19,6 @@
 #######################################################
 
 ### FUNCTIONS ###
-MAINTENANCE_SCRIPT="maintenance.sh"
-MAINTENANCE_SCRIPT_TITLE="Maintenance Script"
-CONTAINER_SCRIPT="maintenance_container.sh"
-CONTAINER_SCRIPT_TITLE="Container Maintenance Script"
-################################################################################
-
 create_constants() { ### defines constants
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
 	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
@@ -54,6 +48,11 @@ create_constants() { ### defines constants
 	declare -gr FALSE=1
 	### misc
 	declare -gr LOG_WIDTH=100
+	declare -gr MAINTENANCE_SCRIPT="maintenance.sh"
+	declare -gr MAINTENANCE_SCRIPT_TITLE="Maintenance Script"
+	declare -gr CONTAINER_SCRIPT="maintenance_container.sh"
+	declare -gr CONTAINER_SCRIPT_TITLE="Container Maintenance Script"
+
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 

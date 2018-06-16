@@ -218,7 +218,7 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 	if (( "$_IMPORTANCE" <= "$VERBOSITY" ))
 	then
 		_SCREEN_LINE_FILLER_LENGTH=$((SCREEN_WIDTH - $(_log_line_length)))
-		_SCREEN_LINE_FILLER=$(dup_var '$_CHAR' $_SCREEN_LINE_FILLER_LENGTH)
+		_SCREEN_LINE_FILLER=$(dup_var "$_CHAR" $_SCREEN_LINE_FILLER_LENGTH)
 		_SCREEN_LINE="$_MESSAGE $_SCREEN_LINE_FILLER"
 		case $_IMPORTANCE in
 			1	)	_SCREEN_OUTPUT=$(crit_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
@@ -230,9 +230,8 @@ log_line() {	# creates a nice logline and decides what to print on screen and
 		echo -e "$_SCREEN_OUTPUT"
 	fi
 	### generating log output
-#	local IMAX=$LOG_WIDTH-$(_log_line_length)
 	_LOG_LINE_FILLER_LENGTH=$((LOG_WIDTH - $(_log_line_length)))
-	_LOG_LINE_FILLER=$(dup_var '$_CHAR' $_LOG_LINE_FILLER_LENGTH)
+	_LOG_LINE_FILLER=$(dup_var "$_CHAR" $_LOG_LINE_FILLER_LENGTH)
 	_LOG_OUTPUT="$_LOG_HEADER $_MESSAGE $_LOG_LINE_FILLER"
 	tolog "$_LOG_OUTPUT"
 }

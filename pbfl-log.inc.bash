@@ -147,6 +147,12 @@ log_line() {
 	tolog "$_LOG_OUTPUT"
 }
 
+# fun: to_log LOG_ENTRY
+# txt: Checks whether the log file has been created yet and whether the log
+#      buffer exists. The log entry will be added to the logfile if exist,
+#      otherwise it will be added to the buffer which will be created if needed.
+# use: tol_log <VAR> LOG_ENTRY
+# api: logging_internal
 tolog() {
 	local _LOG_ENTRY="$1"
 	if [ "$LOG_FILE_CREATED" != true ]

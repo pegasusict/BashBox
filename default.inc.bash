@@ -12,17 +12,22 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=55									  #
+# VERSION_PATCH=57									  #
 # VERSION_STATE="PRE-ALPHA"							  #
 # VERSION_BUILD=20180614							  #
 # LICENSE="MIT"										  #
 #######################################################
 
-### FUNCTIONS ###
-create_constants() { ### defines constants
+# mod: pbfl index
+# txt: This script is an index for Pegasus' Bash Function Library
+
+# fun: create_constants
+# txt: creates constants used by the library
+# use: create_constants
+# api: pbfl
+create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
-	declare -agr PLAT_MODULES=("PLAT_Manager" "PLAT_WordPressTools" "PBFL" "PLAT_internet_watchdog" "PLAT_aptcacher")
-	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
+	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "log" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	### declare extensions
@@ -48,14 +53,13 @@ create_constants() { ### defines constants
 	declare -gr FALSE=1
 	### misc
 	declare -gr LOG_WIDTH=100
-	declare -gr MAINTENANCE_SCRIPT="maintenance.sh"
-	declare -gr MAINTENANCE_SCRIPT_TITLE="Maintenance Script"
-	declare -gr CONTAINER_SCRIPT="maintenance_container.sh"
-	declare -gr CONTAINER_SCRIPT_TITLE="Container Maintenance Script"
-
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 
+# fun: import_libs
+# txt: imports all parts of the library
+# use: import_libs
+# api: pbfl
 import_libs() {
 	if [ $VERBOSITY=5 ] ; then echo "importing libs..." ; fi
 	local _PART=""
@@ -78,7 +82,7 @@ import_libs() {
 	if [ $VERBOSITY=5 ] ; then echo "libs imported." ; fi
 }
 
-### MAIN ###
+##### BOILERPLATE #####
 create_constants
 import_libs
 import "$INI_PRSR"

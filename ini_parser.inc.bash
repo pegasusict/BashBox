@@ -3,7 +3,7 @@
 # Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
 # (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
 # License: MIT						  #	Please keep my name in the credits #
-# based on
+# based on https://github.com/rudimeier/bash_ini_parser/                   #
 ############################################################################
 
 #######################################################
@@ -13,16 +13,22 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=5									  #
+# VERSION_PATCH=6									  #
 # VERSION_STATE="PRE-ALPHA"							  #
 # VERSION_BUILD=20180616							  #
 # LICENSE="MIT"										  #
 #######################################################
 
-function read_ini() {
-	# usage: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]
-	# Be strict with the prefix, since it's going to be run through eval
+# mod: pbfl ini_parser
+# txt: This script is an ini_parser
 
+declare -gA INI
+
+# fun: read_ini
+# txt: parses .ini files
+# use: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]
+# api: pbfl
+function read_ini() {
 	# Set defaults
 	local _BOOLEANS=1
 	local _CLEAN_ENV=0
@@ -31,18 +37,22 @@ function read_ini() {
 	local _INI_ALL_SECTION=""
 	local _INI_ALL_VARNAME=""
 	local _INI_FILE=""
-	local _INI_NUMSECTIONS_VARNAME=""
+	local _INI_NUMSECTIONS_VARNAME=0
 	local _INI_SECTION=""
 	local _LINE=""
-	local _LINE_NUM=""
+	local _LINE_NUM=0
 	local _SECTION=""
-	local _SECTIONS_NUM=""
+	local _SECTIONS_NUM=0
 	local _SWITCH_SHOPT=""
 	local _VAL=""
 	local _VAR=""
 	local _VARNAME=""
 	local _VARNAME_PREFIX=INI
 
+	# fun: check_prefix
+	# txt: Validates the INI prefix
+	# use: check_prefix
+	# api: ini_internal
 	function check_prefix() {
 		if ! [[ "${_VARNAME_PREFIX}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]
 		then
@@ -50,6 +60,11 @@ function read_ini() {
 			return 1
 		fi
 	}
+
+	# fun: check_ini_file
+	# txt: hcecks if ini file exists and is readable
+	# use: check_ini_file
+	# api: ini_internal
 	function check_ini_file() {
 		if [ ! -f "$_INI_FILE" ]
 		then
@@ -62,7 +77,11 @@ function read_ini() {
 			fi
 		fi
 	}
-	# enable some optional shell behavior (shopt)
+
+	# fun: pollute_bash
+	# txt: enable some optional shell behavior (shopt)
+	# use: pollute_bash
+	# api: ini_internal
 	function pollute_bash() {
 		if ! shopt -q extglob
 		then
@@ -74,28 +93,29 @@ function read_ini() {
 		fi
 		shopt -q -s ${_SWITCH_SHOPT}
 	}
-	# unset all local functions and restore shopt settings before returning
-	# from read_ini()
+
+	# fun: clean_bash
+	# txt: unset all local functions and restore shopt settings before
+	#      returning from read_ini()
+	# use: clean_bash
+	# api: ini_internal
 	function cleanup_bash() {
 		shopt -q -u ${_SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}
 
 	# {{{ START Deal with command line args
-
 		# {{{ START Options
-
-		# Available options:
-		#   --boolean	   Whether to recognise special boolean values: ie for 'yes', 'true'
-		#				   and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
-		#				   values will be left as strings
-		#				   Default: on
-		#
-		#   --prefix=STRING String to begin all returned variables with (followed by '__').
-		#				   Default: INI
-		#
-		#   First non-option arg is filename, second is section name
-
+			# Available options:
+			#   --boolean	   Whether to recognise special boolean values: ie for 'yes', 'true'
+			#				   and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
+			#				   values will be left as strings
+			#				   Default: on
+			#
+			#   --prefix=STRING String to begin all returned variables with (followed by '__').
+			#				   Default: INI
+			#
+			#   First non-option arg is filename, second is section name
 		while [ $# -gt 0 ]
 		do
 			case $1 in

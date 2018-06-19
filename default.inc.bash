@@ -27,7 +27,7 @@
 # api: pbfl
 create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
-	declare -agr LIB_PARTS=("apt" "datetime" "file" "install" "log" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
+	declare -agr LIB_PARTS=("apt" "datetime" "dialog" "exit" "file" "header" "install" "log" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	### declare extensions

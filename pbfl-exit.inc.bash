@@ -47,28 +47,28 @@ EOF
 declare_exit_codes() {
 	declare -ag EXIT_CODES
 	EXIT_CODES[0]="EX_OK"			#	successful termination
-	
+
 	### reserved exit codes (source: advanced bash scripting guide)
 	EXIT_CODES[1]="EX_GEN_ERR"		#	generic error code
 	EXIT_CODES[2]="EX_MISUSE"		#	Misuse of shell builtins; Missing keyword or command, or permission problem (and diff return code on a failed binary file comparison).
 	####
 
 	### defined by apple for C code ###
-	EXIT_CODES[64]="EX_USAGE"			#	command line usage error 
-	EXIT_CODES[65]="EX_DATAERR"			#	data format error 
-	EXIT_CODES[66]="EX_NOINPUT"			#	cannot open input 
-	EXIT_CODES[67]="EX_NOUSER"			#	addressee unknown 
-	EXIT_CODES[68]="EX_NOHOST"			#	host name unknown 
-	EXIT_CODES[69]="EX_UNAVAILABLE"		#	service unavailable 
-	EXIT_CODES[70]="EX_SOFTWARE"		#	internal software error 
-	EXIT_CODES[71]="EX_OSERR"			#	system error (e.g., can't fork) 
-	EXIT_CODES[72]="EX_OSFILE"			#	critical OS file missing 
-	EXIT_CODES[73]="EX_CANTCREAT"		#	can't create (user) output file 
-	EXIT_CODES[74]="EX_IOERR"			#	input/output error 
-	EXIT_CODES[75]="EX_TEMPFAIL"		#	temp failure; user is invited to retry 
-	EXIT_CODES[76]="EX_PROTOCOL"		#	remote error in protocol 
-	EXIT_CODES[77]="EX_NOPERM"			#	permission denied 
-	EXIT_CODES[78]="EX_CONFIG"			#	configuration error 
+	EXIT_CODES[64]="EX_USAGE"			#	command line usage error
+	EXIT_CODES[65]="EX_DATAERR"			#	data format error
+	EXIT_CODES[66]="EX_NOINPUT"			#	cannot open input
+	EXIT_CODES[67]="EX_NOUSER"			#	addressee unknown
+	EXIT_CODES[68]="EX_NOHOST"			#	host name unknown
+	EXIT_CODES[69]="EX_UNAVAILABLE"		#	service unavailable
+	EXIT_CODES[70]="EX_SOFTWARE"		#	internal software error
+	EXIT_CODES[71]="EX_OSERR"			#	system error (e.g., can't fork)
+	EXIT_CODES[72]="EX_OSFILE"			#	critical OS file missing
+	EXIT_CODES[73]="EX_CANTCREAT"		#	can't create (user) output file
+	EXIT_CODES[74]="EX_IOERR"			#	input/output error
+	EXIT_CODES[75]="EX_TEMPFAIL"		#	temp failure; user is invited to retry
+	EXIT_CODES[76]="EX_PROTOCOL"		#	remote error in protocol
+	EXIT_CODES[77]="EX_NOPERM"			#	permission denied
+	EXIT_CODES[78]="EX_CONFIG"			#	configuration error
 	### end defined by apple ###
 
 	### thought up myself ###
@@ -92,7 +92,7 @@ declare_exit_codes() {
 	EXIT_CODES[130]="EX_CTRL_C"			#	Script terminated by Control-C; Control-C is fatal error signal 2, (130 = 128 + 2)
 	EXIT_CODES[137]="EX_ERR_SIG9"		#	Fatal error signal 9; kill -9 $PPID $? returns 137 (128 + 9)
 	EXIT_CODES[143]="EX_ERR_SIG15"		#	Fatal error signal 15; kill -15 $PPID $? returns 143 (128 + 15)
-	if [[EXIT_CODE>255]]		 		#	Exit status out of range; exit takes only integer args in the range 0 - 255
+	if [[ $EXIT_CODE>255 ]]				#	Exit status out of range; exit takes only integer args in the range 0 - 255
 	then
 		EXIT_CODE="$EX_EXIT"
 	fi
@@ -110,6 +110,7 @@ do_exit() {
 			if (( "$_EXIT_CODE" > 0 ))
 			then
 				exit "$_EXIT_CODE" "$_OUTPUT" >&2
+			fi
 		fi
 	done
 }

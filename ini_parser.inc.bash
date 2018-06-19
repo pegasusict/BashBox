@@ -21,6 +21,8 @@
 
 # mod: pbfl ini_parser
 # txt: This script is an ini_parser
+#      It will parse an ini file and export this as $INI_<SECTION>_<KEY>
+#      TODO Will look into a way to do this via an array
 
 declare -gA INI
 

@@ -32,15 +32,15 @@ dialog_init() {
 }
 
 dialog_msgbox() {
-	local _TITLE="$1"
-	local _MESSAGE="$2"
-	local _HEIGHT=$3
-	local _WIDTH=$4
-	"$DIALOG" --title "<$_TITLE>" --msgbox "<$_MESSAGE>" <"$_HEIGHT"> <"$_WIDTH">
+	local _TITLE	;	_TITLE="$1"
+	local _MESSAGE	;	_MESSAGE="$2"
+	local _HEIGHT	;	_HEIGHT=$3
+	local _WIDTH	;	_WIDTH=$4
+	"$DIALOG" --title "<$_TITLE>" --msgbox "<$_MESSAGE>" "$_HEIGHT" "$_WIDTH"
 }
 
 dialog_yn() {
-	local _TITLE="$1"
+	local _TITLE	;	_TITLE="$1"
 	local _MESSAGE="$2"
 	local _HEIGHT=$3
 	local _WIDTH=$4
@@ -118,7 +118,7 @@ dialog_checklist() {
 	# opt: SELECTED is an array of preselected KEYs corresponding to OPTIONS
 	# opt: ANSWER is the array created with the results
 	# use: declare -A RADIO_OPTIONS=([a]=alpha [b])
-	# use: dialog_checklist "A Title" "a message" 10 80 0 
+	# use: dialog_checklist "A Title" "a message" 10 80 0
 	local _TITLE="$1"
 	local _MESSAGE="$2"
 	local _HEIGHT=$3

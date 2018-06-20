@@ -29,6 +29,7 @@ dialog_init() {
 		crit_line 'neither whiptail nor dialog found'
 		exit 1
 	}
+	dialog_init() { :: }
 }
 
 dialog_msgbox() {
@@ -149,8 +150,6 @@ dialog_checklist() {
 		err_line "Checklist: User cancelled."
 	fi
 }
-
-
 
 ### MAIN ###
 dialog_init

@@ -130,9 +130,4 @@ catch_exit() {
 
 #######
 
-main() {
-	declare_exit_codes
-}
-
-### BOILERPLATE ###
-main
+declare_exit_codes

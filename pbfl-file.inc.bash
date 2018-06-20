@@ -181,6 +181,9 @@ goto_base_dir() { # If we're not in the base directory of the script,
 		cd "$BASE_DIR"
 	fi
 	dbg_line "Now we're in the base directory\"$BASE_DIR\""
+#--------------------------------------------------------------------------------------
+	#echo "The script you are running has basename `basename "$(readlink -f "$0")"`, dirname `dirname "$(readlink -f "$0")"`"
+	#echo "The present working directory is `pwd`"
 }
 
 purge_dir() {

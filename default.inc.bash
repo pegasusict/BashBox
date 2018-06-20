@@ -56,78 +56,106 @@ create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 
-check_dependencies() {
-	for DEP in "$@"
-	do
-declare -a __moduleCache=()
-
-module() {
-  local path="${1}"
-  local export="${2}"
-  shift; shift;
-  local filename
-  if [[ "${path:0:2}" == "./" ]]
-  then
-    filename="$( cd "${BASH_SOURCE[1]%/*}" && pwd )/${path#\./}"
-  else
-    # for absolute path we assume it's relative to "SCRIPT_DIR"
-    filename="${SCRIPT_DIR}/${path}"
-  fi
-  load "${filename}.sh" "${export}" "$@"
-}
-
-load() {
-  local filename="${1}"
-  local export="${2}"
-  shift; shift;
-  local moduleName="_moduleId_${filename//[^a-zA-Z0-9]/_}"
-  local moduleId="${!moduleName}"
-  if [[ -z "${moduleId}" ]]
-  then
-    # module not yet loaded
-    local moduleId="${#__moduleCache[@]}"
-    local moduleContents
-    moduleContents=$(<"${filename}")
-    local moduleMemberPrefix="__module__${moduleId}"
-    local prefixedModule="${moduleContents//__module__/$moduleMemberPrefix}"
-    # declares reference to ID in global scope:
-    eval ${moduleName}=${moduleId}
-    __moduleCache+=($moduleName)
-    # execute the module:
-    eval "$prefixedModule"
-  fi
-
-  # module already loaded, execute
-  __module__${moduleId}.${export} "$@"
-}
-}
-# fun: import_libs
-# txt: imports all parts of the library
-# use: import_libs
+# fun: import_lib
+# txt: completes the filenames for the library "classes" and invokes import() --> import LIBDIR/LIBPREFIX-LIB.LIBEXT
+# use: import_lib $LIB
 # api: pbfl
-import_libs() {
-	if [ $VERBOSITY=5 ] ; then echo "importing libs..." ; fi
-	local _PART=""
-	local _TO_BE_IMPORTED=""
-	for _PART in "${LIB_PARTS[@]}"
-	do
-		local _LIB_FILE="${LIB_PREFIX}${_PART}${LIB_EXT}"
-		if [[ -f "${LIB_DIR}${_LIB_FILE}" ]]
-		then
-			echo "importing $_LIB_FILE"
-			source "${LIB_DIR}${_LIB_FILE}"
-		elif [[ -f "${SYS_LIB_DIR}${_LIB_FILE}" ]]
-		then
-			source "${SYS_LIB_DIR}${_LIB_FILE}"
-		else
-			>&2 echo "File $_LIB_FILE not found!"
-			exit 1
-		fi
-	done
-	if [ $VERBOSITY=5 ] ; then echo "libs imported." ; fi
+import_lib() {
+	local _LIB	;	_LIB=$1
+	_LIB="${LIB_DIR}${LIB_PREFIX}${_LIB}${LIB_EXT}"
+	import "$_LIB"
+}
+
+# fun: create_placeholders
+# txt: Creates placeholders for all functions defined in the library.
+#      If one is invoked, the corresponding library class will be imported so
+#      the placeholders of the functions belonging to that particular class will
+#      be overwritten in memory and then the function call will be repeated.
+# use: create_placeholders
+# api: pbfl
+create_placeholders() {
+	read_ini() {			import "$INI_PRSR"	;	$0 $@ }
+
+	add_ppa_key() {			importlib apt		;	$0 $@ }
+	apt_inst() {			importlib apt		;	$0 $@ }
+	install() {				importlib apt		;	$0 $@ }
+
+	get_timestamp() {		importlib datetime	;	$0 $@ }
+
+	dialog_init() {			importlib dialog	;	$0 $@ }
+	dialog_checklist() {	importlib dialog	;	$0 $@ }
+	dialog_menu() {			importlib dialog	;	$0 $@ }
+	dialog_msgbox() {		importlib dialog	;	$0 $@ }
+	dialog_radiolist() {	importlib dialog	;	$0 $@ }
+	dialog_yn() {			importlib dialog	;	$0 $@ }
+
+	catch_exit() {			importlib exit		;	$0 $@ }
+	declare_exit_codes() {	importlib exit		;	$0 $@ }
+	do_exit() {				importlib exit		;	$0 $@ }
+	exit_codes_howto() {	importlib exit		;	$0 $@ }
+
+	add_line_to_file() {	importlib file		;	$0 $@ }
+	edit_line_in_file() {	importlib file		;	$0 $@ }
+	add_to_script() {		importlib file		;	$0 $@ }
+	create_dir() {			importlib file		;	$0 $@ }
+	create_file() {			importlib file		;	$0 $@ }
+	create_logfile() {		importlib file		;	$0 $@ }
+	file_exists() {			importlib file		;	$0 $@ }
+	goto_base_dir() {		importlib file		;	$0 $@ }
+	purge_dir() {			importlib file		;	$0 $@ }
+
+	header() {				importlib header	;	$0 $@ }
+	header_line() {			importlib header	;	$0 $@ }
+	make_line() {			importlib header	;	$0 $@ }
+
+	insert_into_initd() {	importlib install	;	$0 $@ }
+	install_mod() {			importlib install	;	$0 $@ }
+
+	set_verbosity() {		importlib log		;	$0 $@ }
+	crit_line() {			importlib log		;	$0 $@ }
+	err_line() {			importlib log		;	$0 $@ }
+	warn_line() {			importlib log		;	$0 $@ }
+	info_line() {			importlib log		;	$0 $@ }
+	dbg_line() {			importlib log		;	$0 $@ }
+	log_line() {			importlib log		;	$0 $@ }
+	tolog() {				importlib log		;	$0 $@ }
+
+	do_mutex() {			importlib mutex		;	$0 $@ }
+
+	download() {			importlib net		;	$0 $@ }
+	cycle_network() {		importlib net		;	$0 $@ }
+	test_DNS() {			importlib net		;	$0 $@ }
+	watch_dog() {			importlib net		;	$0 $@ }
+
+	in_place() {			importlib sed		;	$0 $@ }
+	replace_in_file() {		importlib sed		;	$0 $@ }
+	delete_from_file() {	importlib sed		;	$0 $@ }
+	append_in_file() {		importlib sed		;	$0 $@ }
+
+	get_screen_size() {		importlib term		;	$0 $@ }
+	gen_colours() {			importlib term		;	$0 $@ }
+	crit_colours() {		importlib term		;	$0 $@ }
+	err_colours() {			importlib term		;	$0 $@ }
+	warn_colours() {		importlib term		;	$0 $@ }
+	info_colours() {		importlib term		;	$0 $@ }
+	dbg_colours() {			importlib term		;	$0 $@ }
+
+	create_tmp() {			importlib tmp		;	$0 $@ }
+
+	file_from_template() {	importlib sed		;	$0 $@ }
+
+	version() {				importlib user		;	$0 $@ }
+	ask() {					importlib user		;	$0 $@ }
+	prompt() {				importlib user		;	$0 $@ }
+	choose() {				importlib user		;	$0 $@ }
+
+	create_var() {			importlib vars		;	$0 $@ }
+	dup_var() {				importlib vars		;	$0 $@ }
+	value_exists() {		importlib vars		;	$0 $@ }
+	str_to_lower() {		importlib vars		;	$0 $@ }
+	str_to_upper() {		importlib vars		;	$0 $@ }
 }
 
 ##### BOILERPLATE #####
 create_constants
-import_libs
-import "$INI_PRSR"
+create_placeholders

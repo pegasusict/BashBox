@@ -22,9 +22,9 @@
 # txt: This script contains functions that facilitate logging messages to
 #      logfile and screen
 
-# fun: set_verbosity VERBOSITY
+# fun: set_verbosity
 # txt: declares global constant VERBOSITY, is usually called from get_args
-# use: set_verbosity INT
+# use: set_verbosity <INT> VERBOSITY
 # api: logging
 set_verbosity() { ### Set verbosity level
 	dbg_line "setting verbosity to $1"

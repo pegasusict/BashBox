@@ -19,7 +19,7 @@
 #######################################################
 
 ######################################################################################################################
-create_file_from_template() { ### render a template file
+file_from_template() { ### render a template file
 							  # expand variables + preserve formatting
 							  #usage: create_file_from_template $TARGET_FILE $TEMPLATE
 	local _TARGET_FILE=$1

@@ -46,7 +46,7 @@ dup_var() {
 #	_ARGS=$@
 #	for (( i=1 ; i<=_ARGS ; i+2 ))
 #	do
-#		declare -gA $_ARRAY$=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
+#		declare -gA $_ARRAY=( [${_ARGS[$i]}]=${_ARGS[$i+1]} )
 #	done
 #}
 
@@ -61,6 +61,18 @@ dup_var() {
 #	fi
 #}
 
+value_exists() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
 #value_exists() {
 #	local _VALUE="$1"
 #	local _ARRAY="$2"

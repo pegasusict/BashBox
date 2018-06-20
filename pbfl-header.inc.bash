@@ -57,7 +57,7 @@ header_line() {
 	local _SPACERS		;	_SPACERS=""
 	local _HEADER_LINE	;	_HEADER_LINE="${_CHAR} ${_PART1}${_SPACERS}${_PART2} ${_CHAR}"
 	local _SPACERS_LEN	;	_SPACERS_LEN=(MAX_WIDTH-{#_HEADER_LINE})
-	_SPACERS=$( printf '%0.s$(_SPACER)' $( seq 1 $_SPACERS_LEN ) )
+	_SPACERS=$( printf "%0.s$_SPACER" $( seq 1 $_SPACERS_LEN ) )
 	_HEADER_LINE="${_CHAR} ${_PART1}${_SPACERS}${_PART2} ${_CHAR}"
 	printf "%s\n" "$_HEADER_LINE"
 }
@@ -71,6 +71,6 @@ header_line() {
 make_line() {
 	local _CHAR		;	_CHAR=${1:-#}
 	local _LEN		;	_LEN=${2:-80}
-	local _LINE		;	_LINE=$( printf '%0.s$(_CHAR)' $( seq 1 $_LEN ) )
+	local _LINE		;	_LINE=$( printf "%0.s$_CHAR" $( seq 1 $_LEN ) )
 	printf "%s\n" "$_LINE"
 }

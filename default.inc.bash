@@ -27,7 +27,6 @@
 # api: pbfl
 create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
-	declare -agr LIB_PARTS=("apt" "datetime" "dialog" "exit" "file" "header" "install" "log" "mutex" "net" "sed" "term" "tmp" "tmpl" "user" "vars")
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	### declare extensions
@@ -74,86 +73,86 @@ import_lib() {
 # use: create_placeholders
 # api: pbfl
 create_placeholders() {
-	read_ini() {			import "$INI_PRSR"	;	$0 $@ }
+	read_ini() {			import "$INI_PRSR"	;	read_ini $@ ; }
 
-	add_ppa_key() {			importlib apt		;	$0 $@ }
-	apt_inst() {			importlib apt		;	$0 $@ }
-	install() {				importlib apt		;	$0 $@ }
+	add_ppa_key() {			import_lib apt		;	add_ppa_key $@ ; }
+	apt_inst() {			import_lib apt		;	apt_inst $@ ; }
+	install() {				import_lib apt		;	install $@ ; }
 
-	get_timestamp() {		importlib datetime	;	$0 $@ }
+	get_timestamp() {		import_lib datetime	;	get_timestamp ; }
 
-	dialog_init() {			importlib dialog	;	$0 $@ }
-	dialog_checklist() {	importlib dialog	;	$0 $@ }
-	dialog_menu() {			importlib dialog	;	$0 $@ }
-	dialog_msgbox() {		importlib dialog	;	$0 $@ }
-	dialog_radiolist() {	importlib dialog	;	$0 $@ }
-	dialog_yn() {			importlib dialog	;	$0 $@ }
+	dialog_init() {			import_lib dialog	;	dialog_init ; }
+	dialog_checklist() {	import_lib dialog	;	dialog_checklist $@ ; }
+	dialog_menu() {			import_lib dialog	;	dialog_menu $@ ; }
+	dialog_msgbox() {		import_lib dialog	;	dialog_radiolist $@ ; }
+	dialog_radiolist() {	import_lib dialog	;	dialog_radiolist $@ ; }
+	dialog_yn() {			import_lib dialog	;	dialog_yn $@ ; }
 
-	catch_exit() {			importlib exit		;	$0 $@ }
-	declare_exit_codes() {	importlib exit		;	$0 $@ }
-	do_exit() {				importlib exit		;	$0 $@ }
-	exit_codes_howto() {	importlib exit		;	$0 $@ }
+	catch_exit() {			import_lib exit		;	catch_exit $@ ; }
+	declare_exit_codes() {	import_lib exit		;	declare_exit_codes ; }
+	do_exit() {				import_lib exit		;	do_exit $@ ; }
+	exit_codes_howto() {	import_lib exit		;	exit_codes_howto ; }
 
-	add_line_to_file() {	importlib file		;	$0 $@ }
-	edit_line_in_file() {	importlib file		;	$0 $@ }
-	add_to_script() {		importlib file		;	$0 $@ }
-	create_dir() {			importlib file		;	$0 $@ }
-	create_file() {			importlib file		;	$0 $@ }
-	create_logfile() {		importlib file		;	$0 $@ }
-	file_exists() {			importlib file		;	$0 $@ }
-	goto_base_dir() {		importlib file		;	$0 $@ }
-	purge_dir() {			importlib file		;	$0 $@ }
+	add_line_to_file() {	import_lib file		;	add_line_to_file $@ ; }
+	edit_line_in_file() {	import_lib file		;	edit_line_in_file $@ ; }
+	add_to_script() {		import_lib file		;	add_to_script $@ ; }
+	create_dir() {			import_lib file		;	create_dir $@ ; }
+	create_file() {			import_lib file		;	create_file $@ ; }
+	create_logfile() {		import_lib file		;	create_logfile $@ ; }
+	file_exists() {			import_lib file		;	file_exists $@ ; }
+	goto_base_dir() {		import_lib file		;	goto_base_dir ; }
+	purge_dir() {			import_lib file		;	purge_dir $@ ; }
 
-	header() {				importlib header	;	$0 $@ }
-	header_line() {			importlib header	;	$0 $@ }
-	make_line() {			importlib header	;	$0 $@ }
+	header() {				import_lib header	;	header $@ ; }
+	header_line() {			import_lib header	;	header_line $@ ; }
+	make_line() {			import_lib header	;	make_line $@ ; }
 
-	insert_into_initd() {	importlib install	;	$0 $@ }
-	install_mod() {			importlib install	;	$0 $@ }
+	insert_into_initd() {	import_lib install	;	insert_into_initd $@ ; }
+	install_mod() {			import_lib install	;	install_mod $@ ; }
 
-	set_verbosity() {		importlib log		;	$0 $@ }
-	crit_line() {			importlib log		;	$0 $@ }
-	err_line() {			importlib log		;	$0 $@ }
-	warn_line() {			importlib log		;	$0 $@ }
-	info_line() {			importlib log		;	$0 $@ }
-	dbg_line() {			importlib log		;	$0 $@ }
-	log_line() {			importlib log		;	$0 $@ }
-	tolog() {				importlib log		;	$0 $@ }
+	set_verbosity() {		import_lib log		;	set_verbosity $@ ; }
+	crit_line() {			import_lib log		;	crit_line $@ ; }
+	err_line() {			import_lib log		;	err_line $@ ; }
+	warn_line() {			import_lib log		;	warn_line $@ ; }
+	info_line() {			import_lib log		;	info_line $@ ; }
+	dbg_line() {			import_lib log		;	dbg_line $@ ; }
+	log_line() {			import_lib log		;	log_line $@ ; }
+	tolog() {				import_lib log		;	tolog $@ ; }
 
-	do_mutex() {			importlib mutex		;	$0 $@ }
+	do_mutex() {			import_lib mutex	;	do_mutex $@ ; }
 
-	download() {			importlib net		;	$0 $@ }
-	cycle_network() {		importlib net		;	$0 $@ }
-	test_DNS() {			importlib net		;	$0 $@ }
-	watch_dog() {			importlib net		;	$0 $@ }
+	download() {			import_lib net		;	download $@ ; }
+	cycle_network() {		import_lib net		;	cycle_network $@ ; }
+	test_DNS() {			import_lib net		;	test_DNS $@ ; }
+	watch_dog() {			import_lib net		;	watch_dog $@ ; }
 
-	in_place() {			importlib sed		;	$0 $@ }
-	replace_in_file() {		importlib sed		;	$0 $@ }
-	delete_from_file() {	importlib sed		;	$0 $@ }
-	append_in_file() {		importlib sed		;	$0 $@ }
+	in_place() {			import_lib sed		;	in_place $@ ; }
+	replace_in_file() {		import_lib sed		;	replace_in_file $@ ; }
+	delete_from_file() {	import_lib sed		;	delete_from_file $@ ; }
+	append_in_file() {		import_lib sed		;	append_in_file $@ ; }
 
-	get_screen_size() {		importlib term		;	$0 $@ }
-	gen_colours() {			importlib term		;	$0 $@ }
-	crit_colours() {		importlib term		;	$0 $@ }
-	err_colours() {			importlib term		;	$0 $@ }
-	warn_colours() {		importlib term		;	$0 $@ }
-	info_colours() {		importlib term		;	$0 $@ }
-	dbg_colours() {			importlib term		;	$0 $@ }
+	get_screen_size() {		import_lib term		;	get_screen_size ; }
+	gen_colours() {			import_lib term		;	gen_colours $@ ; }
+	crit_colours() {		import_lib term		;	crit_colours $@ ; }
+	err_colours() {			import_lib term		;	err_colours $@ ; }
+	warn_colours() {		import_lib term		;	warn_colours $@ ; }
+	info_colours() {		import_lib term		;	info_colours $@ ; }
+	dbg_colours() {			import_lib term		;	dbg_colours $@ ; }
 
-	create_tmp() {			importlib tmp		;	$0 $@ }
+	create_tmp() {			import_lib tmp		;	create_tmp $@ ; }
 
-	file_from_template() {	importlib sed		;	$0 $@ }
+	file_from_template() {	import_lib sed		;	file_from_template $@ ; }
 
-	version() {				importlib user		;	$0 $@ }
-	ask() {					importlib user		;	$0 $@ }
-	prompt() {				importlib user		;	$0 $@ }
-	choose() {				importlib user		;	$0 $@ }
+	version() {				import_lib user		;	version $@ ; }
+	ask() {					import_lib user		;	ask $@ ; }
+	prompt() {				import_lib user		;	prompt $@ ; }
+	choose() {				import_lib user		;	choose $@ ; }
 
-	create_var() {			importlib vars		;	$0 $@ }
-	dup_var() {				importlib vars		;	$0 $@ }
-	value_exists() {		importlib vars		;	$0 $@ }
-	str_to_lower() {		importlib vars		;	$0 $@ }
-	str_to_upper() {		importlib vars		;	$0 $@ }
+	create_var() {			import_lib vars		;	create_var $@ ; }
+	dup_var() {				import_lib vars		;	dup_var $@ ; }
+	value_exists() {		import_lib vars		;	value_exists $@ ; }
+	str_to_lower() {		import_lib vars		;	str_to_lower $@ ; }
+	str_to_upper() {		import_lib vars		;	str_to_upper $@ ; }
 }
 
 ##### BOILERPLATE #####

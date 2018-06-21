@@ -11,10 +11,10 @@
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=57									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180614							  #
+# VERSION_MINOR=2									  #
+# VERSION_PATCH=0									  #
+# VERSION_STATE="ALPHA"								  #
+# VERSION_BUILD=20180621							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -75,9 +75,14 @@ import_lib() {
 create_placeholders() {
 	read_ini() {			import "$INI_PRSR"	;	read_ini $@ ; }
 
-	add_ppa_key() {			import_lib apt		;	add_ppa_key $@ ; }
-	apt_inst() {			import_lib apt		;	apt_inst $@ ; }
-	install() {				import_lib apt		;	install $@ ; }
+	add_ppa_key() {			importlib apt		;	$0 $@ }
+	apt_inst() {			importlib apt		;	$0 $@ }
+	apt_update() {			importlib apt		;	$0 $@ }
+	apt_upgrade() {			importlib apt		;	$0 $@ }
+	apt_remove() {			importlib apt		;	$0 $@ }
+	apt_clean() {			importlib apt		;	$0 $@ }
+	apt_cycle() {			importlib apt		;	$0 $@ }
+	install() {				importlib apt		;	$0 $@ }
 
 	get_timestamp() {		import_lib datetime	;	get_timestamp ; }
 

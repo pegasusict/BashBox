@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=2									  #
-# VERSION_PATCH=0									  #
+# VERSION_PATCH=5									  #
 # VERSION_STATE="ALPHA"								  #
 # VERSION_BUILD=20180621							  #
 # LICENSE="MIT"										  #
@@ -33,25 +33,33 @@ create_constants() {
 	declare -gr INI_EXT=".ini"
 	declare -gr LIB_EXT=".inc.bash"
 	declare -gr LOG_EXT=".log"
-	### declare directories !!! always end with a "/" !!!
-	declare -gr LOG_DIR="LOGS/"
-	declare -gr LIB_DIR="PBFL/"
+	### declare prefixes
 	declare -gr LIB_PREFIX="pbfl-"
-	declare -gr SYS_LIB_DIR="/var/lib/plat/"
-	declare -gr SYS_BIN_DIR="/usr/bin/plat/"
-	declare -gr SYS_CFG_DIR="/etc/plat/"
-	declare -gr SYS_LOG_DIR="/var/log/plat/"
+	declare -gr MAINT_PRFX="maintenance-"
+	### declare directories !!! always end with a "/" !!!
+	declare -gr BASE="plat/"
+	declare -gr LIB_DIR="PBFL/"
+	declare -gr LOG_DIR="LOGS/"
+	declare -gr SYS_BIN_DIR="/usr/bin/$BASE"
+	declare -gr SYS_CFG_DIR="/etc/$BASE"
+	declare -gr SYS_LIB_DIR="/var/lib/BASE"
+	declare -gr SYS_LOG_DIR="/var/log/BASE"
+	declare -gr TPL_DIR="templates/"
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
 	declare -gr LIB_FILE="${SCRIPT}-functions${LIB_EXT}"
 	declare -gr LIB="lib/${LIB_FILE}"
-	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
 	# define booleans
 	declare -gr TRUE=0
 	declare -gr FALSE=1
-	### misc
+	### log stuff
 	declare -gr LOG_WIDTH=100
+	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
+	### git stuff
+	declare -gr GIT_BASE_URL="https://github.com/pegasusict/"
+	declare -gr GIT_EXT=".git"
+	#
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 
@@ -73,16 +81,17 @@ import_lib() {
 # use: create_placeholders
 # api: pbfl
 create_placeholders() {
-	read_ini() {			import "$INI_PRSR"	;	read_ini $@ ; }
+	read_ini() {			import_lib ini		;	read_ini $@ ; }
+	create_ini() {			import_lib ini		;	create_ini $@ ; }
 
-	add_ppa_key() {			importlib apt		;	$0 $@ }
-	apt_inst() {			importlib apt		;	$0 $@ }
-	apt_update() {			importlib apt		;	$0 $@ }
-	apt_upgrade() {			importlib apt		;	$0 $@ }
-	apt_remove() {			importlib apt		;	$0 $@ }
-	apt_clean() {			importlib apt		;	$0 $@ }
-	apt_cycle() {			importlib apt		;	$0 $@ }
-	install() {				importlib apt		;	$0 $@ }
+	add_ppa_key() {			import_lib apt		;	add_ppa_key $@ ; }
+	apt_inst() {			import_lib apt		;	apt_inst $@ ; }
+	apt_update() {			import_lib apt		;	apt_update ; }
+	apt_upgrade() {			import_lib apt		;	apt_upgrade ; }
+	apt_remove() {			import_lib apt		;	apt_remove ; }
+	apt_clean() {			import_lib apt		;	apt_clean ; }
+	apt_cycle() {			import_lib apt		;	apt_cycle ; }
+	install() {				import_lib apt		;	install $@ ; }
 
 	get_timestamp() {		import_lib datetime	;	get_timestamp ; }
 

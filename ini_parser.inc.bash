@@ -12,18 +12,17 @@
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=0									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180622							  #
+# VERSION_MINOR=0									  #
+# VERSION_PATCH=6									  #
+# VERSION_STATE="PRE-ALPHA"							  #
+# VERSION_BUILD=20180616							  #
 # LICENSE="MIT"										  #
 #######################################################
 
 # mod: pbfl ini_parser
-# txt: This script is an ini parser/generator
+# txt: This script is an ini_parser
 #      It will parse an ini file and export this as $INI_<SECTION>_<KEY>
-#      TODO(pegasusict): Will look into a way to do this via an array
-#      TODO(pegasusict): develop generator
+#      TODO Will look into a way to do this via an array
 
 declare -gA INI
 
@@ -31,7 +30,7 @@ declare -gA INI
 # txt: parses .ini files
 # use: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]
 # api: pbfl
-read_ini() {
+function read_ini() {
 	# Set defaults
 	local _BOOLEANS=1
 	local _CLEAN_ENV=0
@@ -276,8 +275,4 @@ read_ini() {
 	# return also the number of parsed sections
 	eval "$_INI_NUMSECTIONS_VARNAME=$_SECTIONS_NUM"
 	cleanup_bash
-}
-
-create_ini() {
-	:
 }

@@ -124,6 +124,8 @@ create_placeholders() {
 	insert_into_initd() {	import_lib install	;	insert_into_initd $@ ; }
 	install_mod() {			import_lib install	;	install_mod $@ ; }
 
+	lxc_rename() {			import_lib lxc		;	lxc_rename $@ ; }
+
 	set_verbosity() {		import_lib log		;	set_verbosity $@ ; }
 	crit_line() {			import_lib log		;	crit_line $@ ; }
 	err_line() {			import_lib log		;	err_line $@ ; }

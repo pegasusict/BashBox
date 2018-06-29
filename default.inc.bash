@@ -57,6 +57,7 @@ create_constants() {
 	declare -gr LOG_WIDTH=100
 	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
 	### git stuff
+	declare -agr PLAT_REPOSITORIES=("PLAT" "PBFL" "PLAT_aptcacher" "PLAT_container_toolset" "PLAT_internet_watchdog" "PLAT_WordPressTools")
 	declare -gr GIT_BASE_URL="https://github.com/pegasusict/"
 	declare -gr GIT_EXT=".git"
 	#

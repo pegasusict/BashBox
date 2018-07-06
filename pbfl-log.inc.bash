@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=0									  #
+# VERSION_PATCH=5									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180616							  #
+# VERSION_BUILD=20180706							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -88,11 +88,10 @@ dbg_line() {
 	fi
 }
 
-###
 # fun: log_line IMPORTANCE MESSAGE
 # txt: Creates a nice logline and decides what to print on screen and what to
 #      send to logfile by comparing VERBOSITY and IMPORTANCE.
-# use: crit_line <INT> IMPORTANCE <VAR> MESSAGE
+# use: log_line <INT> IMPORTANCE <VAR> MESSAGE
 # api: logging_internal
 log_line() {
 	_log_line_length() {
@@ -111,13 +110,17 @@ log_line() {
 	local _LOG_OUTPUT=""
 	local _LOG_LINE_FILLER_LENGTH=0
 	local _SCREEN_LINE_FILLER_LENGTH=0
-	if [ -z $SCREEN_WIDTH ] ; then get_screen_size ; fi
+	if [ -z $SCREEN_WIDTH ]
+	then
+		get_screen_size
+	fi
 	case $_IMPORTANCE in
 		1	)	_LABEL="CRITICAL:"	;;
 		2	)	_LABEL="ERROR:   "	;;
 		3	)	_LABEL="WARNING: "	;;
 		4	)	_LABEL="INFO:    "	;;
 		5	)	_LABEL="DEBUG:   "	;;
+		*	)	_LABEL="INFO:    "	;;
 	esac
 	_LOG_HEADER="$(get_timestamp) % $_LABEL"
 	### generating screen output
@@ -147,11 +150,11 @@ log_line() {
 	tolog "$_LOG_OUTPUT"
 }
 
-# fun: to_log LOG_ENTRY
+# fun: to_log
 # txt: Checks whether the log file has been created yet and whether the log
 #      buffer exists. The log entry will be added to the logfile if exist,
 #      otherwise it will be added to the buffer which will be created if needed.
-# use: tol_log <VAR> LOG_ENTRY
+# use: to_log LOG_ENTRY
 # api: logging_internal
 tolog() {
 	local _LOG_ENTRY="$1"

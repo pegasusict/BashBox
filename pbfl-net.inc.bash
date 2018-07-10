@@ -1,22 +1,22 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="(Inter)Net(work) Functions Script"	  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=15									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180507							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="(Inter)Net(work) Functions Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=0
+# VER_PATCH=20
+# VER_STATE="ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 ### (Inter)net(work) Operations ################################################
 download() { ### downloads quietly, output to $LOG_FILE
@@ -26,7 +26,7 @@ download() { ### downloads quietly, output to $LOG_FILE
 
 cycle_network() {
 	dbg_line "cycle_network: resetting network"
-	ifdown --exclude=lo -a && ifup --exclude=lo -a 
+	ifdown --exclude=lo -a && ifup --exclude=lo -a
 }
 
 test_DNS() {

@@ -1,23 +1,23 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-# based on https://github.com/rudimeier/bash_ini_parser/                   #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+# based on https://github.com/rudimeier/bash_ini_parser/					   #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="INI Parser"							  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=6									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180616							  #
-# LICENSE="MIT"										  #
-#######################################################
+#########################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"	#
+# SCRIPT_TITLE="INI Parser"								#
+# MAINTAINER="Mattijs Snepvangers"						#
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
+# VER_MAJOR=0											#
+# VER_MINOR=0											#
+# VER_PATCH=7											#
+# VER_STATE="PRE-ALPHA"									#
+# BUILD=20180710										#
+# LICENSE="MIT"											#
+#########################################################
 
 # mod: pbfl ini_parser
 # txt: This script is an ini_parser

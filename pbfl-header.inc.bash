@@ -1,22 +1,22 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="Header Generator Script"			  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=4									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180619							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="Header Generator Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=1
+# VER_PATCH=7
+# VER_STATE="PRE-ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 # mod: pbfl::header
 # txt: This script contains functions to generate headers & lines
@@ -35,7 +35,7 @@ header() {
 	local _HEADER	;	_HEADER=$(make_line "$_CHAR" "$_LEN")
 	_HEADER+=$(header_line "$PROGRAM_SUITE" "$SCRIPT_TITLE" "$_CHAR" "$_LEN" "$_SPACER")
 	_HEADER+=$(header_line "$COPYRIGHT" "$MAINTAINER_EMAIL" "$_CHAR" "$_LEN" "$_SPACER")
-	_HEADER+=$(header_line "$SHORT_VERSION" "Build $VERSION_BUILD" "$_CHAR" "$_LEN" "$_SPACER")
+	_HEADER+=$(header_line "$SHORT_VER" "Build $BUILD" "$_CHAR" "$_LEN" "$_SPACER")
 	_HEADER+=$(header_line "License: $LICENSE" "Please keep my name in the credits" "$_CHAR" "$_LEN" "$_SPACER")
 	_HEADER+="\n$(make_line $_CHAR $_LEN)"
 	printf "%s\n" $_HEADER

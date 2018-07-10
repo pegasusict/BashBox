@@ -1,22 +1,22 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="File(system) Operations Script"		  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VER_MAJOR=0									  #
-# VER_MINOR=0									  #
-# VER_PATCH=10									  #
-# VER_STATE="ALPHA"								  #
-# VER_BUILD=20180528							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="File(system) Operations Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=0
+# VER_PATCH=10
+# VER_STATE="ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 ### File(System) operations ####################################################
 add_line_to_file() { ### Inserts line into file if it's not there yet
@@ -98,29 +98,29 @@ create_dir() { ### Creates directory if it doesn't exist
 	fi
 }
 
-create_file() { ### Creates file if it doesn't exist
-	local _FILE=$1
-	#UMASK=$2
-	#OWNER=$3
-	#GROUP=$4
-	if [ ! -f "$_FILE" ]
-	then
-		touch "$_FILE"
-	fi
-	if [ "x$2" != "x" ]
-	then
-		chmod $2 "$_FILE"
-	fi
-	if [ "x$3" != "x" ]
-	then
-		if [ "x$4" != "x" ]
-		then
-			chown $3:$4 "$_FILE"
-		else
-			chown $3 "$_FILE"
-		fi
-	fi
-}
+#create_file() { ### Creates file if it doesn't exist
+	#local _FILE=$1
+	##UMASK=$2
+	##OWNER=$3
+	##GROUP=$4
+	#if [ ! -f "$_FILE" ]
+	#then
+		#touch "$_FILE"
+	#fi
+	#if [ "x$2" != "x" ]
+	#then
+		#chmod $2 "$_FILE"
+	#fi
+	#if [ "x$3" != "x" ]
+	#then
+		#if [ "x$4" != "x" ]
+		#then
+			#chown $3:$4 "$_FILE"
+		#else
+			#chown $3 "$_FILE"
+		#fi
+	#fi
+#}
 
 create_logfile() {
     create_file $LOG_FILE
@@ -128,10 +128,13 @@ create_logfile() {
 }
 
 create_file() { ### Creates file if it doesn't exist
-	local _TARGET_FILE="$1"
-	if [ ! -f "$_TARGET_FILE" ]
+	local _FILE="$1"
+	if [ ! -f "$_FILE" ]
 	then
-		touch "$_TARGET_FILE"
+		dbg_line "$_FILE doesn't exist, creating."
+		touch "$_FILE"
+	else
+		dbg_line "$_FILE already exists, leaving it alone."
 	fi
 }
 
@@ -147,7 +150,7 @@ file_exists() { ### Checks if file exists
 }
 
 go_home() { # If we're not in the base directory of the script,
-				  ##+ let's go there to prevent stuff from going haywire
+					##+ let's go there to prevent stuff from going haywire
 	#dbg_line "Let's find out where we're at..."
 	#EXEC_PATH="${BASH_SOURCE[0]}"
 	#while [ -h "$EXEC_PATH" ]

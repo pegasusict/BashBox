@@ -1,23 +1,23 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-# based on https://github.com/rudimeier/bash_ini_parser/                   #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+# based on https://github.com/rudimeier/bash_ini_parser/					   #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="INI Parser"							  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=0									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180622							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="INI Parser"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=1
+# VER_PATCH=5
+# VER_STATE="ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 # mod: pbfl ini_parser
 # txt: This script is an ini parser/generator
@@ -114,10 +114,10 @@ read_ini() {
 			#				   and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
 			#				   values will be left as strings
 			#				   Default: on
-			#
+
 			#   --prefix=STRING String to begin all returned variables with (followed by '__').
 			#				   Default: INI
-			#
+
 			#   First non-option arg is filename, second is section name
 		while [ $# -gt 0 ]
 		do

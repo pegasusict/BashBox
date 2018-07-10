@@ -1,26 +1,26 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="User Interaction Functions Script"	  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=22									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180617							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="User Interaction Functions Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=1
+# VER_PATCH=27
+# VER_STATE="PRE-ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 ### Basic program ##############################################################
 version() { ### returns version information
-	echo -e "\n$PROGRAM $VERSION - $COPYRIGHT $MAINTAINER"
+	echo -e "\n$PROGRAM $VER - $COPYRIGHT $MAINTAINER"
 }
 
 ### User Interaction ###########################################################

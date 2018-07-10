@@ -1,22 +1,22 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #					LXC command module #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  # Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#					LXC command module #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							# Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="LXC command module"					  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=0									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD="20180705"							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="LXC command module"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=1
+# VER_PATCH=0
+# VER_STATE="ALPHA"
+# BUILD="20180705"
+# LICENSE="MIT"
+################################################################################
 
 # mod: LXC command module
 # txt: This script is contains functions used in conjunction with LXC/LXD
@@ -70,7 +70,7 @@ create_cont() { ### TODO(pegasusict): WTF is this mess?!
 	else
 		lxc init "$_COMMAND"
 	fi
-	# "$CONT_DISTR":"$CONTAINER_VERSION" "$CONT_NAME"
+	# "$CONT_DISTR":"$CONTAINER_VER" "$CONT_NAME"
 }
 
 start_cont() {

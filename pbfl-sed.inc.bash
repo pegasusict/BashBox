@@ -1,28 +1,28 @@
 #!/bin/bash -p
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="Sed Functions Script"				  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=0									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180531							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="Sed Functions Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=0
+# VER_PATCH=5
+# VER_STATE="PRE-ALPHA"
+# BUILD=20180710
+# LICENSE="MIT"
+################################################################################
 
 declare -gr SED_BASE_COMMAND="sed --follow-symlinks --quiet"
 declare -gr SED_EXT_REGEX="-E"
 declare -gr SED_ZERO_TERM="--zero-terminated"
 
-in_place() {   ### ties everything together and checks if it involves a seperate outputfile or not
+in_place() { 	### ties everything together and checks if it involves a seperate outputfile or not
 	local _COMMAND="$1"
 	local _SOURCE="$2"
 	local _TARGET="$3"

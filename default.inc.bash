@@ -1,22 +1,22 @@
 #!/bin/bash
-############################################################################
-# Pegasus' Linux Administration Tools #		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers	  #				 pegasus.ict@gmail.com #
-# License: MIT						  #	Please keep my name in the credits #
-############################################################################
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
 
-#######################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools" #
-# SCRIPT_TITLE="Library Index"						  #
-# MAINTAINER="Mattijs Snepvangers"					  #
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VER_MAJOR=0									  #
-# VER_MINOR=2									  #
-# VER_PATCH=5									  #
-# VER_STATE="ALPHA"								  #
-# VER_BUILD=20180621							  #
-# LICENSE="MIT"										  #
-#######################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="Library Index"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=2
+# VER_PATCH=5
+# VER_STATE="ALPHA"
+# BUILD=20180621
+# LICENSE="MIT"
+################################################################################
 
 # mod: pbfl index
 # txt: This script is an index for Pegasus' Bash Function Library
@@ -61,7 +61,7 @@ create_constants() {
 	declare -agr PLAT_REPOSITORIES=("PLAT" "PBFL" "PLAT_aptcacher" "PLAT_container_toolset" "PLAT_internet_watchdog" "PLAT_WordPressTools")
 	declare -gr GIT_BASE_URL="https://github.com/pegasusict/"
 	declare -gr GIT_EXT=".git"
-	#
+
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 

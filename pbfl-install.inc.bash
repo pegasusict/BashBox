@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=6
+# VER_PATCH=8
 # VER_STATE="PRE-ALPHA"
 # BUILD=20180710
 # LICENSE="MIT"
@@ -21,27 +21,28 @@
 # mod: pbfl::install
 # txt:
 
-# fun:add_to_initd
-# txt:
-# use:
+# fun: insert_into_initd
+# txt: copies source file to /etc/init.d/ and optionally renames it,
+#      set rights and ownership and runs update-rc.d to register it to
+#      start on boot-time
+# use: insert_into_initd SRC_DIR SRC_FILE [TARGET_FILE_NAME]
+# opt: var SRC_DIR: source directory - MUST END WITH SLASH "/"!!!
+# opt: var SRC_FILE: source file
+# opt: var TARGET_FILE_NAME: optional new name for file in /etc/init.d/
 # api: pbfl::install
 insert_into_initd() {
-	#copy to /etc/init.d/
-	dbg_line "SCRIPT_DIR: $SCRIPT_DIR"
-	dbg_line "SCRIPT: $SCRIPT"
-	local _SRC_FILE="$SCRIPT_DIR/$SCRIPT"
-	dbg_line "Source File: $_SRC_FILE"
-	local _TARGET="/etc/init.d/$SCRIPT"
-	dbg_line "Target: $_TARGET"
-	dbg_line "Copying $_SRC_FILE to $_TARGET"
-	cp "$_SRC_FILE" "$_TARGET"
+	local _SRC_DIR	;	_SRC_DIR="$1"
+	local _SRC_FILE	;	_SRC_FILE="$2"
+	local _TARGET	;	_TARGET="/etc/init.d/$_SRC_FILE"
+	dbg_line "insert_into_initd: copying $_SRC_FILE from $_SRC_DIR to $_TARGET"
+	cp "${_SRC_DIR}${_SRC_FILE}" "$_TARGET"
 	# set rights and ownership
 	dbg_line "Setting rights and ownership for $_TARGET"
 	chmod a+x "$_TARGET"
 	chown root "$_TARGET"
 	dbg_line "Running update-rc.d"
-	update-rc.d "$SCRIPT" defaults
-	info_line "Installation of $SCRIPT_TITLE complete"
+	update-rc.d "$_SRC_FILE" defaults
+	info_line "Installation of $_SRC_FILE complete"
 }
 
 

@@ -37,7 +37,6 @@ add_line_to_file() { ### Inserts line into file if it's not there yet
 			info_line "$_TARGET has been updated"
 		else
 			crit_line "CRITICAL: $_TARGET not writeable: Line could not be added"
-			exit 1
 		fi
 	fi
 }
@@ -62,15 +61,15 @@ edit_line_in_file() {
 }
 
 add_to_script() { #adds line or blob to script
-	local _TARGET_SCRIPT=$1
-	local _LINE_OR_BLOB=$2
-	local _MESSAGE=$3
-	if [ "$LINE_OR_BLOB" == line ]
+	local _TARGET="$1"
+	local _LINE_OR_BLOB="$2"
+	local _MESSAGE="$3"
+	if [ "$LINE_OR_BLOB" == line ] || [ "$LINE_OR_BLOB" == true ]
 	then
-		echo "$MESSAGE" >> "$TARGET_SCRIPT"
+		echo "$MESSAGE" >> "$TARGET"
 	elif [ "$LINE_OR_BLOB" == blob ]
 	then
-		cat "$MESSAGE" >> "$TARGET_SCRIPT"
+		cat "$MESSAGE" >> "$TARGET"
 	else
 		err_line "unknown value: $_LINE_OR_BLOB"
 		exit 1

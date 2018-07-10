@@ -30,6 +30,7 @@ create_constants() {
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
 	### declare extensions
+	declare -gr SCRIPT_EXT=".sh"
 	declare -gr INI_EXT=".ini"
 	declare -gr LIB_EXT=".inc.bash"
 	declare -gr LOG_EXT=".log"

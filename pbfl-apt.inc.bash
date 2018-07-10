@@ -10,11 +10,11 @@
 # SCRIPT_TITLE="Apt Functions Script"				  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=1									  #
-# VERSION_PATCH=0									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180621							  #
+# VER_MAJOR=0									  #
+# VER_MINOR=1									  #
+# VER_PATCH=0									  #
+# VER_STATE="ALPHA"								  #
+# VER_BUILD=20180621							  #
 # LICENSE="MIT"										  #
 #######################################################
 

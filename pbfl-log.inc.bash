@@ -10,11 +10,11 @@
 # SCRIPT_TITLE="Log Functions Script"				  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=6									  #
-# VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180709							  #
+# VER_MAJOR=0									  #
+# VER_MINOR=0									  #
+# VER_PATCH=6									  #
+# VER_STATE="PRE-ALPHA"							  #
+# VER_BUILD=20180709							  #
 # LICENSE="MIT"										  #
 #######################################################
 

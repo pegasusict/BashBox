@@ -10,11 +10,11 @@
 # SCRIPT_TITLE="File(system) Operations Script"		  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=0									  #
-# VERSION_PATCH=10									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180528							  #
+# VER_MAJOR=0									  #
+# VER_MINOR=0									  #
+# VER_PATCH=10									  #
+# VER_STATE="ALPHA"								  #
+# VER_BUILD=20180528							  #
 # LICENSE="MIT"										  #
 #######################################################
 

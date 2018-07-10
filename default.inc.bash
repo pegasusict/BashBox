@@ -10,11 +10,11 @@
 # SCRIPT_TITLE="Library Index"						  #
 # MAINTAINER="Mattijs Snepvangers"					  #
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
-# VERSION_MAJOR=0									  #
-# VERSION_MINOR=2									  #
-# VERSION_PATCH=5									  #
-# VERSION_STATE="ALPHA"								  #
-# VERSION_BUILD=20180621							  #
+# VER_MAJOR=0									  #
+# VER_MINOR=2									  #
+# VER_PATCH=5									  #
+# VER_STATE="ALPHA"								  #
+# VER_BUILD=20180621							  #
 # LICENSE="MIT"										  #
 #######################################################
 

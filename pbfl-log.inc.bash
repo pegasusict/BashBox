@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"			  #
 # VERSION_MAJOR=0									  #
 # VERSION_MINOR=0									  #
-# VERSION_PATCH=5									  #
+# VERSION_PATCH=6									  #
 # VERSION_STATE="PRE-ALPHA"							  #
-# VERSION_BUILD=20180706							  #
+# VERSION_BUILD=20180709							  #
 # LICENSE="MIT"										  #
 #######################################################
 
@@ -147,7 +147,7 @@ log_line() {
 	_LOG_LINE_FILLER_LENGTH=$((LOG_WIDTH - $(_log_line_length)))
 	_LOG_LINE_FILLER=$(dup_var "$_CHAR" $_LOG_LINE_FILLER_LENGTH)
 	_LOG_OUTPUT="$_LOG_HEADER $_MESSAGE $_LOG_LINE_FILLER"
-	tolog "$_LOG_OUTPUT"
+	to_log "$_LOG_OUTPUT"
 }
 
 # fun: to_log
@@ -156,23 +156,29 @@ log_line() {
 #      otherwise it will be added to the buffer which will be created if needed.
 # use: to_log LOG_ENTRY
 # api: logging_internal
-tolog() {
-	local _LOG_ENTRY="$1"
+to_log() {
+	local _LOG_ENTRY	;	_LOG_ENTRY="$1"
 	if [ "$LOG_FILE_CREATED" != true ]
 	then
 		if [ -z ${LOG_BUFFER+x} ]
 		then
-			declare -g LOG_BUFFER=""
+			declare -g LOG_BUFFER
+			LOG_BUFFER="$START_TIME - $COMMAND Process started\n"
 		fi
-		LOG_BUFFER+="\n$_LOG_ENTRY"
+		LOG_BUFFER+="$_LOG_ENTRY"
 	else
-		if [ -n "$LOG_BUFFER" ]
-		then
-			echo -e "$_LOG_BUFFER" >> "$LOG_FILE"
-			unset $_LOG_BUFFER
+		to_log() {
+			if [ -n "$LOG_BUFFER" ]
+			then
+				cat "$LOG_BUFFER" > "$LOG_FILE"
+				unset $LOG_BUFFER
+			else
+				to_log() {
+					echo "$_LOG_ENTRY" >> "$LOG_FILE"
+				}
+			fi
 			echo "$_LOG_ENTRY" >> "$LOG_FILE"
-		else
-			echo "$_LOG_ENTRY" >> "$LOG_FILE"
-		fi
+		}
+		to_log "$_LOG_ENTRY"
 	fi
 }

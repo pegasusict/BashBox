@@ -48,7 +48,7 @@ create_constants() {
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
-	declare -gr LIB_FILE="${SCRIPT}-functions${LIB_EXT}"
+	declare -gr FUNC_FILE="${SCRIPT}-functions${LIB_EXT}"
 	declare -gr LIB="lib/${LIB_FILE}"
 	# define booleans
 	declare -gr TRUE=0
@@ -115,7 +115,7 @@ create_placeholders() {
 	create_file() {			import_lib file		;	create_file $@			; }
 	create_logfile() {		import_lib file		;	create_logfile $@		; }
 	file_exists() {			import_lib file		;	file_exists $@			; }
-	goto_base_dir() {		import_lib file		;	goto_base_dir			; }
+	go_home() {				import_lib file		;	go_home					; }
 	purge_dir() {			import_lib file		;	purge_dir $@			; }
 
 	header() {				import_lib header	;	header $@				; }

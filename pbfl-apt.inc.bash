@@ -43,8 +43,8 @@ add_ppa_key() {
 # opt: PACKAGES: space separated list of packages to be installed
 # api: pbfl::apt
 apt_inst() {
-	apt-get install --force-yes -y --no-install-recommends -qq --allow-unauthenticated ${packages} 2>&1 | verb_line
-	# "$@"
+	local _PACKAGES	;	_PACKAGES="$@"
+	apt-get install --force-yes -y --no-install-recommends -qq --allow-unauthenticated ${_PACKAGES} 2>&1 | verb_line
 }
 
 # fun: apt_update

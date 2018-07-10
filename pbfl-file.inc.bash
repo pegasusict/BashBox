@@ -147,43 +147,54 @@ file_exists() { ### Checks if file exists
 	fi
 }
 
-goto_base_dir() { # If we're not in the base directory of the script,
-				  #+ let's go there to prevent stuff from going haywire
-	dbg_line "Let's find out where we're at..."
-	EXEC_PATH="${BASH_SOURCE[0]}"
-	while [ -h "$EXEC_PATH" ]
-	do # resolve $EXEC_PATH until the file is no longer a symlink
-		local TARGET="$(readlink "$EXEC_PATH")"
-		if [[ $TARGET == /* ]]
-		then
-			dbg_line "EXEC_PATH '$EXEC_PATH' is an absolute symlink to '$TARGET'"
-			EXEC_PATH="$TARGET"
-		else
-			DIR="$(dirname "$EXEC_PATH")"
-			dbg_line "EXEC_PATH '$EXEC_PATH' is a relative symlink to '$TARGET' (relative to '$DIR')"
-			EXEC_PATH="$DIR/$TARGET"
-		fi
-	done
-	dbg_line "EXEC_PATH is $EXEC_PATH"
-	THIS_SCRIPT="$(basename $EXEC_PATH)"
-	BASE_DIR=$(dirname "$EXEC_PATH")
-	RDIR="$( dirname "$EXEC_PATH" )"
-	DIR="$( cd -P "$( dirname "$EXEC_PATH" )" && pwd )"
-	if [ "$DIR" != "$RDIR" ]
+go_home() { # If we're not in the base directory of the script,
+				  ##+ let's go there to prevent stuff from going haywire
+	#dbg_line "Let's find out where we're at..."
+	#EXEC_PATH="${BASH_SOURCE[0]}"
+	#while [ -h "$EXEC_PATH" ]
+	#do # resolve $EXEC_PATH until the file is no longer a symlink
+		#local TARGET="$(readlink "$EXEC_PATH")"
+		#if [[ $TARGET == /* ]]
+		#then
+			#dbg_line "EXEC_PATH '$EXEC_PATH' is an absolute symlink to '$TARGET'"
+			#EXEC_PATH="$TARGET"
+		#else
+			#DIR="$(dirname "$EXEC_PATH")"
+			#dbg_line "EXEC_PATH '$EXEC_PATH' is a relative symlink to '$TARGET' (relative to '$DIR')"
+			#EXEC_PATH="$DIR/$TARGET"
+		#fi
+	#done
+	#dbg_line "EXEC_PATH is $EXEC_PATH"
+	#THIS_SCRIPT="$(basename $EXEC_PATH)"
+	#BASE_DIR=$(dirname "$EXEC_PATH")
+	#RDIR="$( dirname "$EXEC_PATH" )"
+	#DIR="$( cd -P "$( dirname "$EXEC_PATH" )" && pwd )"
+	#if [ "$DIR" != "$RDIR" ]
+	#then
+		#dbg_line "DIR '$RDIR' resolves to '$DIR'"
+	#fi
+	#dbg_line "DIR is '$DIR'"
+	#THIS_SCRIPT=$(basename $EXEC_PATH)
+	#BASE_DIR=$(dirname "$EXEC_PATH")
+	#if [[ $(pwd) != "$BASE_DIR" ]]
+	#then
+		#cd "$BASE_DIR"
+	#fi
+	#dbg_line "Now we're in the base directory\"$BASE_DIR\""
+##--------------------------------------------------------------------------------------
+	info_line "go_home: Where are we being called from?"
+	declare -gr SCRIPT_FULL="${COMMAND##*/}"
+	declare -gr SCRIPT="${SCRIPT_FULL%.*}"
+	declare -gr SCRIPT_PATH="$(readlink -fn $COMMAND)"
+	declare -gr SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+	declare -g CURRENT_DIR=$(pwd)
+	if [[ $SCRIPT_DIR != $CURRENT_DIR ]]
 	then
-		dbg_line "DIR '$RDIR' resolves to '$DIR'"
+		info_line "go_home: We're being called outside our basedir, going home to \"$SCRIPT_DIR\"..."
+		cd "$SCRIPT_DIR"
+	else
+		info_line "go_home: We're right at home. :-) "
 	fi
-	dbg_line "DIR is '$DIR'"
-	THIS_SCRIPT=$(basename $EXEC_PATH)
-	BASE_DIR=$(dirname "$EXEC_PATH")
-	if [[ $(pwd) != "$BASE_DIR" ]]
-	then
-		cd "$BASE_DIR"
-	fi
-	dbg_line "Now we're in the base directory\"$BASE_DIR\""
-#--------------------------------------------------------------------------------------
-	#echo "The script you are running has basename `basename "$(readlink -f "$0")"`, dirname `dirname "$(readlink -f "$0")"`"
-	#echo "The present working directory is `pwd`"
 }
 
 purge_dir() {

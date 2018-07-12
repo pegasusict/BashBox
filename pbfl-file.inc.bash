@@ -83,19 +83,19 @@ create_dir() { ### Creates directory if it doesn't exist
 	then
 		mkdir "$_DIR"
 	fi
-	if [ "x$2" != "x" ]
-	then
-		chmod $2 "$_DIR"
-	fi
-	if [ "x$3" != "x" ]
-	then
-		if [ "x$4" != "x" ]
-		then
-			chown $3:$4 "$_DIR"
-		else
-			chown $3 "$_DIR"
-		fi
-	fi
+#	if [ "x$2" != "x" ]
+	#then
+		#chmod $2 "$_DIR"
+	#fi
+	#if [ "x$3" != "x" ]
+	#then
+		#if [ "x$4" != "x" ]
+		#then
+			#chown $3:$4 "$_DIR"
+		#else
+			#chown $3 "$_DIR"
+		#fi
+	#fi
 }
 
 #create_file() { ### Creates file if it doesn't exist
@@ -185,11 +185,6 @@ go_home() { # If we're not in the base directory of the script,
 	#dbg_line "Now we're in the base directory\"$BASE_DIR\""
 ##--------------------------------------------------------------------------------------
 	info_line "go_home: Where are we being called from?"
-	declare -gr SCRIPT_FULL="${COMMAND##*/}"
-	declare -gr SCRIPT="${SCRIPT_FULL%.*}"
-	declare -gr SCRIPT_PATH="$(readlink -fn $COMMAND)"
-	declare -gr SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
-	declare -g CURRENT_DIR=$(pwd)
 	if [[ $SCRIPT_DIR != $CURRENT_DIR ]]
 	then
 		info_line "go_home: We're being called outside our basedir, going home to \"$SCRIPT_DIR\"..."

@@ -94,6 +94,15 @@ apt_cycle() {
 	apt_clean
 }
 
+# fun: apt_fix_deps
+# txt: cleans up apt cache
+# use: apt_clean
+# api: pbfl::apt
+apt_fix_deps() {
+	info_line "Fixing any broken dependencies if needed"
+	apt -qqy --fix-broken install 2>&1
+}
+
 # fun: install
 # txt: install a .deb package not available in apt
 # use: install <DEB_PACKAGE>

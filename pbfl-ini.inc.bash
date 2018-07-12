@@ -129,7 +129,7 @@ read_ini() {
 									then
 										_INI_FILE=$1
 									else
-										if [ -z "_$INI_SECTION" ]
+										if [ -z "$_INI_SECTION" ]
 										then
 											_INI_SECTION=$1
 										fi
@@ -148,9 +148,9 @@ read_ini() {
 			cleanup_bash
 			return 1
 		fi
-		_INI_ALL_VARNAME="${VARNAME_PREFIX}__ALL_VARS"
-		_INI_ALL_SECTION="${VARNAME_PREFIX}__ALL_SECTIONS"
-		_INI_NUMSECTIONS_VARNAME="${VARNAME_PREFIX}__NUMSECTIONS"
+		_INI_ALL_VARNAME="${_VARNAME_PREFIX}__ALL_VARS"
+		_INI_ALL_SECTION="${_VARNAME_PREFIX}__ALL_SECTIONS"
+		_INI_NUMSECTIONS_VARNAME="${_VARNAME_PREFIX}__NUMSECTIONS"
 		if [ "${_CLEAN_ENV}" = 1 ]
 		then
 			eval unset "\$${_INI_ALL_VARNAME}"

@@ -43,14 +43,12 @@ create_constants() {
 	declare -gr LOG_DIR="LOGS/"
 	declare -gr SYS_BIN_DIR="/usr/bin/$BASE"
 	declare -gr SYS_CFG_DIR="/etc/$BASE"
-	declare -gr SYS_LIB_DIR="/var/lib/BASE"
-	declare -gr SYS_LOG_DIR="/var/log/BASE"
+	declare -gr SYS_LOG_DIR="/var/log/$BASE"
 	declare -gr TPL_DIR="templates/"
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
 	declare -gr INI_PRSR="${LIB_DIR}ini_parser${LIB_EXT}"
 	declare -gr FUNC_FILE="${SCRIPT}-functions${LIB_EXT}"
-	declare -gr LIB="lib/${LIB_FILE}"
 	# define booleans
 	declare -gr TRUE=0
 	declare -gr FALSE=1
@@ -67,12 +65,16 @@ create_constants() {
 
 # fun: import_lib
 # txt: completes the filenames for the library "classes" and invokes import() --> import LIBDIR/LIBPREFIX-LIB.LIBEXT
-# use: import_lib $LIB
+# use: import_lib $LIB $DIR
+# opt: var FILE
+# opt: var DIR
+# opt: bool REQUIRED
 # api: pbfl
 import_lib() {
 	local _LIB	;	_LIB=$1
-	_LIB="${LIB_DIR}${LIB_PREFIX}${_LIB}${LIB_EXT}"
-	import "$_LIB"
+	_LIB="${LIB_PREFIX}${_LIB}${LIB_EXT}"
+	local _DIR	;	_DIR="${LIB_DIR}"
+	import "$_LIB" "$_DIR" true
 }
 
 # fun: create_placeholders

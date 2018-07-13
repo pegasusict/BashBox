@@ -27,8 +27,8 @@ create_var() {	### sets $VAR to $VALUE
 }
 
 dup_var() {
-	local _STRING=$1
-	local _COUNT=$2
+	local _STRING="$1"
+	local _COUNT="$2"
 	local _OUTPUT=$(printf "%-${COUNT}s" "$STRING")
 	echo "${_OUTPUT// /*}"
 }

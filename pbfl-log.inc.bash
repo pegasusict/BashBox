@@ -54,8 +54,11 @@ crit_line() {
 # use: err_line <var> MESSAGE
 # api: logging
 err_line() {
-	local _MESSAGE="$1"
-	log_line 2 "$_MESSAGE"
+	if [[ -n "$1" ]]
+	then
+		local _MESSAGE="$1"
+		log_line 2 "$_MESSAGE"
+	fi
 }
 
 # fun: warn_line MESSAGE
@@ -136,7 +139,7 @@ log_line() {
 			4	)	_SCREEN_OUTPUT=$(info_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
 			5	)	_SCREEN_OUTPUT=$(dbg_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
 		esac
-		if (( IMPORTANCE >= 1 && IMPORTANCE <= 2 ))
+		if $(( $_IMPORTANCE <= 2 ))
 		then
 			echo -e "$_SCREEN_OUTPUT" >&2
 		else

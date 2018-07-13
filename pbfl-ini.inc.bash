@@ -13,9 +13,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=5
+# VER_PATCH=6
 # VER_STATE="ALPHA"
-# BUILD=20180710
+# BUILD=20180713
 # LICENSE="MIT"
 ################################################################################
 
@@ -114,10 +114,10 @@ read_ini() {
 			#				   and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
 			#				   values will be left as strings
 			#				   Default: on
-
+			#
 			#   --prefix=STRING String to begin all returned variables with (followed by '__').
 			#				   Default: INI
-
+			#
 			#   First non-option arg is filename, second is section name
 		while [ $# -gt 0 ]
 		do

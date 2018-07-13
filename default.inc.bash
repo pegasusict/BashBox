@@ -38,12 +38,8 @@ create_constants() {
 	declare -gr LIB_PREFIX="pbfl-"
 	declare -gr MAINT_PRFX="maintenance-"
 	### declare directories !!! always end with a "/" !!!
-	declare -gr BASE="plat/"
 	declare -gr LIB_DIR="PBFL/"
-	declare -gr LOG_DIR="LOGS/"
-	declare -gr SYS_BIN_DIR="/usr/bin/$BASE"
-	declare -gr SYS_CFG_DIR="/etc/$BASE"
-	declare -gr SYS_LOG_DIR="/var/log/$BASE"
+	declare -gr LOG_DIR="logs/"
 	declare -gr TPL_DIR="templates/"
 	### declare ini & dedicated function lib
 	declare -gr INI_FILE="${SCRIPT}${INI_EXT}"
@@ -130,14 +126,14 @@ create_placeholders() {
 
 	lxc_rename() {			import_lib lxc		;	lxc_rename $@			; }
 
-	set_verbosity() {		import_lib log		;	set_verbosity $@		; }
-	crit_line() {			import_lib log		;	crit_line $@			; }
-	err_line() {			import_lib log		;	err_line $@				; }
-	warn_line() {			import_lib log		;	warn_line $@			; }
-	info_line() {			import_lib log		;	info_line $@			; }
-	dbg_line() {			import_lib log		;	dbg_line $@				; }
-	log_line() {			import_lib log		;	log_line $@				; }
-	tolog() {				import_lib log		;	tolog $@				; }
+	#set_verbosity() {		import_lib log		;	set_verbosity $@		; }
+	#crit_line() {			import_lib log		;	crit_line $@			; }
+	#err_line() {			import_lib log		;	err_line $@				; }
+	#warn_line() {			import_lib log		;	warn_line $@			; }
+	#info_line() {			import_lib log		;	info_line $@			; }
+	#dbg_line() {			import_lib log		;	dbg_line $@				; }
+	#log_line() {			import_lib log		;	log_line $@				; }
+	#tolog() {				import_lib log		;	tolog $@				; }
 
 	do_mutex() {			import_lib mutex	;	do_mutex $@				; }
 

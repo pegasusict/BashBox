@@ -77,11 +77,11 @@ add_to_script() { #adds line or blob to script
 }
 
 create_dir() { ### Creates directory if it doesn't exist
-	_DIR="$1"
+	local _DIR	;	_DIR="$1"
 	# UMASK=$2, OWNER=$3, GROUP=$4
 	if [ ! -d "$_DIR" ]
 	then
-		mkdir "$_DIR"
+		mkdir -p "$_DIR"
 	fi
 #	if [ "x$2" != "x" ]
 	#then
@@ -98,37 +98,12 @@ create_dir() { ### Creates directory if it doesn't exist
 	#fi
 }
 
-#create_file() { ### Creates file if it doesn't exist
-	#local _FILE=$1
-	##UMASK=$2
-	##OWNER=$3
-	##GROUP=$4
-	#if [ ! -f "$_FILE" ]
-	#then
-		#touch "$_FILE"
-	#fi
-	#if [ "x$2" != "x" ]
-	#then
-		#chmod $2 "$_FILE"
-	#fi
-	#if [ "x$3" != "x" ]
-	#then
-		#if [ "x$4" != "x" ]
-		#then
-			#chown $3:$4 "$_FILE"
-		#else
-			#chown $3 "$_FILE"
-		#fi
-	#fi
-#}
-
-create_logfile() {
-    create_file $LOG_FILE
-    declare -gr LOG_FILE_CREATED=true
-}
-
 create_file() { ### Creates file if it doesn't exist
-	local _FILE="$1"
+	set +u
+	local _FILE		;	_FILE="$1"
+	local _UMASK	;	_UMASK="$2"
+	local _OWNER	;	_OWNER="$3"
+	local _GROUP	;	_GROUP="$4"
 	if [ ! -f "$_FILE" ]
 	then
 		dbg_line "$_FILE doesn't exist, creating."
@@ -136,6 +111,24 @@ create_file() { ### Creates file if it doesn't exist
 	else
 		dbg_line "$_FILE already exists, leaving it alone."
 	fi
+	if [ "x$_UMASK" != "x" ]
+	then
+		chmod "$_UMASK" "$_FILE"
+	fi
+	if [ "x$_OWNER" != "x" ]
+	then
+		if [ "x$_GROUP" != "x" ]
+		then
+			chown "$_OWNER:$_GROUP" "$_FILE"
+		else
+			chown "$_OWNER" "$_FILE"
+		fi
+	fi
+}
+
+create_logfile() {
+    create_file $LOG_FILE
+    declare -gr LOG_FILE_CREATED=true
 }
 
 file_exists() { ### Checks if file exists

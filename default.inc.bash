@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=2
-# VER_PATCH=5
+# VER_PATCH=7
 # VER_STATE="ALPHA"
-# BUILD=20180621
+# BUILD=20180803
 # LICENSE="MIT"
 ################################################################################
 
@@ -126,14 +126,15 @@ create_placeholders() {
 
 	lxc_rename() {			import_lib lxc		;	lxc_rename $@			; }
 
-	#set_verbosity() {		import_lib log		;	set_verbosity $@		; }
-	#crit_line() {			import_lib log		;	crit_line $@			; }
-	#err_line() {			import_lib log		;	err_line $@				; }
-	#warn_line() {			import_lib log		;	warn_line $@			; }
-	#info_line() {			import_lib log		;	info_line $@			; }
-	#dbg_line() {			import_lib log		;	dbg_line $@				; }
-	#log_line() {			import_lib log		;	log_line $@				; }
-	#tolog() {				import_lib log		;	tolog $@				; }
+	set_verbosity() {		import_lib log		;	set_verbosity $@		; }
+	crit_line() {			import_lib log		;	crit_line $@			; }
+	err_line() {			import_lib log		;	err_line $@				; }
+	warn_line() {			import_lib log		;	warn_line $@			; }
+	info_line() {			import_lib log		;	info_line $@			; }
+	dbg_line() {			import_lib log		;	dbg_line $@				; }
+	log_line() {			import_lib log		;	log_line $@				; }
+	tolog() {				import_lib log		;	tolog $@				; }
+	exeqt() {				import_lib log		;	exeqt $@				; }
 
 	do_mutex() {			import_lib mutex	;	do_mutex $@				; }
 

@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=10
+# VER_PATCH=14
 # VER_STATE="ALPHA"
-# BUILD=20180710
+# BUILD=20180803
 # LICENSE="MIT"
 ################################################################################
 
@@ -142,45 +142,18 @@ file_exists() { ### Checks if file exists
 	fi
 }
 
-go_home() { # If we're not in the base directory of the script,
-					##+ let's go there to prevent stuff from going haywire
-	#dbg_line "Let's find out where we're at..."
-	#EXEC_PATH="${BASH_SOURCE[0]}"
-	#while [ -h "$EXEC_PATH" ]
-	#do # resolve $EXEC_PATH until the file is no longer a symlink
-		#local TARGET="$(readlink "$EXEC_PATH")"
-		#if [[ $TARGET == /* ]]
-		#then
-			#dbg_line "EXEC_PATH '$EXEC_PATH' is an absolute symlink to '$TARGET'"
-			#EXEC_PATH="$TARGET"
-		#else
-			#DIR="$(dirname "$EXEC_PATH")"
-			#dbg_line "EXEC_PATH '$EXEC_PATH' is a relative symlink to '$TARGET' (relative to '$DIR')"
-			#EXEC_PATH="$DIR/$TARGET"
-		#fi
-	#done
-	#dbg_line "EXEC_PATH is $EXEC_PATH"
-	#THIS_SCRIPT="$(basename $EXEC_PATH)"
-	#BASE_DIR=$(dirname "$EXEC_PATH")
-	#RDIR="$( dirname "$EXEC_PATH" )"
-	#DIR="$( cd -P "$( dirname "$EXEC_PATH" )" && pwd )"
-	#if [ "$DIR" != "$RDIR" ]
-	#then
-		#dbg_line "DIR '$RDIR' resolves to '$DIR'"
-	#fi
-	#dbg_line "DIR is '$DIR'"
-	#THIS_SCRIPT=$(basename $EXEC_PATH)
-	#BASE_DIR=$(dirname "$EXEC_PATH")
-	#if [[ $(pwd) != "$BASE_DIR" ]]
-	#then
-		#cd "$BASE_DIR"
-	#fi
-	#dbg_line "Now we're in the base directory\"$BASE_DIR\""
-##--------------------------------------------------------------------------------------
+# fun: go_home
+# txt: determins where the script is called from and if this is the same
+#      location the script resides. If not, moves to that directory.
+# use: go_home
+# api: internal
+go_home() {
 	info_line "go_home: Where are we being called from?"
+	declare -g CURRENT_DIR	;	CURRENT_DIR=$(pwd)
 	if [[ $SCRIPT_DIR != $CURRENT_DIR ]]
 	then
-		info_line "go_home: We're being called outside our basedir, going home to \"$SCRIPT_DIR\"..."
+		info_line "go_home: We're being called outside our basedir, \
+		going home to \"$SCRIPT_DIR\"..."
 		cd "$SCRIPT_DIR"
 	else
 		info_line "go_home: We're right at home. :-) "
@@ -188,7 +161,6 @@ go_home() { # If we're not in the base directory of the script,
 }
 
 purge_dir() {
-	local _DIR="$1"
-	rm -rf "$_DIR" && mkdir "$_DIR"
-	create_dir "$_DIR"
+	local _DIR	;	_DIR="$1"
+	rm -rf "$_DIR/*" && rm -rf "$_DIR/.*"
 }

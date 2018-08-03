@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=6
-# VER_STATE="PRE-ALPHA"
-# BUILD=20180709
+# VER_PATCH=12
+# VER_STATE="ALPHA"
+# BUILD=20180803
 # LICENSE="MIT"
 ################################################################################
 
@@ -29,12 +29,28 @@
 set_verbosity() { ### Set verbosity level
 	dbg_line "setting verbosity to $1"
 	case $1 in
-		1	)	declare -gr VERBOSITY=1; info_line "Verbosity is set to CRITICAL"	;	shift	;;	### Be vewy, vewy quiet... Will only show Critical errors which result in an untimely exiting of the script
-		2	)	declare -gr VERBOSITY=2; info_line "Verbosity is set to ERROR"		;	shift	;;	# Will show errors that don't endanger the basic functioning of the program
-		3	)	declare -gr VERBOSITY=3; info_line "Verbosity is set to WARNING"	;	shift	;;	# Will show warnings
-		4	)	declare -gr VERBOSITY=4; info_line "Verbosity is set to INFO"		;	shift	;;	# Let me know what youre doing, every step of the way
-		5	)	declare -gr VERBOSITY=5; info_line "Verbosity is set to DEBUG"		;	shift	;;	# I want it all, your thoughts and dreams too!!!
-		*	)	declare -gr VERBOSITY=4; info_line "Verbosity is default: INFO"		;	shift	;	break	;;	## DEFAULT
+		1 )	declare -gr VERBOSITY=1
+			info_line "Verbosity is set to CRITICAL"
+			shift	;;	### Be vewy, vewy quiet...
+						# Will only show Critical errors which result in an
+						# untimely exiting of the script.
+		2 )	declare -gr VERBOSITY=2
+			info_line "Verbosity is set to ERROR"
+			shift	;;	# Will show errors that don't endanger the
+						# functioning of the program
+		3 )	declare -gr VERBOSITY=3
+			info_line "Verbosity is set to WARNING"
+			shift	;;	# Will show warnings
+		4 )	declare -gr VERBOSITY=4
+			info_line "Verbosity is set to INFO"
+			shift	;;	# Let me know what youre doing, every step of the way
+		5 )	declare -gr VERBOSITY=5
+			info_line "Verbosity is set to DEBUG"
+			shift	;;	# I want it all, your thoughts and dreams too!!!
+		* )	declare -gr VERBOSITY=4
+			info_line "Verbosity is default: INFO"
+			shift
+			break	;;	## DEFAULT
 	esac
 }
 
@@ -88,6 +104,8 @@ dbg_line() {
 	then
 		local _MESSAGE="$1"
 		log_line 5 "$_MESSAGE"
+	else
+		dbg_line() { : ; }
 	fi
 }
 
@@ -133,11 +151,11 @@ log_line() {
 		_SCREEN_LINE_FILLER=$(dup_var "$_CHAR" $_SCREEN_LINE_FILLER_LENGTH)
 		_SCREEN_LINE="$_MESSAGE $_SCREEN_LINE_FILLER"
 		case $_IMPORTANCE in
-			1	)	_SCREEN_OUTPUT=$(crit_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			2	)	_SCREEN_OUTPUT=$(err_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			3	)	_SCREEN_OUTPUT=$(warn_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			4	)	_SCREEN_OUTPUT=$(info_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
-			5	)	_SCREEN_OUTPUT=$(dbg_colours "$_LOG_HEADER" "$_SCREEN_LINE")	;;
+			1 )	_SCREEN_OUTPUT=$(crit_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
+			2 )	_SCREEN_OUTPUT=$(err_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
+			3 )	_SCREEN_OUTPUT=$(warn_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
+			4 )	_SCREEN_OUTPUT=$(info_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
+			5 )	_SCREEN_OUTPUT=$(dbg_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
 		esac
 		if $(( $_IMPORTANCE <= 2 ))
 		then
@@ -168,7 +186,7 @@ to_log() {
 			declare -g LOG_BUFFER
 			LOG_BUFFER="$START_TIME - $COMMAND Process started\n"
 		fi
-		LOG_BUFFER+="$_LOG_ENTRY"
+		LOG_BUFFER+="$_LOG_ENTRY\n"
 	else
 		to_log() {
 			if [ -n "$LOG_BUFFER" ]
@@ -182,6 +200,19 @@ to_log() {
 			fi
 			echo "$_LOG_ENTRY" >> "$LOG_FILE"
 		}
-		to_log "$_LOG_ENTRY"
+	fi
+}
+
+# fun: exeqt
+# txt: Executes COMMAND.
+#      If COMMAND returns an error code, the output is sent to the error log.
+# use: exeqt COMMAND
+# api: logging internal
+exeqt() {
+	local _CMD		; _CMD="$1"
+	local _RESULT	; _RESULT=$($_CMD) 2>&1
+	if [[ $? > 0 ]]
+	then
+		err_line $_RESULT
 	fi
 }

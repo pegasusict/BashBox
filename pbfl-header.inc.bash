@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=7
+# VER_PATCH=13
 # VER_STATE="PRE-ALPHA"
-# BUILD=20180710
+# BUILD=20180803
 # LICENSE="MIT"
 ################################################################################
 
@@ -32,13 +32,13 @@ header() {
 	local _CHAR		;	_CHAR=${1:-#}
 	local _LEN		;	_LEN=${2:-80}
 	local _SPACER	;	_SPACER=${2:-" "}
-	local _HEADER	;	_HEADER=$(make_line "$_CHAR" "$_LEN")
-	_HEADER+=$(header_line "$PROGRAM_SUITE" "$SCRIPT_TITLE" "$_CHAR" "$_LEN" "$_SPACER")
-	_HEADER+=$(header_line "$COPYRIGHT" "$MAINTAINER_EMAIL" "$_CHAR" "$_LEN" "$_SPACER")
-	_HEADER+=$(header_line "$SHORT_VER" "Build $BUILD" "$_CHAR" "$_LEN" "$_SPACER")
-	_HEADER+=$(header_line "License: $LICENSE" "Please keep my name in the credits" "$_CHAR" "$_LEN" "$_SPACER")
-	_HEADER+="\n$(make_line $_CHAR $_LEN)"
-	printf "%s\n" $_HEADER
+	local _HEADER	;	_HEADER="$(make_line "$_CHAR" "$_LEN")\n"
+	_HEADER+="$(header_line "$PROGRAM_SUITE" "$SCRIPT_TITLE" "$_CHAR" "$_LEN" "$_SPACER")\n"
+	_HEADER+="$(header_line "$COPYRIGHT" "$MAINTAINER_EMAIL" "$_CHAR" "$_LEN" "$_SPACER")\n"
+	_HEADER+="$(header_line "$SHORT_VER" "Build $BUILD" "$_CHAR" "$_LEN" "$_SPACER")\n"
+	_HEADER+="$(header_line "License: $LICENSE" "Please keep my name in the credits" "$_CHAR" "$_LEN" "$_SPACER")\n"
+	_HEADER+="$(make_line $_CHAR $_LEN)\n"
+	echo -e "${_HEADER}"
 }
 
 # fun: header_line
@@ -52,14 +52,15 @@ header_line() {
 	local _PART1		;	_PART1="$1"
 	local _PART2		;	_PART2="$2"
 	local _CHAR			;	_CHAR=${3:-#}
-	local _LEN			;	_LEN=${4:-}
+	local _LEN			;	_LEN=${4:-80}
 	local _SPACER		;	_SPACER=${5:-" "}
 	local _SPACERS		;	_SPACERS=""
 	local _HEADER_LINE	;	_HEADER_LINE="${_CHAR} ${_PART1}${_SPACERS}${_PART2} ${_CHAR}"
-	local _SPACERS_LEN	;	_SPACERS_LEN=(MAX_WIDTH-{#_HEADER_LINE})
+	local _HEADER_LINE_LEN	;	_HEADER_LINE_LEN=${#_HEADER_LINE}
+	local _SPACERS_LEN	;	_SPACERS_LEN=$((_LEN-_HEADER_LINE_LEN))
 	_SPACERS=$( printf "%0.s$_SPACER" $( seq 1 $_SPACERS_LEN ) )
 	_HEADER_LINE="${_CHAR} ${_PART1}${_SPACERS}${_PART2} ${_CHAR}"
-	printf "%s\n" "$_HEADER_LINE"
+	echo -e "${_HEADER_LINE}"
 }
 
 # fun: make_line
@@ -72,5 +73,5 @@ make_line() {
 	local _CHAR		;	_CHAR=${1:-#}
 	local _LEN		;	_LEN=${2:-80}
 	local _LINE		;	_LINE=$( printf "%0.s$_CHAR" $( seq 1 $_LEN ) )
-	printf "%s\n" "$_LINE"
+	echo -e "${_LINE}"
 }

@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=2
-# VER_PATCH=7
+# VER_PATCH=9
 # VER_STATE="ALPHA"
-# BUILD=20180803
+# BUILD=20180804
 # LICENSE="MIT"
 ################################################################################
 
@@ -29,6 +29,7 @@ create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
+	decalre -gr LOG_DATE=$(date +"%Y%m%d")
 	### declare extensions
 	declare -gr SCRIPT_EXT=".sh"
 	declare -gr INI_EXT=".ini"
@@ -50,7 +51,7 @@ create_constants() {
 	declare -gr FALSE=1
 	### log stuff
 	declare -gr LOG_WIDTH=100
-	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${TODAY}${LOG_EXT}"
+	declare -gr LOG_FILE="${LOG_DIR}${SCRIPT}_${LOG_DATE}${LOG_EXT}"
 	### git stuff
 	declare -agr PLAT_REPOSITORIES=("PLAT" "PBFL" "PLAT_aptcacher" "PLAT_container_toolset" "PLAT_internet_watchdog" "PLAT_WordPressTools")
 	declare -gr GIT_BASE_URL="https://github.com/pegasusict/"

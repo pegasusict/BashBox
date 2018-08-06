@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=13
+# VER_PATCH=14
 # VER_STATE="ALPHA"
 # BUILD=20180806
 # LICENSE="MIT"
@@ -61,8 +61,10 @@ set_verbosity() { ### Set verbosity level
 # use: crit_line <var> MESSAGE
 # api: logging
 crit_line() {
+	stop_dbg
 	local _MESSAGE="$1"
 	log_line 1 "$_MESSAGE"
+	restore_dbg
 }
 
 # fun: err_line MESSAGE
@@ -70,11 +72,13 @@ crit_line() {
 # use: err_line <var> MESSAGE
 # api: logging
 err_line() {
+	stop_dbg
 	if [[ -n "$1" ]]
 	then
 		local _MESSAGE="$1"
 		log_line 2 "$_MESSAGE"
 	fi
+	restore_dbg
 }
 
 # fun: warn_line MESSAGE
@@ -82,8 +86,10 @@ err_line() {
 # use: warn_line <var> MESSAGE
 # api: logging
 warn_line() {
+	stop_dbg
 	local _MESSAGE="$1"
 	log_line 3 "$_MESSAGE"
+	restore_dbg
 }
 
 # fun: info_line MESSAGE
@@ -91,8 +97,10 @@ warn_line() {
 # use: info_line <var> MESSAGE
 # api: logging
 info_line() {
+	stop_dbg
 	local _MESSAGE="$1"
 	log_line 4 "$_MESSAGE"
+	restore_dbg
 }
 
 # fun: dbg_line MESSAGE
@@ -100,6 +108,7 @@ info_line() {
 # use: dbg_line <var> MESSAGE
 # api: logging
 dbg_line() {
+	stop_dbg
 	if [[ $VERBOSITY -ge 5 ]]
 	then
 		local _MESSAGE="$1"
@@ -107,6 +116,7 @@ dbg_line() {
 	else
 		dbg_line() { : ; }
 	fi
+	restore_dbg
 }
 
 # fun: log_line IMPORTANCE MESSAGE

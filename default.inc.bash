@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=2
-# VER_PATCH=9
+# VER_PATCH=11
 # VER_STATE="ALPHA"
-# BUILD=20180804
+# BUILD=20180806
 # LICENSE="MIT"
 ################################################################################
 
@@ -29,7 +29,7 @@ create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "creating constants..." ; fi
 	### today's date
 	declare -gr TODAY=$(date +"%d-%m-%Y")
-	decalre -gr LOG_DATE=$(date +"%Y%m%d")
+	declare -gr LOG_DATE=$(date +"%Y%m%d")
 	### declare extensions
 	declare -gr SCRIPT_EXT=".sh"
 	declare -gr INI_EXT=".ini"
@@ -82,6 +82,9 @@ import_lib() {
 # use: create_placeholders
 # api: pbfl
 create_placeholders() {
+	getopt_test() {			import_lib argparse	;	getopt_test $@			; }
+	arg_parse() {			import_lib argparse	;	arg_parse $@			; }
+
 	read_ini() {			import_lib ini		;	read_ini $@				; }
 	create_ini() {			import_lib ini		;	create_ini $@			; }
 

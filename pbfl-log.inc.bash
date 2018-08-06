@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=12
+# VER_PATCH=13
 # VER_STATE="ALPHA"
-# BUILD=20180803
+# BUILD=20180806
 # LICENSE="MIT"
 ################################################################################
 
@@ -157,7 +157,7 @@ log_line() {
 			4 )	_SCREEN_OUTPUT=$(info_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
 			5 )	_SCREEN_OUTPUT=$(dbg_colours "$_LOG_HEADER" "$_SCREEN_LINE");;
 		esac
-		if $(( $_IMPORTANCE <= 2 ))
+		if $(( _IMPORTANCE <= 2 ))
 		then
 			echo -e "$_SCREEN_OUTPUT" >&2
 		else

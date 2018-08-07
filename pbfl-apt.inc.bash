@@ -5,18 +5,18 @@
 # License: MIT							#	Please keep my name in the credits #
 ################################################################################
 
-#########################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools"	#
-# SCRIPT_TITLE="Apt Functions Script"					#
-# MAINTAINER="Mattijs Snepvangers"						#
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"				#
-# VER_MAJOR=0											#
-# VER_MINOR=1											#
-# VER_PATCH=1											#
-# VER_STATE="ALPHA"										#
-# BUILD=20180710										#
-# LICENSE="MIT"											#
-#########################################################
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="Apt Functions Script"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=1
+# VER_PATCH=4
+# VER_STATE="ALPHA"
+# BUILD=20180807
+# LICENSE="MIT"
+################################################################################
 
 # fun: add_ppa_key
 # txt: installs ppa certificate
@@ -24,7 +24,6 @@
 # opt: METHOD: <wget|apt-key|aar>
 # opt: URL: the URL of the PPA key
 # opt: KEY: code needed when using the apt-key method
-# env: LOG_FILE: In case of wget method writes directly to LOG_FILE
 # api: pbfl::apt
 add_ppa_key() {
 	local _METHOD	;	_METHOD=$1
@@ -32,8 +31,8 @@ add_ppa_key() {
 	local _KEY		;	_KEY=$3
 	case $_METHOD in
 		"wget"		)	wget -q -a "$LOG_FILE" $_URL -O- | apt-key add - ;;
-		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY 2>&1 | verb_line ;;
-		"aar"		)	add-apt-repository $_URL 2>&1 | verb_line ;;
+		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY 2>&1 | dbg_line ;;
+		"aar"		)	add-apt-repository $_URL 2>&1 | dbg_line ;;
 	esac
 }
 
@@ -44,7 +43,7 @@ add_ppa_key() {
 # api: pbfl::apt
 apt_inst() {
 	local _PACKAGES	;	_PACKAGES="$@"
-	apt-get install --force-yes -y --no-install-recommends -qq --allow-unauthenticated ${_PACKAGES} 2>&1 | verb_line
+	apt-get install --force-yes -y --no-install-recommends -qq --allow-unauthenticated ${_PACKAGES} 2>&1 | dbg_line
 }
 
 # fun: apt_update
@@ -53,7 +52,7 @@ apt_inst() {
 # api: pbfl::apt
 apt_update() {
 	info_line "Updating apt cache"
-	apt-get -qqy update 2>&1 | verb_line
+	apt-get -qqy update 2>&1 | dbg_line
 }
 
 # fun: apt_upgrade
@@ -62,7 +61,7 @@ apt_update() {
 # api: pbfl::apt
 apt_upgrade() {
 	info_line "Updating installed packages"
-	apt-get -qqy --allow-unauthenticated upgrade 2>&1 | verb_line
+	apt-get -qqy --allow-unauthenticated upgrade 2>&1 | dbg_line
 }
 
 # fun: apt_remove
@@ -71,7 +70,7 @@ apt_upgrade() {
 # api: pbfl::apt
 apt_remove() {
 	info_line "Cleaning up obsolete packages"
-	apt-get -qqy auto-remove --purge 2>&1 | verb_line
+	apt-get -qqy auto-remove --purge 2>&1 | dbg_line
 }
 
 # fun: apt_clean
@@ -80,7 +79,7 @@ apt_remove() {
 # api: pbfl::apt
 apt_clean() {
 	info_line "Clearing old/obsolete package cache"
-	apt-get -qqy autoclean 2>&1 | verb_line
+	apt-get -qqy autoclean 2>&1 | dbg_line
 }
 
 # fun: apt_cycle
@@ -110,5 +109,5 @@ apt_fix_deps() {
 # api: pbfl::apt
 install() {
 	local _DEB_PACKAGE	;	_DEB_PACKAGE=$1
-	dpkg -i $_DEB_PACKAGE 2>&1 | verb_line
+	dpkg -i $_DEB_PACKAGE 2>&1 | dbg_line
 }

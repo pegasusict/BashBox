@@ -13,9 +13,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=6
+# VER_PATCH=7
 # VER_STATE="ALPHA"
-# BUILD=20180713
+# BUILD=20180807
 # LICENSE="MIT"
 ################################################################################
 
@@ -56,7 +56,7 @@ read_ini() {
 	# txt: Validates the INI prefix
 	# use: check_prefix
 	# api: ini_internal
-	function check_prefix() {
+	check_prefix() {
 		if ! [[ "${_VARNAME_PREFIX}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]
 		then
 			crit_line "CRITICAL read_ini: invalid prefix '${_VARNAME_PREFIX}'" >&2
@@ -68,7 +68,7 @@ read_ini() {
 	# txt: hcecks if ini file exists and is readable
 	# use: check_ini_file
 	# api: ini_internal
-	function check_ini_file() {
+	check_ini_file() {
 		if [ ! -f "$_INI_FILE" ]
 		then
 			err_line "ERROR read_ini: '${_INI_FILE}' doesn't exist" >&2
@@ -85,7 +85,7 @@ read_ini() {
 	# txt: enable some optional shell behavior (shopt)
 	# use: pollute_bash
 	# api: ini_internal
-	function pollute_bash() {
+	pollute_bash() {
 		if ! shopt -q extglob
 		then
 			_SWITCH_SHOPT="${_SWITCH_SHOPT} extglob"
@@ -102,7 +102,7 @@ read_ini() {
 	#      returning from read_ini()
 	# use: clean_bash
 	# api: ini_internal
-	function cleanup_bash() {
+	cleanup_bash() {
 		shopt -q -u ${_SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}

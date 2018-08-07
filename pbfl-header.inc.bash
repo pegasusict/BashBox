@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=14
+# VER_PATCH=15
 # VER_STATE="ALPHA"
-# BUILD=20180806
+# BUILD=20180807
 # LICENSE="MIT"
 ################################################################################
 
@@ -29,7 +29,7 @@
 # opt: $SPACER: defaults to " "
 # api: pbfl::header
 header() {
-	stop_dbg
+	dbg_pause
 	local _CHAR		;	_CHAR=${1:-#}
 	local _LEN		;	_LEN=${2:-80}
 	local _SPACER	;	_SPACER=${2:-" "}
@@ -40,7 +40,7 @@ header() {
 	_HEADER+="$(header_line "License: $LICENSE" "Please keep my name in the credits" "$_CHAR" "$_LEN" "$_SPACER")\n"
 	_HEADER+="$(make_line $_CHAR $_LEN)\n"
 	echo -e "${_HEADER}"
-	restore_dbg
+	dbg_restore
 }
 
 # fun: header_line

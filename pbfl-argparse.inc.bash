@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=0
-# VER_PATCH=3
+# VER_PATCH=4
 # VER_STATE="ALPHA"
-# BUILD=20180806
+# BUILD=20180807
 # LICENSE="MIT"
 ################################################################################
 
@@ -39,12 +39,12 @@ arg_parse() {
 # use: getopt_test
 # api: argparse
 getopt_test() {
-	stop_dbg
+	dbg_pause
 	getopt --test > /dev/null
 	if [[ $? -ne 4 ]]
 	then
 		err_line "I’m sorry, \"getopt --test\" failed in this environment."
 		exit 1
 	fi
-	restore_dbg
+	dbg_restore
 }

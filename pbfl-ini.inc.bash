@@ -13,9 +13,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=7
+# VER_PATCH=8
 # VER_STATE="ALPHA"
-# BUILD=20180807
+# BUILD=20180808
 # LICENSE="MIT"
 ################################################################################
 
@@ -102,7 +102,7 @@ read_ini() {
 	#      returning from read_ini()
 	# use: clean_bash
 	# api: ini_internal
-	cleanup_bash() {
+	cleanup_bash() { # PBFL/pbfl-ini.inc.bash: line 105: /home/pegasus/Desktop/[: No such file or directory (????)
 		shopt -q -u ${_SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}

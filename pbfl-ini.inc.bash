@@ -13,7 +13,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=8
+# VER_PATCH=18
 # VER_STATE="ALPHA"
 # BUILD=20180808
 # LICENSE="MIT"
@@ -29,7 +29,7 @@ declare -gA INI
 
 # fun: read_ini
 # txt: parses .ini files
-# use: read_ini INI_FILE [SECTION] [[--prefix|-p] PREFIX] [[--booleans|-b] [0|1]]
+# use: read_ini INI_FILE
 # api: pbfl
 read_ini() {
 	# Set defaults
@@ -39,7 +39,7 @@ read_ini() {
 	local _IFS_OLD=""
 	local _INI_ALL_SECTION=""
 	local _INI_ALL_VARNAME=""
-	local _INI_FILE=""
+	#local _INI_FILE=""
 	local _INI_NUMSECTIONS_VARNAME=0
 	local _INI_SECTION=""
 	local _LINE=""
@@ -50,7 +50,8 @@ read_ini() {
 	local _VAL=""
 	local _VAR=""
 	local _VARNAME=""
-	local _VARNAME_PREFIX=INI
+	local _VARNAME_PREFIX="INI"
+	local -r _INI_FILE="$1"
 
 	# fun: check_prefix
 	# txt: Validates the INI prefix
@@ -102,52 +103,23 @@ read_ini() {
 	#      returning from read_ini()
 	# use: clean_bash
 	# api: ini_internal
-	cleanup_bash() { # PBFL/pbfl-ini.inc.bash: line 105: /home/pegasus/Desktop/[: No such file or directory (????)
+	cleanup_bash() { # PBFL/pbfl-ini.inc.bash: line 106: /home/pegasus/Desktop/[: No such file or directory (????)
 		shopt -q -u ${_SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}
 
 	# {{{ START Deal with command line args
 		# {{{ START Options
-			# Available options:
-			#   --boolean	   Whether to recognise special boolean values: ie for 'yes', 'true'
-			#				   and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
-			#				   values will be left as strings
-			#				   Default: on
-			#
-			#   --prefix=STRING String to begin all returned variables with (followed by '__').
-			#				   Default: INI
-			#
-			#   First non-option arg is filename, second is section name
-		while [ $# -gt 0 ]
-		do
-			case $1 in
-				--clean | -c	)	_CLEAN_ENV=1 ;;
-				--booleans | -b	)	shift ; _BOOLEANS=$1 ;;
-				--prefix | -p	)	shift ; _VARNAME_PREFIX=$1 ;;
-				* )					if [ -z "$_INI_FILE" ]
-									then
-										_INI_FILE=$1
-									else
-										if [ -z "$_INI_SECTION" ]
-										then
-											_INI_SECTION=$1
-										fi
-									fi ;;
-			esac
-			shift
-		done
-		if [ -z "$_INI_FILE" ] && [ "${_CLEAN_ENV}" = 0 ]
-		then
-			echo -e "Usage: read_ini [-c] [-b 0| -b 1]] [-p PREFIX] FILE [SECTION]\n  or   read_ini -c [-p PREFIX]" >&2
-			cleanup_bash
-			return 1
-		fi
+#special boolean values: 'yes', 'true' and 'on' return 1
+ #for 'no', 'false' and 'off' return 0. Quoted values will be left as strings
+#prefix=STRING String to begin all returned variables with (followed by '__').
+		#Default: INI
 		if [ ! check_prefix ]
 		then
 			cleanup_bash
 			return 1
 		fi
+		### CHECK -> redundant code??
 		_INI_ALL_VARNAME="${_VARNAME_PREFIX}__ALL_VARS"
 		_INI_ALL_SECTION="${_VARNAME_PREFIX}__ALL_SECTIONS"
 		_INI_NUMSECTIONS_VARNAME="${_VARNAME_PREFIX}__NUMSECTIONS"
@@ -158,6 +130,7 @@ read_ini() {
 		unset ${_INI_ALL_VARNAME}
 		unset ${_INI_ALL_SECTION}
 		unset ${_INI_NUMSECTIONS_VARNAME}
+		### /CHECK
 		if [ -z "$_INI_FILE" ]
 		then
 			cleanup_bash
@@ -176,7 +149,6 @@ read_ini() {
 		# }}} END Options
 
 	# }}} END Deal with command line args
-
 	_LINE_NUM=0
 	_SECTIONS_NUM=0
 	_SECTION=""
@@ -261,8 +233,8 @@ read_ini() {
 			# here we compare case insensitive because
 			# "shopt nocasematch"
 			case "$_VAL" in
-				yes | true | on )   _VAL=1 ;;
-				no | false | off )  _VAL=0 ;;
+				1| yes | true | on )   _VAL=1 ;;
+				0| no | false | off )  _VAL=0 ;;
 			esac
 		fi
 		# enclose the value in single quotes and escape any
@@ -271,8 +243,7 @@ read_ini() {
 		_VAL="\$'${_VAL//\'/\'}'"
 
 		eval "$_VARNAME=$_VAL"
-	done  <"${_INI_FILE}"
-
+	done <"${_INI_FILE}"
 	# return also the number of parsed sections
 	eval "$_INI_NUMSECTIONS_VARNAME=$_SECTIONS_NUM"
 	cleanup_bash

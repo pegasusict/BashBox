@@ -61,10 +61,10 @@ set_verbosity() { ### Set verbosity level
 # use: crit_line <var> MESSAGE
 # api: logging
 crit_line() {
-	dbg_pause
+	#dbg_pause
 	local _MESSAGE="$1"
 	log_line 1 "$_MESSAGE"
-	dbg_restore
+	#dbg_restore
 }
 
 # fun: err_line MESSAGE
@@ -72,13 +72,13 @@ crit_line() {
 # use: err_line <var> MESSAGE
 # api: logging
 err_line() {
-	dbg_pause
+	#dbg_pause
 	if [[ -n "$1" ]]
 	then
 		local _MESSAGE="$1"
 		log_line 2 "$_MESSAGE"
 	fi
-	dbg_restore
+	#dbg_restore
 }
 
 # fun: warn_line MESSAGE
@@ -86,10 +86,10 @@ err_line() {
 # use: warn_line <var> MESSAGE
 # api: logging
 warn_line() {
-	dbg_pause
+	#dbg_pause
 	local _MESSAGE="$1"
 	log_line 3 "$_MESSAGE"
-	dbg_restore
+	#dbg_restore
 }
 
 # fun: info_line MESSAGE
@@ -97,10 +97,10 @@ warn_line() {
 # use: info_line <var> MESSAGE
 # api: logging
 info_line() {
-	dbg_pause
+	#dbg_pause
 	local _MESSAGE="$1"
 	log_line 4 "$_MESSAGE"
-	dbg_restore
+	#dbg_restore
 }
 
 # fun: dbg_line MESSAGE
@@ -108,7 +108,7 @@ info_line() {
 # use: dbg_line <var> MESSAGE
 # api: logging
 dbg_line() {
-	dbg_pause
+	#dbg_pause
 	if [[ $VERBOSITY -ge 5 ]]
 	then
 		local _MESSAGE="$1"
@@ -116,7 +116,7 @@ dbg_line() {
 	else
 		dbg_line() { : ; }
 	fi
-	dbg_restore
+	#dbg_restore
 }
 
 # fun: log_line IMPORTANCE MESSAGE

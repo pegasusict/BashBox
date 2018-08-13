@@ -13,7 +13,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=18
+# VER_PATCH=26
 # VER_STATE="ALPHA"
 # BUILD=20180808
 # LICENSE="MIT"
@@ -33,13 +33,12 @@ declare -gA INI
 # api: pbfl
 read_ini() {
 	# Set defaults
-	local _BOOLEANS=1
+	local _BOOLEANS=true
 	local _CLEAN_ENV=0
 	local _IFS=""
 	local _IFS_OLD=""
 	local _INI_ALL_SECTION=""
 	local _INI_ALL_VARNAME=""
-	#local _INI_FILE=""
 	local _INI_NUMSECTIONS_VARNAME=0
 	local _INI_SECTION=""
 	local _LINE=""
@@ -51,8 +50,7 @@ read_ini() {
 	local _VAR=""
 	local _VARNAME=""
 	local _VARNAME_PREFIX="INI"
-	local -r _INI_FILE="$1"
-
+	local -r _INI_FILE="$@"
 	# fun: check_prefix
 	# txt: Validates the INI prefix
 	# use: check_prefix
@@ -108,11 +106,10 @@ read_ini() {
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}
 
-	# {{{ START Deal with command line args
 		# {{{ START Options
-#special boolean values: 'yes', 'true' and 'on' return 1
- #for 'no', 'false' and 'off' return 0. Quoted values will be left as strings
-#prefix=STRING String to begin all returned variables with (followed by '__').
+		#special boolean values: 'yes', 'true' and 'on' return 1
+		#for 'no', 'false' and 'off' return 0. Quoted values will be left as strings
+		#prefix=STRING String to begin all returned variables with (followed by '__').
 		#Default: INI
 		if [ ! check_prefix ]
 		then
@@ -142,13 +139,12 @@ read_ini() {
 			return 1
 		fi
 		# Sanitise BOOLEANS - interpret "0" as 0, anything else as 1
-		if [ "$_BOOLEANS" != "0" ]
+		if [ "$_BOOLEANS" != "0" ] || [ "$_BOOLEANS" != false ]
 		then
 			_BOOLEANS=1
 		fi
-		# }}} END Options
+	# }}} END Options
 
-	# }}} END Deal with command line args
 	_LINE_NUM=0
 	_SECTIONS_NUM=0
 	_SECTION=""
@@ -159,6 +155,8 @@ read_ini() {
 	# current settings before returning
 	_SWITCH_SHOPT=""
 	pollute_bash
+	set +e
+	set -x
 	while read -r _LINE || [ -n "$_LINE" ]
 	do
 		dbg_line "line = $_LINE"

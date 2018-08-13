@@ -156,6 +156,7 @@ read_ini() {
 	_SWITCH_SHOPT=""
 	pollute_bash
 	set +e
+	set -x
 	while read -r _LINE || [ -n "$_LINE" ]
 	do
 		dbg_line "line = $_LINE"

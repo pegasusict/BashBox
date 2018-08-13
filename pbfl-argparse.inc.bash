@@ -39,12 +39,12 @@ arg_parse() {
 # use: getopt_test
 # api: argparse
 getopt_test() {
-	dbg_pause
+	#dbg_pause
 	getopt --test > /dev/null
 	if [[ $? -ne 4 ]]
 	then
 		err_line "I’m sorry, \"getopt --test\" failed in this environment."
 		exit 1
 	fi
-	dbg_restore
+	#dbg_restore
 }

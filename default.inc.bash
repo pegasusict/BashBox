@@ -60,6 +60,46 @@ create_constants() {
 	if [ $VERBOSITY=5 ] ; then echo "constants created." ; fi
 }
 
+# fun: import
+# txt: tries to import the file from given location and some standard locations
+#      of this suite. If REQUIRED is set to true, script will exit with a
+#      CRITICAL ERROR message
+# use: import $FILE $DIR [ $REQUIRED ]
+# opt: str FILE: filename
+# opt: str DIR: directory ( MUST end with slash! )
+# opt: bool REQUIRED ( true/false ) if omitted, REQUIRED is set to false
+# api: internal
+import() {
+	dbg_pause
+	local _FILE	;	_FILE="$1"
+	local _DIR	;	_DIR="$2"
+	local _REQUIRED	;	_REQUIRED="$3"
+	local _SUCCESS	;	_SUCCESS=false
+	if [[ "x$_REQUIRED" = x ]]
+	then
+		_REQUIRED=false
+	fi
+	for LOC in "$_DIR$_FILE" "../$_DIR$_FILE" "$LOCAL_LIB_DIR$_FILE" "../$LOCAL_LIB_DIR$_FILE" "$SYS_LIB_DIR$_FILE"
+	do
+		if [[ -f "$LOC" ]]
+		then
+			source "$LOC"
+			SUCCESS=true
+			break
+		fi
+	done
+	if [[ "$SUCCESS" = false ]]
+	then
+		if [[ "$_REQUIRED" = true ]]
+		then
+			crit_line "Required file $_FILE not found, aborting!"
+		else
+			err_line "File $_FILE not found!"
+		fi
+	fi
+	dbg_restore
+}
+
 # fun: import_lib
 # txt: completes the filenames for the library "classes" and invokes import() --> import LIBDIR/LIBPREFIX-LIB.LIBEXT
 # use: import_lib $LIB $DIR
@@ -73,8 +113,6 @@ import_lib() {
 	import "$_LIB" "$_DIR" true
 }
 
-
 ##### BOILERPLATE #####
 create_constants
 import "index$LIB_EXT" "$LIB_DIR" true
-create_placeholders

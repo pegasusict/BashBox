@@ -123,3 +123,6 @@ create_placeholders() {
 	str_to_lower() {		import_lib vars		;	str_to_lower $@			; }
 	str_to_upper() {		import_lib vars		;	str_to_upper $@			; }
 }
+
+### BOILERPLATE ###
+create_placeholders

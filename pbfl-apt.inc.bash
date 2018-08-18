@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
-# License: MIT							#	Please keep my name in the credits #
+# Pegasus' Linux Administration Tools	#	Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers	#		 pegasus.ict@gmail.com #
+# License: MIT				#   Please keep my name in the credits #
 ################################################################################
 
 ################################################################################
@@ -12,9 +12,9 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=1
-# VER_PATCH=4
+# VER_PATCH=8
 # VER_STATE="ALPHA"
-# BUILD=20180807
+# BUILD=20180819
 # LICENSE="MIT"
 ################################################################################
 
@@ -31,8 +31,8 @@ add_ppa_key() {
 	local _KEY		;	_KEY=$3
 	case $_METHOD in
 		"wget"		)	wget -q -a "$LOG_FILE" $_URL -O- | apt-key add - ;;
-		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY 2>&1 | dbg_line ;;
-		"aar"		)	add-apt-repository $_URL 2>&1 | dbg_line ;;
+		"apt-key"	)	apt-key adv --keyserver $_URL --recv-keys $_KEY | dbg_line ;;
+		"aar"		)	add-apt-repository $_URL | dbg_line ;;
 	esac
 }
 
@@ -94,8 +94,8 @@ apt_cycle() {
 }
 
 # fun: apt_fix_deps
-# txt: cleans up apt cache
-# use: apt_clean
+# txt: fixes broken dependencies
+# use: apt_fix_deps
 # api: pbfl::apt
 apt_fix_deps() {
 	info_line "Fixing any broken dependencies if needed"
@@ -110,4 +110,27 @@ apt_fix_deps() {
 install() {
 	local _DEB_PACKAGE	;	_DEB_PACKAGE=$1
 	dpkg -i $_DEB_PACKAGE 2>&1 | dbg_line
+}
+
+# fun: clean_sources
+# txt: cleans up /etc/apt/sources.list and /etc/apt/sources.list.d/*
+# use: clean_sources
+# api: pbfl::apt
+clean_sources() {
+    info_line "removing duplicate lines from source lists"
+    #perl -i -ne 'print if ! $a{$_}++' /etc/apt/sources.list /etc/apt/sources.list.d/* | dbg_line
+    local TEMP; TEMP=$(mktemp)
+    local -a FILES=($(echo /etc/apt/*.list /etc/apt/sources.list.d/*|sort))
+    local LENGTH; LENGTH=$(echo ${#FILES[@]})
+    for ((i=0;i<LENGTH;i++))
+    do
+	for ((j=0;j<=3;j++))
+	do
+	    [ "${FILES[i]}" == "${FILES[i+j]}" ] && continue
+	    [ "$((i+j))" -ge "$LENGTH" ] && continue
+	    #echo ${FILES[i]} ${FILES[i+j]}
+	    grep -w -Ff ${FILES[i]} -v ${FILES[i+j]} > ${TEMP}
+	    mv ${TEMP} ${FILES[i+j]}
+	done
+    done
 }

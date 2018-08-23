@@ -12,7 +12,7 @@
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
 # VER_MINOR=3
-# VER_PATCH=3
+# VER_PATCH=4
 # VER_STATE="ALPHA"
 # BUILD=20180823
 # LICENSE="MIT"
@@ -157,6 +157,7 @@ clean_sources() {
 # use: apt_cycle
 # api: pbfl::apt
 apt_cycle() {
+	info_line "Starting Apt Cycle"
 	clean_sources
 	apt_update
 	apt_fix_deps

@@ -1,0 +1,36 @@
+#!/bin/bash
+################################################################################
+# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
+# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
+# License: MIT							#	Please keep my name in the credits #
+################################################################################
+
+################################################################################
+# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
+# SCRIPT_TITLE="AutoLoader"
+# MAINTAINER="Mattijs Snepvangers"
+# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
+# VER_MAJOR=0
+# VER_MINOR=0
+# VER_PATCH=0
+# VER_STATE="ALPHA"
+# BUILD=20191104
+# LICENSE="MIT"
+################################################################################
+
+# fun: autoload_register
+# txt: registers function placeholders which will load the respective library when required
+# api: pbfl::internal
+autoload_register() {
+    local -r LIB="lxc"
+    lxc_rename() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    check_cont_name() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    create_cont() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    start_cont() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    stop_cont() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    list_cont() {		import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    run_post_install() {	import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    run_in_container() {	import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    put_in_container() {	import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+    pull_from_container() {	import_lib ${LIB} ; ${FUNCNAME[0]} $@; }
+}

@@ -23,6 +23,13 @@
 # use: apt_cmd $ACTION
 # api: pbfl::apt-internal
 apt_cmd() {
+	apt-get -qy $@ | dbg_line
+}
+# fun: apt_cmd_silent
+# txt: performs apt-get ACTION silently
+# use: apt_cmd_silent $ACTION
+# api: pbfl::apt-internal
+apt_cmd_silent() {
 	apt-get -qqy $@ | dbg_line
 }
 

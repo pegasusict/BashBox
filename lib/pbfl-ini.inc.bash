@@ -51,6 +51,7 @@ read_ini() {
 	local _VARNAME=""
 	local _VARNAME_PREFIX="INI"
 	local -r _INI_FILE="$@"
+
 	# fun: check_prefix
 	# txt: Validates the INI prefix
 	# use: check_prefix

@@ -41,7 +41,7 @@ check_cont_name() {
 	if [ $_FILTERED_NAME != $_CONT_NAME ]
 	then
 		cat <<-EOT
-			I'm sorry, the name you proposed is invalid, please enter a valid name:
+			I am sorry, the name you proposed is invalid, please enter a valid name:
 			    > max 63 chars: -, a-z, A-Z, 0-9
 			    > it may not start or end with a dash "-"
 			    > it may not start with a digit "0-9""

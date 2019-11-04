@@ -52,7 +52,7 @@ edit_line_in_file() {
 	_QUERY+="$_REPLACE_WITH"
 	_QUERY+="/' "
 	_QUERY+="'$_FILE'"
-	echo $_QUERY
+	#echo $_QUERY
 	local _RESULT=("$_QUERY")
 	#if [ $_RESULT!=0 ]
 	#then
@@ -64,7 +64,7 @@ add_to_script() { #adds line or blob to script
 	local _TARGET="$1"
 	local _LINE_OR_BLOB="$2"
 	local _MESSAGE="$3"
-	if [ "$LINE_OR_BLOB" == line ] || [ "$LINE_OR_BLOB" == true ]
+	if [ "${LINE_OR_BLOB}" == "line" ] || [ ${LINE_OR_BLOB} == true ]
 	then
 		echo "$MESSAGE" >> "$TARGET"
 	elif [ "$LINE_OR_BLOB" == blob ]

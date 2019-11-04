@@ -40,8 +40,8 @@ dup_var() {
 #	declare -ga $_ARRAY=( "$[@]:1" )
 #}
 
-#create_associative_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
-#							 # usage create_associative_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
+#create_assoc_array() { ### fills $ARRAY with $KEY=$VALUE pair(s)
+# usage: create_assoc_array $ARRAY $KEY1 $VALUE1 [KEY2 $VALUE2 ...]
 #	_ARRAY=$1
 #	_ARGS=$@
 #	for (( i=1 ; i<=_ARGS ; i+2 ))
@@ -50,16 +50,16 @@ dup_var() {
 #	done
 #}
 
-#key_exists() {
-#	local _KEY="$1"
-#	local _ARRAY="$2"
-#	if [] # key exists in array
-#	then
-#		echo true
-#	else
-#		echo false
-#	fi
-#}
+key_exists() {
+    local _KEY="$1"
+    local _ARRAY="$2"
+    if test "${_ARRAY[${_KEY}]+isset}"
+    then
+        echo true
+    else
+        echo false
+fi
+}
 
 value_exists() {
     local n=$#

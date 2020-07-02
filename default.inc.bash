@@ -71,8 +71,8 @@ create_constants() {
 # api: internal
 import() {
 	dbg_pause
-	local _FILE	;	_FILE="$1"
-	local _DIR	;	_DIR="$2"
+	local _FILE	;	    _FILE="$1"
+	local _DIR	;	    _DIR="$2"
 	local _REQUIRED	;	_REQUIRED="$3"
 	local _SUCCESS	;	_SUCCESS=false
 	if [[ "x$_REQUIRED" = x ]]

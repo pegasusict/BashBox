@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 ###############################################################################
 ## Pegasus' Linux Administration Tools #      Pegasus' Bash Function Library ##
 ## (C)2017-2020 Mattijs Snepvangers    #               pegasus.ict@gmail.com ##
@@ -7,25 +7,37 @@
 
 ###############################################################################
 ### PROGRAM_SUITE="Pegasus' Linux Administration Tools"
-### SCRIPT_TITLE="Apt Functions AutoLoader"
+### SCRIPT_TITLE="AutoLoader"
 ### MAINTAINER="Mattijs Snepvangers"
 ### MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 ### VER_MAJOR=0
-### VER_MINOR=0
+### VER_MINOR=1
 ### VER_PATCH=0
-### VER_STATE="ALPHA"
-### BUILD=20191104
+### VER_STATE="DEV"
+### BUILD=20200701
 ### LICENSE="MIT"
 ################################################################################
 
-# fun: autoload_register
+# fun: pbfl_autoload_register
 # txt: registers function placeholders which will load the respective library when required
 # api: pbfl::internal
-function autoload_register() {
-  local -r LIB="apt"
-  local -ar FUNCTIONS=( "apt_cmd" "apt_cmd_silent" "add_ppa_key" "apt_inst_with_recs"
- "apt_inst_no_recs" "apt_update" "apt_upgrade" "apt_remove" "apt_uninstall" "apt_clean"
- "apt_fix_deps" "install_pkg" "clean_sources" "apt_cycle" "apt_uninstall" )
+function pbfl_autoload_register() {
+  local -r  _LIB="$1"
+  local -ar _FUNCTIONS=( $2[@] )
 
-  pbfl_autoload_register ${LIB} ${FUNCTIONS[@]}
+  for _FUNCTION in $_FUNCTIONS; do
+    eval "${_FUNCTION}() { import_lib ${_LIB} ; ${_FUNCTION} \$@; }"
+  done
 }
+
+# # # # # # # # # # # #
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+[[ $DIR != */ ]] && DIR="${DIR}/"
+
+source ${DIR}*.bash

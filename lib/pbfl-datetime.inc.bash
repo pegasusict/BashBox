@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
-# License: MIT							#	Please keep my name in the credits #
+# Pegasus' Linux Administration Tools  #      BashFrame #
+# (C)2017-2018 Mattijs Snepvangers    #         pegasus.ict@gmail.com #
+# License: MIT              #  Please keep my name in the credits #
 ################################################################################
 
 ################################################################################
@@ -23,5 +23,5 @@
 # use: get_timestamp
 # api: pbfl::datetime
 get_timestamp() {
-	echo $(date +"%Y-%m-%d_%H.%M.%S.%3N")
+  echo $(date +"%Y-%m-%d_%H.%M.%S.%3N")
 }

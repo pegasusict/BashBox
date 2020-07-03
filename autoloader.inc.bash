@@ -1,41 +1,34 @@
-#!/bin/bash
-####################################################################################
-# Pegasus' Linux Administration Tools	#				PBFL Index #
-# (C)2017-2018 Mattijs Snepvangers	#		     pegasus.ict@gmail.com #
-# License: MIT				#	Please keep my name in the credits #
-####################################################################################
+#!/bin/env bash
+###############################################################################
+## Pegasus' Linux Administration Tools #        BashFrame ##
+## (C)2017-2020 Mattijs Snepvangers    #               pegasus.ict@gmail.com ##
+## License: MIT                        #  Please keep my name in the credits ##
+###############################################################################
+## SCRIPT_TITLE="AutoLoader"
+## VERSION=( 0 1 0 "DEV" 20200701 )
+###############################################################################
 
-####################################################################################
-# PROGRAM_SUITE="Pegasus' Linux Administration Tools"
-# SCRIPT_TITLE="PBFL Index Autoloader"
-# MAINTAINER="Mattijs Snepvangers"
-# MAINTAINER_EMAIL="pegasus.ict@gmail.com"
-# VER_MAJOR=1
-# VER_MINOR=0
-# VER_PATCH=0
-# VER_STATE="ALPHA"
-# BUILD="20191104"
-# LICENSE="MIT"
-####################################################################################
+# fun: pbfl_autoload_register
+# txt: registers function placeholders which will load the respective library
+#       when required
+# api: pbfl::internal
+function pbfl_autoload_register() {
+  local -r  _LIB="$1"
+  local -ar _FUNCTIONS=( $2[@] )
 
-# mod: PBFL Index
-# txt: This script creates placeholders using the files in the autoload directory
-#      for all functions present in PBFL to allow for dynamic loading
-# fun: create_placeholders
-# txt: Creates placeholders for all functions defined in the library.
-#      If one is invoked, the corresponding library class will be imported so
-#      the placeholders of the functions belonging to that particular class will
-#      be overwritten in memory and then the function call will be repeated.
-# use: create_placeholders
-# api: pbfl
-create_placeholders() {
-	for _FILE in $(ls autoload/ -Q); do
-	    if [ -f "$_FILE" ]; then
-		source "$_FILE"
-		autoload_register
-	    fi
-	done
+  for _FUNCTION in $_FUNCTIONS; do
+    eval "${_FUNCTION}() { import_lib ${_LIB} ; ${_FUNCTION} \$@; }"
+  done
 }
 
-### BOILERPLATE ###
-create_placeholders
+# get source directory
+SOURCE="${BASH_SOURCE[0]}"
+while [[ -h "$SOURCE" ]]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+[[ $DIR != */ ]] && DIR="${DIR}/"
+
+source "${DIR}autoload/*.load.bash"

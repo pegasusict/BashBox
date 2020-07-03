@@ -28,6 +28,6 @@
 # env:
 # api:
 cfg_parser() {
-	for CAT in $CFG_CAT; do
+  for CAT in $CFG_CAT; do
 
 }

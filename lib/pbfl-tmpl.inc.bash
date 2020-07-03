@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# Pegasus' Linux Administration Tools	#		Pegasus' Bash Function Library #
-# (C)2017-2018 Mattijs Snepvangers		#				 pegasus.ict@gmail.com #
-# License: MIT							#	Please keep my name in the credits #
+# Pegasus' Linux Administration Tools  #      BashFrame #
+# (C)2017-2018 Mattijs Snepvangers    #         pegasus.ict@gmail.com #
+# License: MIT              #  Please keep my name in the credits #
 ################################################################################
 
 ################################################################################
@@ -20,10 +20,10 @@
 
 ################################################################################
 file_from_template() { ### render a template file
-					# expand variables + preserve formatting
-					#usage: create_file_from_template $TARGET_FILE $TEMPLATE
-	local _TARGET_FILE=$1
-	local _TEMPLATE=$2
-	eval "echo \"$(cat $_TEMPLATE)\"" > $_TARGET_FILE
+          # expand variables + preserve formatting
+          #usage: create_file_from_template $TARGET_FILE $TEMPLATE
+  local _TARGET_FILE=$1
+  local _TEMPLATE=$2
+  eval "echo \"$(cat $_TEMPLATE)\"" > $_TARGET_FILE
 }
 ################################################################################

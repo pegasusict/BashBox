@@ -29,3 +29,4 @@ I've decided to change my function library into a framework due to added benefit
 | mutex (lock files) functionality |        |          |                                       |
 | RSA functionality                |        |          |                                       |
 | *edit in progress...*                                                                        |
+ 

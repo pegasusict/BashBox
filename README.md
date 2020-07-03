@@ -1,10 +1,16 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6ccdfa5c43424960a00ef5a16541a2e1)](https://www.codacy.com/manual/pegasus.ict/BashBox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pegasusict/BashBox&amp;utm_campaign=Badge_Grade)
+Dev: [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6ccdfa5c43424960a00ef5a16541a2e1)](https://www.codacy.com/manual/pegasus.ict/BashBox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pegasusict/BashBox&amp;utm_campaign=Badge_Grade)
 
 # BashBox - A BASH Framework
 This is my attempt at building a framework for BASH.
 
-### Update july 2nd 2020: A complete overhaul has begun
+### Acknowledgements:
+ini parser: Ruediger Meier (https://github.com/rudimeier/)
+
+#### Update july 2nd 2020: A complete overhaul has begun
 I've decided to change my function library into a framework due to added benefits.
+
+#### Update nov 4th 2019: implemented a new autloloading system, inspired on PHP's autoloader.
+
 ### Functionality:
 | Functionality                    | Status | Progress | Remarks                               |
 |----------------------------------|:------:|---------:|---------------------------------------|
@@ -23,10 +29,3 @@ I've decided to change my function library into a framework due to added benefit
 | mutex (lock files) functionality |        |          |                                       |
 | RSA functionality                |        |          |                                       |
 | *edit in progress...*                                                                        |
-
-### Update nov 4th 2019: implemented a new autloloading system, inspired on PHP's autoloader.
-Place your lib file in the "lib" directory and a file in the autoload directory. See one of the existing ".load.bash" files for examples.
-
---
-Acknowledgements:
-ini parser: Ruediger Meier (https://github.com/rudimeier/)

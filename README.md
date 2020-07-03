@@ -1,6 +1,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ced3d7489b0441929563cacfbe5b8e47)](https://www.codacy.com/app/pegasus.ict/PBFL?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pegasusict/PBFL&amp;utm_campaign=Badge_Grade)
 
-# BashBox - A BASH FrameWork
+# BashBox - A BASH Framework
 This is my attempt at building a framework for BASH.
 
 ### Update july 2nd 2020: A complete overhaul has begun

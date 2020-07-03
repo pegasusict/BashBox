@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ced3d7489b0441929563cacfbe5b8e47)](https://www.codacy.com/app/pegasus.ict/PBFL?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pegasusict/PBFL&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6ccdfa5c43424960a00ef5a16541a2e1)](https://www.codacy.com/manual/pegasus.ict/BashBox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pegasusict/BashBox&amp;utm_campaign=Badge_Grade)
 
 # BashBox - A BASH Framework
 This is my attempt at building a framework for BASH.

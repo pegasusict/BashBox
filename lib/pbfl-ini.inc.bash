@@ -12,20 +12,20 @@
 # MAINTAINER="Mattijs Snepvangers"
 # MAINTAINER_EMAIL="pegasus.ict@gmail.com"
 # VER_MAJOR=0
-# VER_MINOR=1
-# VER_PATCH=26
+# VER_MINOR=2
+# VER_PATCH=0
 # VER_STATE="ALPHA"
-# BUILD=20180808
+# BUILD=20240126
 # LICENSE="MIT"
 ################################################################################
 
 # mod: pbfl ini_parser
 # txt: This script is an ini parser/generator
-#      It will parse an ini file and export this as $INI_<SECTION>_<KEY>
+#      It will parse an ini file and export this as $INI_[<SECTION>_]<KEY>
 #      TODO(pegasusict): Will look into a way to do this via an array
 #      TODO(pegasusict): develop generator
 
-declare -gA INI
+#declare -gA INI
 
 # fun: read_ini
 # txt: parses .ini files
@@ -65,7 +65,7 @@ read_ini() {
 	}
 
 	# fun: check_ini_file
-	# txt: hcecks if ini file exists and is readable
+	# txt: checks if ini file exists and is readable
 	# use: check_ini_file
 	# api: ini_internal
 	check_ini_file() {
@@ -110,24 +110,58 @@ read_ini() {
 		# {{{ START Options
 		#special boolean values: 'yes', 'true' and 'on' return 1
 		#for 'no', 'false' and 'off' return 0. Quoted values will be left as strings
-		#prefix=STRING String to begin all returned variables with (followed by '__').
+		#prefix=STRING String to begin all returned variables with (followed by '_').
 		#Default: INI
+			# Available options:
+			#   --boolean	   Whether to recognise special boolean values: ie for 'yes', 'true'
+			#				   and 'on' return true; for 'no', 'false' and 'off' return false. Quoted
+			#				   values will be left as strings
+			#				   Default: on
+			#
+			#   --prefix=STRING String to begin all returned variables with (followed by '_').
+			#				   Default: INI
+			#
+			#   First non-option arg is filename, second is section name
+		while [ $# -gt 0 ]
+		do
+			case $1 in
+				--clean | -c	)	_CLEAN_ENV=1 ;;
+				--booleans | -b	)	shift ; _BOOLEANS=$1 ;;
+				--prefix | -p	)	shift ; _VARNAME_PREFIX=$1 ;;
+				* )					if [ -z "$_INI_FILE" ]
+									then
+										_INI_FILE=$1
+									else
+										if [ -z "$_INI_SECTION" ]
+										then
+											_INI_SECTION=$1
+										fi
+									fi ;;
+			esac
+			shift
+		done
+		if [ -z "$_INI_FILE" ] && [ "${_CLEAN_ENV}" = 0 ]
+		then
+			echo -e "Usage: read_ini [-c] [-b 0| -b 1]] [-p PREFIX] FILE [SECTION]\n  or   read_ini -c [-p PREFIX]" >&2
+			cleanup_bash
+			return 1
+		fi
 		if [ ! check_prefix ]
 		then
 			cleanup_bash
 			return 1
 		fi
 		### CHECK -> redundant code??
-		_INI_ALL_VARNAME="${_VARNAME_PREFIX}__ALL_VARS"
-		_INI_ALL_SECTION="${_VARNAME_PREFIX}__ALL_SECTIONS"
-		_INI_NUMSECTIONS_VARNAME="${_VARNAME_PREFIX}__NUMSECTIONS"
+#		_INI_ALL_VARNAME="${_VARNAME_PREFIX}__ALL_VARS"
+#		_INI_ALL_SECTION="${_VARNAME_PREFIX}__ALL_SECTIONS"
+#		_INI_NUMSECTIONS_VARNAME="${_VARNAME_PREFIX}__NUMSECTIONS"
 		if [ "${_CLEAN_ENV}" = 1 ]
 		then
 			eval unset "\$${_INI_ALL_VARNAME}"
 		fi
-		unset ${_INI_ALL_VARNAME}
-		unset ${_INI_ALL_SECTION}
-		unset ${_INI_NUMSECTIONS_VARNAME}
+#		unset ${_INI_ALL_VARNAME}
+#		unset ${_INI_ALL_SECTION}
+#		unset ${_INI_NUMSECTIONS_VARNAME}
 		### /CHECK
 		if [ -z "$_INI_FILE" ]
 		then
@@ -173,6 +207,8 @@ read_ini() {
 			# Set SECTION var to name of section (strip [ and ] from section marker)
 			_SECTION="${_LINE#[}"
 			_SECTION="${_SECTION%]}"
+			local _SECTION_ARRAY = ${_VARNAME_PREFIX}_${_SECTION}
+			declare -Ag ${_SECTION_ARRAY}
 			eval "${_INI_ALL_SECTION}=\"\${${_INI_ALL_SECTION}# } $_SECTION\""
 			((_SECTIONS_NUM++))
 			continue
@@ -202,15 +238,13 @@ read_ini() {
 		_VAR=$(echo $_VAR)
 
 		# Construct variable name:
-		# ${_VARNAME_PREFIX}__$_SECTION__$_VAR
-		# Or if not in a section:
-		# ${_VARNAME_PREFIX}__$_VAR
-		# In both cases, full stops ('.') are replaced with underscores ('_')
+		# ${_VARNAME_PREFIX}_[$_SECTION_]$_VAR
+		# Full stops ('.') are replaced with underscores ('_')
 		if [ -z "$_SECTION" ]
 		then
-			_VARNAME=${_VARNAME_PREFIX}__${_VAR//./_}
+			_VARNAME=${_VARNAME_PREFIX}_${_VAR//./_}
 		else
-			_VARNAME=${_VARNAME_PREFIX}__${_SECTION}__${_VAR//./_}
+			_VARNAME=${_VARNAME_PREFIX}_${_SECTION}_${_VAR//./_}
 		fi
 		eval "${_INI_ALL_VARNAME}=\"\${${_INI_ALL_VARNAME}# } ${_VARNAME}\""
 		if [[ "${_VAL}" =~ ^\".*\"$  ]]
@@ -242,10 +276,38 @@ read_ini() {
 		_VAL="\$'${_VAL//\'/\'}'"
 
 		eval "$_VARNAME=$_VAL"
-	done <"${_INI_FILE}"
+
+    if [ ! -z "$_SECTION" ]
+		then
+			$SECTION_ARRAY[_VARNAME]=$_VAL
+		fi
+	done  <"${_INI_FILE}"
+
 	# return also the number of parsed sections
 	eval "$_INI_NUMSECTIONS_VARNAME=$_SECTIONS_NUM"
 	cleanup_bash
+}
+
+merge_ini_values() {
+    local _SECTION=$1
+    # check for empty section, log error is so
+    if [[ -n $_SECTION ]]
+    then
+        local INI_SECTION="${INI_PREFIX}_${SECTION}"
+        for KEY in $_SECTION[@]
+        do
+            if [[ -n "$KEY" ]]
+            then
+                if [[ -n  "$INI_SECTION" ]]
+                then
+                    $_$ECTION[${KEY}]=$INI_SECTION[${KEY}]
+                fi
+            else
+                return 1
+            fi
+        done
+
+    fi
 }
 
 create_ini() {
